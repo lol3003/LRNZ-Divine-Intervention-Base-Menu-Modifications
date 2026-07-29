@@ -1,4 +1,4 @@
-# Applies one selected relation from the current character to TARGET, but only
+﻿# Applies one selected relation from the current character to TARGET, but only
 # when that exact relation is not already present.
 DI_add_selected_relation_effect = {
     if = {
