@@ -994,9 +994,6 @@
  houseName: "Set House Name"
  DI_get_house_name: "[recipient.GetDynastyHouseNameNoTooltip]"
  CHEAT_ACTIONS: "Divine Intervention actions"
- all_loc: "Toggle All"
- hide_loc: "Toggle Hide"
- capital_loc: "Check Capitals"
  castle_loc: "Check Castles"
  temple_loc: "Check Temples"
  city_loc: "Check Cities"
@@ -1016,7 +1013,11 @@
  clear_pinned_loc: "Clear All Pinned Titles"
  DI_title_manager_filter_loc: "Filter Titles"
  DI_province_manager_filter_loc: "Filter Provinces"
- 
+ DI_province_filter_all_loc: "Toggle All"
+ DI_province_filter_hide_loc: "Toggle Hide"
+ DI_province_filter_capital_loc: "Check Capitals"
+ DI_province_filter_empty_loc: "Check Unheld" 
+
  DI_category_pedestal_loc:0 "Pedestal"
  DI_category_furniture_loc:0 "Furniture"
  DI_category_ornament_loc:0 "Ornament"
