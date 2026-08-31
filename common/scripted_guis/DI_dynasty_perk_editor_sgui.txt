@@ -45,13 +45,6 @@ DI_dynasty_selected_char_copy = {  #Trying to Copy the Culture copy mechanic, fo
                 name = DI_dynasty_selected_dynasty_copy
                 value = scope:select_char.dynasty
             }
-
-            if = {
-                limit = {
-                    has_variable = DI_dynasty_selected_char_copy
-                    has_variable = DI_dynasty_selected_dynasty_copy
-                }
-            }
         }
     }
 }
@@ -79,27 +72,9 @@ DI_dynasty_perk_select_char_init = {
     }
 }
 
-# DI_dynasty_perk_helper = {
-#     scope = character
-#     effect = {
-#         set_data_model = {
-#             name = DI_dynasty_legacy_browser
-#             type = dynasty_legacy_browser
-#             list = all_dynasty_legacies
-#         }
-#     }
-# }
-
-
-DI_Dynastey_perk_list = {
-    scope = character
-
-    effect = {
-        if = {
-            add_to_global_variable_list = {
-                name = DI_all_dynasty_legacies
-                target = scope:legacy
-            }
-        }
-    }
-}
+# NOTE (Phase 0 cleanup): removed dead code here —
+#   - commented `DI_dynasty_perk_helper` (set_data_model with nonexistent
+#     `dynasty_legacy_browser` type — engine-bound, see docs/DYNASTY_PERK_EDITOR_OPTIONS.md)
+#   - `DI_Dynastey_perk_list` (referenced undefined `scope:legacy`, never functional)
+# Runtime enumeration of legacy tracks is not possible; see
+# docs/DYNASTY_PERK_EDITOR_PLAN.md Phase 3 for the generator approach.

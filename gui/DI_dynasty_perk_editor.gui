@@ -3,10 +3,9 @@
 window = {
 	name = "DI_dynasty_perk_editor_window"
 
-    datacontext = "[GetVariableSystem]"
-    datacontext = "[GetPlayer]"
-    datacontext = "[GetPlayer.MakeScope.Var('DI_dynasty_selected_dynasty').Dynasty]"
-	# datacontext = "[Dynasty.GetDynasty]"
+	# single root datacontext: the dynasty of the character selected in the DI picker
+	# (GetVariableSystem and GetPlayer are globally accessible and need no datacontext)
+	datacontext = "[GetPlayer.MakeScope.Var('DI_dynasty_selected_dynasty').Dynasty]"
 
     visible = "[And(GetVariableSystem.Exists('DI_dynasty_perk_editor_window_visible'), GetPlayer.MakeScope.Var('DI_dynasty_selected_char').Char.IsValid)]" # "[GetVariableSystem.Exists('DI_dynasty_perk_editor_window_visible')]"   # 
 
@@ -204,93 +203,20 @@ window = {
 			# 	}
 			# }
 
-			scrollbox = {
-				# visible = "[GreaterThan_int32(GetDataModelSize(DI_dynasty_selected_dynasty.GetLegacies), '(int32)7')]" #OK this makes it a scrollbox if there are more than 7 legacies
+			# TODO Phase 1: hardcoded legacy track button grid goes here
+			# (see docs/DYNASTY_PERK_EDITOR_PLAN.md - vanilla has no runtime enumeration,
+			#  so tracks are hardcoded / generator-produced, not datamodel-driven)
+			vbox = {
 				layoutpolicy_horizontal = expanding
 				layoutpolicy_vertical = expanding
-
-				blockoverride "scrollbox_background_fade" {}
-
-				blockoverride "scrollbox_background" {}
-				blockoverride "scrollbox_content"
-				{
-
-					vbox = {
-						datamodel = "[GetAllDynasties.GetLegacies]"  # Need a List of Al Dynasty Perk Paths / Legacies Available in game # DI_allDynasty_legacies not tested yet, probably does not work.
-						layoutpolicy_horizontal = expanding
-
-						spacing = 5
-
-						item = { #injecting Different Entries
-							di_hbox_legacy_item = {
-								layoutpolicy_horizontal = expanding
-							}
-						}
-					}
-				}
 			}
 		}
 	}
 }
 
-di_confirmation_popup = {
-	name = "DI_dynasty_perk_confirmation_popup"  # Need to remove The Popup Completly since it should only add or remove easily on Left and Right click
-
-	blockoverride "extra_contents" {
-		fixedgridbox = {
-			name = "traits_grid"
-			addcolumn = 55
-			addrow = 55
-			maxhorizontalslots = 5
-			datamodel_wrap = 5
-			flipdirection = yes
-
-			datamodel = "[DynastyPerkConfirmation.GetAssociatedTraits]"
-
-			item = {
-				container = {
-					button_group = {
-						visible = "[Not( EqualTo_string( Trait.GetKey, DynastyPerkConfirmation.GetSelectedTrait.GetKey ) ) ]"
-						onclick = "[DynastyPerkConfirmation.SelectTrait( Trait.Self )]"
-						datacontext = "[GetPlayer]"
-
-						icon_trait = {
-							blockoverride "tooltip_placement"
-							{
-								using = tooltip_se
-							}
-							blockoverride "trait_glow"
-							{
-							}
-						}
-					}
-
-					button_group = {
-						datacontext = "[GetPlayer]"
-
-						visible = "[EqualTo_string( Trait.GetKey, DynastyPerkConfirmation.GetSelectedTrait.GetKey ) ]"
-						onclick = "[DynastyPerkConfirmation.SelectTrait( Trait.Self )]"
-
-						icon_trait = {
-							blockoverride "tooltip_placement"
-							{
-								using = tooltip_se
-							}
-							blockoverride "trait_glow"
-							{
-								glow = {
-									using = Color_Blue
-									using = Glow_Standard
-									glow_radius = 5
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
+# NOTE: the old top-level `di_confirmation_popup` block was removed (Phase 0 cleanup):
+# confirmation popups are not valid at file top level, and the editor design grants/removes
+# perks directly on left/right click without a trait-confirmation step.
 
 types DI_DynastyLegacies {  #This is DynastyView how, how do i hijack that #Should be able to leave this completly vanilla, since but it should get all Dynasties available in game and maybe add an extra tiptool about left and right click 
 	type di_hbox_legacy_item = hbox {
