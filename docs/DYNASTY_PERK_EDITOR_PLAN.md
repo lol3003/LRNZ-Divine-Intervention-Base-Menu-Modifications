@@ -357,6 +357,11 @@ generate editor support for them. UX flow and features, in user's words + struct
 - [ ] Should combined-playset mods get one shared prefix or per-source prefixes?
 - [ ] Descriptor `dependencies` for combined mods: depend on all source perk mods?
 - [ ] Does the user want a GUI (WinForms/terminal menu) or CLI-flags-only interface?
+- [ ] **Window inclusion mechanism:** the base editor window must render each sub-mod's
+      grid. Options: (a) base window lists one line per known generated type
+      (`di_hiraeth_perk_grid = {}` etc. — requires base mod update per new sub-mod), or
+      (b) sub-mods append rows into a shared named container the base window declares.
+      Decide when finalizing the spec.
 - [ ] **User: more specifications to be added — spec incomplete by design.**
 
 ### Why NOT one mod with everything bundled
