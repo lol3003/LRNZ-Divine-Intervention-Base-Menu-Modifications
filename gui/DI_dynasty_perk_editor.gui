@@ -148,6 +148,7 @@ window = {
 					vbox = {
 						layoutpolicy_horizontal = expanding
 						margin = { 100 0 }
+						maximumsize = { 900 -1 }   # keep renown/progress block from stretching the row
 
 						hbox = {
 							layoutpolicy_horizontal = expanding
@@ -205,24 +206,20 @@ window = {
 
 							### Add Copy dynasty char here
 
-							vbox = {  # Explination At the Top of the Dynasty Lecay Window Should show an explination of how the editor modifies the dynasty perks, and if Reknown is still added or removed, and cost is increased
+							vbox = {  # Short DI-specific instructions (replaces the long vanilla
+								# DYNASTY_VIEW_SHOW_LEGACY_EXPLANATION_* paragraph, which forced
+								# this hbox wider than the window and pushed the track buttons,
+								# scrollbar and close button outside the clickable background).
+								# maximumsize caps the width so this can never overflow again.
 								layoutpolicy_horizontal = expanding
+								maximumsize = { 560 -1 }
 								margin_bottom = 7
 
 								text_multi = {
-									visible = "[GetPlayer.IsDynast]"
 									layoutpolicy_horizontal = expanding
-									text = "DYNASTY_VIEW_SHOW_LEGACY_EXPLANATION_HEAD"
+									text = "DI_dynasty_perks_editor_explanation"
 									autoresize = yes
-									fontsize_min = 14
-									default_format = "#low"
-								}
-
-								text_multi = {
-									visible = "[Not(GetPlayer.IsDynast)]"    # This is funny, its a bug in vanilla wher this only checks if the player is leader of his own dynasty, which means it will also show this text when clicking on other dynasties.
-									layoutpolicy_horizontal = expanding
-									text = "DYNASTY_VIEW_SHOW_LEGACY_EXPLANATION_NOT_HEAD"
-									autoresize = yes
+									max_width = 540
 									fontsize_min = 14
 									default_format = "#low"
 								}
