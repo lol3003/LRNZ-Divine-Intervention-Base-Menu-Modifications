@@ -23,8 +23,24 @@ dynasty = {
 ```
 
 - Works inside a `dynasty` scope → we can target `scope:DI_dynasty_selected_dynasty.Dynasty`
-- **No renown cost is charged** when used in script (the Mongols don't pay 10k prestige *for* the
-  perks — the prestige grant is separate). This means we likely don't need cost-offsetting logic.
+- ⚠️ **COST WARNING (confirmed):** `add_dynasty_perk` **deducts renown** from the dynasty.
+  Evidence:
+  - `DYNASTY_PRESTIGE_COST_LONG` loc = `"Renown: [dynasty_prestige_i] $VALUE|0$"` — dynasty
+    prestige **is** renown.
+  - Cost formula from defines: `COST = PERK_COST_BASE (250) + unlocked_perks * PERK_COST_MULTIPLIER (500)`
+    → perks cost 250 / 750 / 1250 / 1750 / 2250 (total 6,250 for a full track).
+  - The Mongol event grants `add_dynasty_prestige = 10000` **alongside** its 5+ perks — consistent
+    with the script effect charging renown and the event compensating for it.
+  - In-game memory confirms: granting a perk consumes the required renown; re-adding prestige
+    afterwards pushes the renown *level* back up.
+- **Mitigation for the editor:** after each `add_dynasty_perk`, compensate with
+  `add_dynasty_prestige = <cost>` (compute from the perk's index: `250 + 500 * index`), or simpler:
+  add a fixed large refund (e.g. `add_dynasty_prestige = 2500` per perk) or a separate
+  "Renown +5000" cheat button. Exact per-perk refund is cleaner:
+  ```paradox
+  add_dynasty_perk = warfare_legacy_1
+  add_dynasty_prestige = 250      # refund perk 1 cost
+  ```
 - Symmetric trigger `has_dynasty_perk = <key>` exists (used in `varangian_events.txt`,
   `artifact_events.txt`) → we can guard "add next perk" per track.
 
@@ -54,22 +70,48 @@ still cover modded legacies via a small compatibility pattern (see Phase 3).
 ### 1.1 Create the scripted effects
 New file: `common/scripted_effects/DI_dynasty_perk_effects.txt`
 
-One effect per track, following the mod's lifestyle-present pattern (`NOT has → add`):
+One effect per track, following the mod's lifestyle-present pattern (`NOT has → add`),
+**with renown refund** (see cost warning above):
 
 ```paradox
 DI_dynasty_add_warfare_perk = {
     scope = character
     effect = {
         scope:DI_dynasty_selected_dynasty.Dynasty = {
-            if = { limit = { NOT = { has_dynasty_perk = warfare_legacy_1 } } add_dynasty_perk = warfare_legacy_1 }
-            else_if = { limit = { NOT = { has_dynasty_perk = warfare_legacy_2 } } add_dynasty_perk = warfare_legacy_2 }
-            else_if = { limit = { NOT = { has_dynasty_perk = warfare_legacy_3 } } add_dynasty_perk = warfare_legacy_3 }
-            else_if = { limit = { NOT = { has_dynasty_perk = warfare_legacy_4 } } add_dynasty_perk = warfare_legacy_4 }
-            else_if = { limit = { NOT = { has_dynasty_perk = warfare_legacy_5 } } add_dynasty_perk = warfare_legacy_5 }
+            if = {
+                limit = { NOT = { has_dynasty_perk = warfare_legacy_1 } }
+                add_dynasty_perk = warfare_legacy_1
+                add_dynasty_prestige = 250       # refund: 250 + 500*0
+            }
+            else_if = {
+                limit = { NOT = { has_dynasty_perk = warfare_legacy_2 } }
+                add_dynasty_perk = warfare_legacy_2
+                add_dynasty_prestige = 750       # refund: 250 + 500*1
+            }
+            else_if = {
+                limit = { NOT = { has_dynasty_perk = warfare_legacy_3 } }
+                add_dynasty_perk = warfare_legacy_3
+                add_dynasty_prestige = 1250      # refund: 250 + 500*2
+            }
+            else_if = {
+                limit = { NOT = { has_dynasty_perk = warfare_legacy_4 } }
+                add_dynasty_perk = warfare_legacy_4
+                add_dynasty_prestige = 1750      # refund: 250 + 500*3
+            }
+            else_if = {
+                limit = { NOT = { has_dynasty_perk = warfare_legacy_5 } }
+                add_dynasty_perk = warfare_legacy_5
+                add_dynasty_prestige = 2250      # refund: 250 + 500*4
+            }
         }
     }
 }
 ```
+
+> Note: refunding renown still increments the renown *level* progress — that's unavoidable
+> (the level is derived from total prestige gained). If that's undesirable, the alternative is
+> not refunding and letting the editor consume renown like a normal purchase, or adding a
+> separate "Renown +5000" cheat button the user clicks as needed.
 
 Repeat for all 20 tracks (keys listed in the appendix below). Also add a
 `DI_dynasty_remove_last_perk` variant per track if desired (check `remove_dynasty_perk` exists in
@@ -163,9 +205,30 @@ effects (105 perks total in vanilla).
 
 | Effect/Trigger | Verified in | Notes |
 |---|---|---|
-| `add_dynasty_perk = <perk_key>` | `00_mongol_invasion_effects.txt` | Works in `dynasty` scope; no cost charged |
+| `add_dynasty_perk = <perk_key>` | `00_mongol_invasion_effects.txt` | Works in `dynasty` scope; **deducts renown** (compensated in Mongol event by `add_dynasty_prestige = 10000`) |
 | `has_dynasty_perk = <perk_key>` | `varangian_events.txt`, `artifact_events.txt` | Trigger, usable in `dynasty` scope |
-| `add_dynasty_prestige = <n>` | `00_mongol_invasion_effects.txt` | For renown cheats |
+| `add_dynasty_prestige = <n>` | `00_mongol_invasion_effects.txt` | Renown add — usable as refund |
 | `add_dynasty_prestige_level = <n>` | `00_mongol_invasion_effects.txt` | |
 | `Dynasty.GetPrestige` / `GetNextPerkCost` / `GetNextPerkProgress` | vanilla GUI | Already used in your editor window |
+| `Dynasty.GetNumberOfLegacies` | `window_ledger.gui` | Returns count only — not an iterable list |
 | ~~`every_dynasty_perk`~~ / ~~`Dynasty.GetLegacies`~~ | searched, not found | Runtime enumeration NOT possible |
+
+---
+
+## How the game builds the modded legacy list (and why we can't emulate it at runtime)
+
+The engine scans `common/dynasty_perks/` and `common/dynasty_legacies/` **from all loaded mods
+and vanilla at startup**, merging them into an internal registry. That registry is exposed to GUI
+only through two engine-owned view-models:
+
+- `DynastyView.GetLegacies` (legacy window)
+- `DynastyHouseView.GetLegacies` (dynasty house window)
+
+Both are created by the C++ side when their game view opens — they cannot be constructed from
+script or referenced from a modded window's datacontext. There is no `every_dynasty_perk` script
+iterator either. **Runtime emulation is therefore not possible with current script/GUI APIs.**
+
+The practical equivalent is **build-time enumeration** (Phase 3a in this doc): a generator script
+scans the same `common/dynasty_perks/*.txt` files the engine scans — including every installed
+mod's copy — and emits the hardcoded effects/GUI. Same result as dynamic, just refreshed by
+re-running the generator instead of being live.
