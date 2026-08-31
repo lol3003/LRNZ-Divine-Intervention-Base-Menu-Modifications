@@ -37,16 +37,19 @@ DI_dynasty_selected_char_copy = {  #Trying to Copy the Culture copy mechanic, fo
     effect = {
         save_scope_as = select_char
 
-        scope:target = {
-            set_variable = {
-                name = DI_dynasty_selected_char_copy
-                value = scope:select_char
-            }
-            set_variable = {
-                name = DI_dynasty_selected_dynasty_copy
-                value = scope:select_char.dynasty
-            }
-        }
+        # NOTE (Phase 2): setters commented out until the "Dynasty to Copy" feature is
+        # built — the engine logged "set but is never used" for both variables because
+        # GUI-only reads (Var('...')) are invisible to the effect validator.
+        # scope:target = {
+        #     set_variable = {
+        #         name = DI_dynasty_selected_char_copy
+        #         value = scope:select_char
+        #     }
+        #     set_variable = {
+        #         name = DI_dynasty_selected_dynasty_copy
+        #         value = scope:select_char.dynasty
+        #     }
+        # }
     }
 }
 

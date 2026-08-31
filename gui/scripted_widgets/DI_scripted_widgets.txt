@@ -1,4 +1,4 @@
-gui/DI_button.gui = DI_button
+﻿gui/DI_button.gui = DI_button
 gui/DI_main.gui = DI_main_window
 gui/DI_char_editor.gui = DI_char_editor_window
 gui/DI_pinned_characters.gui = DI_pinned_characters_window

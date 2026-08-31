@@ -760,6 +760,8 @@
  DI_DYNASTY_EDITOR_PLUS_ONE:0 "+1"
  DI_DYNASTY_EDITOR_RESET_SPLENDOR:0 "Reset to 0"
  DI_DYNASTY_EDITOR_RESET_SPLENDOR_TT:0 "Set the selected dynasty's Level of Splendor back to the lowest level."
+ DI_tm_building_walls_00:0 "Walls"
+ DI_tm_building_walls_01_tribal:0 "Tribal Walls"
  ### INTERACTIONS ###
  interaction_category_cheat_menu: "Divine Intervention" # category name
  DI_open_cheat_menu: "#color_yellow #bold (DI)#!#! Interactions On"
