@@ -19,6 +19,16 @@
 >   first test" (if script grants bypass costs like the console command, refund logic can be
 >   dropped entirely).
 
+> **v3 (2026-08-31).** Test 1 result + generator split:
+> - **Option A Test 1 FAILED as predicted:** the gated vanilla-window override enabled every
+>   perk button, but `DynastyView.SelectPerk` re-validates prerequisites/renown internally in
+>   C++ — clicks were silently ignored. The override was removed; the scripted per-perk toggle
+>   grid is the editor (Phase 1 implemented, commits `a6c543f`/`bc18b87`).
+> - **Generator split into two tools** (user decision): one for vanilla+DLC perks (shipped in
+>   the base mod), one for scanning the user's installed mods / playsets (Phase 3, spec below).
+> - Phase 3 rewritten as a full spec with UX flow, output modes, and playset integration —
+>   **spec is a draft; user will add more specifications later.**
+
 ---
 
 ## 🎉 Key research findings (new — verified in vanilla files)
@@ -274,12 +284,80 @@ front-loaded — it pays for itself the moment modded tracks or regenerations ar
 
 ## Phase 3 — Shipping modded-track variants (sub-mod pattern)
 
-> **When does the list regenerate?** The generated effect/GUI files are ordinary mod files —
-> the game reads them **at startup, exactly like vanilla reads its own**
-> `common/dynasty_perks/`. There is **no separate script that runs at game start**. The only
-> manual step is re-running the *generator* (a PowerShell tool on your PC, not part of the mod)
-> when a supported perk mod updates; the next game launch picks the files up automatically.
-> In-game, everything is instant and native.
+> **⚠️ v3: This phase is now specified as the "Mod Support Generator" below. The original
+> sub-mod rationale (why not bundle everything) still applies and is kept at the end of this
+> phase. The spec is a DRAFT — the user will add more specifications later.**
+
+### Phase 3 spec — Mod Support Generator (`tools/generate_mod_perks.ps1`)
+
+> **Status: DRAFT — user will add more specifications. Do not implement until the spec is
+> marked final.**
+
+A **second, separate generator** (distinct from the vanilla+DLC generator
+`tools/generate_perk_editor.ps1`, which stays as-is and ships in the base mod). Its job:
+scan the user's installed CK3 mods, find every mod that adds dynasty perks/tracks, and
+generate editor support for them. UX flow and features, in user's words + structure
+(order not final):
+
+#### F1 — Scan installed mods for perk content
+
+- Scan all mod locations: `mod/` folder (local mods), Steam Workshop content
+  (`steamapps/workshop/content/1158310/<id>/`), and any additional user-specified dirs.
+- A mod "adds perks" if it contains `common/dynasty_perks/*.txt` with valid perk blocks
+  (reuse the vanilla generator's parser).
+- Present results as a list: mod name (from descriptor.mod), workshop ID / path, number of
+  perks and tracks found, DLC-gate status of its tracks.
+- Handle name resolution: workshop IDs → names via `mod/ugc_*.mod` descriptor files in the
+  user folder (the launcher writes these).
+
+#### F2 — User selection: generate for all or a subset
+
+- Interactive menu (or CLI flags for power users): generate for **all detected perk mods**,
+  or pick **one/some** via multi-select.
+- Show what will be generated before writing (dry-run summary: mods → tracks → perk counts).
+
+#### F3 — Output modes (user chooses per run)
+
+1. **Add to main mod** — write generated files into the base DI mod folder.
+   - ⚠️ Caveat to surface in the UI: Steam Workshop updates of the base mod would overwrite
+     local changes; users who install the base mod from GitHub are unaffected. (The base mod
+     is distributed via GitHub, so this mode is mainly for the maintainer's own install.)
+2. **Generate separate standalone mods** (preferred default) — one small mod per perk mod,
+   each containing only its generated files (`common/scripted_guis/`, grid `.gui`, loc stubs,
+   descriptor with `dependencies = { "<Perk Mod Name>" }`).
+   - Each can be independently enabled/disabled in the launcher/playset.
+   - Auto-register each generated mod in `mod/` with a `.mod` descriptor so the launcher
+     sees it (name pattern: `DI Perks - <Mod Name>`).
+3. **Write to a target folder** — emit the generated files into an arbitrary directory so
+   they can be dropped into an existing compatch mod by hand.
+
+#### F4 — Playset integration (if feasible)
+
+- Read **Paradox launcher playsets**: `playsets_backup/` and the launcher's own
+  `launcher-v2.sqlite` / `game_data.json` in the CK3 user folder (format to be verified —
+  research needed; the launcher stores playsets in a SQLite DB, mods per playset in a
+  join table).
+- Read **Irony Mod Manager playsets**: Irony stores playsets in its own data directory
+  (`%APPDATA%/IronyModManager` or similar — format to be verified).
+- Let the user pick a playset → the generator scans exactly the mods enabled in that
+  playset → generates **one combined mod** containing the editor support for all perk mods
+  in that playset (single enable/disable, no per-mod clutter).
+- If a playset format can't be parsed reliably, fall back to F2 manual selection.
+
+#### F5 — Shared requirements (inherited from the vanilla generator)
+
+- Same parser, same toggle-effect template, same DLC-gating logic, same free-mode flag.
+- Unique type/file naming per generated mod (`-Prefix` derived from the perk mod name) to
+  avoid `di_generated_perk_grid`-style collisions when several generated mods are active.
+- Idempotent regeneration; "GENERATED FILE" headers; re-run after perk-mod updates.
+
+#### Open questions (to resolve before implementation)
+
+- [ ] Exact playset storage formats (Paradox launcher SQLite schema; Irony export format).
+- [ ] Should combined-playset mods get one shared prefix or per-source prefixes?
+- [ ] Descriptor `dependencies` for combined mods: depend on all source perk mods?
+- [ ] Does the user want a GUI (WinForms/terminal menu) or CLI-flags-only interface?
+- [ ] **User: more specifications to be added — spec incomplete by design.**
 
 ### Why NOT one mod with everything bundled
 
@@ -296,38 +374,6 @@ perk mod's tracks into the base mod degrades the experience for users without th
 There is **no script-side way to test "does this database key exist?"**, and files can't be
 conditionally included based on the loaded mod list — so a bundle-everything main mod always
 produces error spam and dead buttons for someone. Unfixable from within CK3 script.
-
-### The sub-mod pattern (same as the AGOT variant)
-
-```
-Divine-Intervention-Base                 ← vanilla tracks only (clean for 100% of users)
-Divine-Intervention-AGOT                 ← AGOT tracks (repo already exists)
-Divine-Intervention-Perks-Hiraeth        ← Hiraeth: Dynasty Legacies Overhaul
-Divine-Intervention-Perks-<OtherMod>     ← etc.
-```
-
-Each variant mod contains **only** the generated files for that perk mod:
-`common/scripted_effects/`, the grid `.gui`, localization, and a descriptor with
-`dependencies = { "<Perk Mod Name>" }` so the launcher orders it after the perk mod. Users
-subscribe only to variants matching their mod list → zero errors, zero dead buttons.
-
-**Which to pre-generate:** keep it to 2–4 mods you actually play with and are willing to
-regenerate on their updates — candidates: **Hiraeth - Dynasty Legacies Overhaul** (the major
-legacy overhaul) and **AGOT** (existing repo). Every shipped variant is a maintenance
-commitment.
-
-### Community guide
-
-Ship `docs/ADDING_PERK_MOD_SUPPORT.md` in the base repo:
-
-1. Run `tools/generate_perk_effects.ps1 -ModPath "...\mod\<name>"` — scans that mod's
-   `common/dynasty_perks/*.txt`.
-2. It emits the effects file, grid GUI, and loc stubs.
-3. Wrap them in a new mod folder whose descriptor `dependencies`-declares the perk mod.
-4. Test: launch with both mods, toggle one perk in the editor, confirm `error.log` and
-   `gui_warnings.log` stay clean.
-
-This turns "please support mod X" from a maintainer task into a community contribution.
 
 ---
 
