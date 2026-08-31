@@ -10,7 +10,12 @@ window = {
     visible = "[And(GetVariableSystem.Exists('DI_dynasty_perk_editor_window_visible'), GetPlayer.MakeScope.Var('DI_dynasty_selected_char').Char.IsValid)]" # "[GetVariableSystem.Exists('DI_dynasty_perk_editor_window_visible')]"   # 
 
 
-	size = { 80% 80% }
+	# Responsive sizing, vanilla pattern (window_activity_guest_list.gui: 1200 90%,
+	# window_ledger.gui: 745 89%): STATIC pixel width + percentage height.
+	# Static width = layout never reflows between aspect ratios (grid content is
+	# ~1330px: 5 x 260px perk buttons + margins); % height adapts to any screen.
+	# 1400px fits 1080p (1920w) with margins and 21:9 ultrawide alike.
+	size = { 1400 90% }
 	parentanchor = center|hcenter
 	movable = yes
 	filter_mouse = all
@@ -28,47 +33,84 @@ window = {
 
 		using = Animation_FadeIn_Standard
 		using = Sound_Panel_Popup_Snapshot
+
+		# free mode defaults ON every time the window opens (reliable lifecycle hook,
+		# unlike widget default= which didn't fire on the toggled window)
+		on_start = "[GetScriptedGui('DI_dynasty_perk_editor_mode_on').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
 	}
 
 	state = {
 		name = _hide
 
 		using = Animation_FadeOut_Standard
+
+		# and resets on close, so normal gameplay never inherits free mode
+		on_start = "[GetScriptedGui('DI_dynasty_perk_editor_mode_off').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
 	}
 
 	vbox = {
 		margin_top = 10
-			# DI EDIT: free-edit mode toggle. When enabled, generated perk toggles top up
-			# renown before granting, so perks are effectively free. Normal mode = vanilla cost.
-			hbox = {
-				layoutpolicy_horizontal = expanding
-				margin_left = 40
-				margin_top = 5
 
-				button_standard = {
-					layoutpolicy_horizontal = expanding
-					visible = "[Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.Var('DI_legacy_editor_free_mode').GetValue, '(CFixedPoint)0' ) )]"
-					text = "DI_DYNASTY_EDITOR_CHEAT_MODE_ON"
-					onclick = "[GetScriptedGui('DI_dynasty_perk_editor_mode_on').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-					tooltip = "DI_DYNASTY_EDITOR_CHEAT_MODE_TT"
-					button_ignore = none
-				}
+		# control bar: free-mode toggle + splendor level editor, top-left, fixed sizes
+		hbox = {
+			margin_left = 15
+			margin_bottom = 5
+			spacing = 10
 
-				button_standard = {
-					layoutpolicy_horizontal = expanding
-					visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.Var('DI_legacy_editor_free_mode').GetValue, '(CFixedPoint)0' )]"
-					text = "DI_DYNASTY_EDITOR_CHEAT_MODE_OFF"
-					onclick = "[GetScriptedGui('DI_dynasty_perk_editor_mode_off').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-					tooltip = "DI_DYNASTY_EDITOR_CHEAT_MODE_TT"
-					button_ignore = none
-				}
+			button_standard = {
+				size = { 210 26 }
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.Var('DI_legacy_editor_free_mode').GetValue, '(CFixedPoint)0' )]"
+				text = "DI_DYNASTY_EDITOR_CHEAT_MODE_OFF"   # "Disable Free Mode (vanilla renown cost)"
+				onclick = "[GetScriptedGui('DI_dynasty_perk_editor_mode_off').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+				tooltip = "DI_DYNASTY_EDITOR_CHEAT_MODE_TT"
+				button_ignore = none
 			}
+
+			button_standard = {
+				size = { 210 26 }
+				visible = "[Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.Var('DI_legacy_editor_free_mode').GetValue, '(CFixedPoint)0' ) )]"
+				text = "DI_DYNASTY_EDITOR_CHEAT_MODE_ON"   # "Enable Free Mode (no renown cost)"
+				onclick = "[GetScriptedGui('DI_dynasty_perk_editor_mode_on').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+				tooltip = "DI_DYNASTY_EDITOR_CHEAT_MODE_TT"
+				button_ignore = none
+			}
+
+			text_single = {
+				text = "DI_DYNASTY_EDITOR_SPLENDOR_LABEL"
+				tooltip = "DI_DYNASTY_EDITOR_SPLENDOR_TT"
+				default_format = "#high"
+			}
+
+			button_standard = {
+				size = { 40 26 }
+				text = "DI_DYNASTY_EDITOR_MINUS_ONE"
+				onclick = "[GetScriptedGui('DI_dynasty_splendor_subtract').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+				tooltip = "DI_DYNASTY_EDITOR_SPLENDOR_TT"
+			}
+
+			button_standard = {
+				size = { 40 26 }
+				text = "DI_DYNASTY_EDITOR_PLUS_ONE"
+				onclick = "[GetScriptedGui('DI_dynasty_splendor_add').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+				tooltip = "DI_DYNASTY_EDITOR_SPLENDOR_TT"
+			}
+
+			button_standard = {
+				size = { 90 26 }
+				text = "DI_DYNASTY_EDITOR_RESET_SPLENDOR"
+				onclick = "[GetScriptedGui('DI_dynasty_splendor_reset').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+				tooltip = "DI_DYNASTY_EDITOR_SPLENDOR_RESET_TT"
+			}
+		}
+
 		header_standard = {  # Dynasty perk editor window header
 			layoutpolicy_horizontal = expanding
 
 			blockoverride "header_text"
 			{
-				text = "DI_dynasty_perks_editor_heading" # Name at the top of the full size window
+				# loc key embeds the selected dynasty's name (vanilla pattern: datafunction
+				# inside the loc string, resolved against the root datacontext = selected dynasty)
+				text = "DI_dynasty_perks_editor_heading"
 			}
 
 			blockoverride "button_close"
@@ -193,53 +235,23 @@ window = {
 			}
 		}
 
-		expand = {}
-	}
+		# perk grid in the main layout flow. Takes the remaining window height and scrolls.
+		scrollbox = {
+			name = "DI_dynasty_perk_grid_scrollbox"
+			layoutpolicy_horizontal = expanding
+			layoutpolicy_vertical = expanding
+			margin = { 10 5 }
 
-	# Eveything Works until here, here is where the Dynasty legacy bars should be added.
-
-	widget = {
-		size = { 100% 100% }
-		parentanchor = center
-		name = "dynasty_legacies_container"
-
-		vbox = {
-			margin_top = 150
-
-			margin_bottom = 60
-
-			# background = {
-			# 	using = Background_Bottom_Fade
-			# }
-
-			# vbox = {
-			# 	visible = "[LessThanOrEqualTo_int32(GetDataModelSize(DI_dynasty_selected_dynasty.GetLegacies), '(int32)7')]" #Ony visible if there are less then 7 legacies thats not even vanilla behaviour? #Have Not quite Figured out what "DynastyView" is may need to implement a whole new DI_DynastyView for this to function Correctly 
-			# 	datamodel = "[DI_dynasty_selected_dynasty.GetLegacies]"                                                                     # Vanilla Implementation is in Window_Dynasty_House.gui
-			# 	layoutpolicy_horizontal = expanding                                                                         # Can i use the Vanilla "GetLegacies"
-			# 	margin_bottom = 60
-
-			# 	spacing = 5
-
-			# 	item = {
-			# 		di_hbox_legacy_item = {   # Injecting Different entires
-			# 			layoutpolicy_horizontal = expanding
-			# 		}
-			# 	}
-			# }
-
-			# TODO Phase 1: hardcoded legacy track button grid goes here
-			# (see docs/DYNASTY_PERK_EDITOR_PLAN.md - vanilla has no runtime enumeration,
-			#  so tracks are hardcoded / generator-produced, not datamodel-driven)
-			vbox = {
-				layoutpolicy_horizontal = expanding
-				layoutpolicy_vertical = expanding
-
+			blockoverride "scrollbox_content" {
 				# GENERATED per-perk toggle grid (tools/generate_perk_editor.ps1)
-				# one button per perk: click = add if missing / remove if owned
+				# left click adds (greyed out if owned), right click removes
 				di_generated_perk_grid = {}
 			}
 		}
 	}
+
+	# (the old 'dynasty_legacies_container' overlay widget was removed - the grid lives
+	#  in the scrollbox above; the overlay was what caused the early overlap bugs)
 }
 
 # NOTE: the old top-level `di_confirmation_popup` block was removed (Phase 0 cleanup):
