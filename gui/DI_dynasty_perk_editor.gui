@@ -233,11 +233,12 @@ window = {
 		}
 
 		# perk grid in the main layout flow. Takes the remaining window height and scrolls.
+		# NOTE: scrollarea does not support 'margin' (pdx_gui_widget error) — spacing is
+		# handled by the parent vbox instead.
 		scrollbox = {
 			name = "DI_dynasty_perk_grid_scrollbox"
 			layoutpolicy_horizontal = expanding
 			layoutpolicy_vertical = expanding
-			margin = { 10 5 }
 
 			blockoverride "scrollbox_content" {
 				# GENERATED per-perk toggle grid (tools/generate_perk_editor.ps1)

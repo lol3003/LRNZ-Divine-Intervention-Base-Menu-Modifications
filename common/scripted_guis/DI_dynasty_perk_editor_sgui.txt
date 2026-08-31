@@ -77,6 +77,43 @@ DI_dynasty_perk_editor_mode_off = {
 	}
 }
 
+### Splendor level editor ###
+# Free-mode refunds raise the splendor level (it tracks lifetime earned prestige,
+# per LEVELS_PRESTIGE in defines) - these let the user set it back afterwards.
+# add_dynasty_prestige_level moves the level relative up/down.
+DI_dynasty_splendor_add = {
+	scope = character
+
+	effect = {
+		var:DI_dynasty_selected_dynasty = {
+			add_dynasty_prestige_level = 1
+		}
+		debug_log = "DI legacy editor: splendor +1"
+	}
+}
+
+DI_dynasty_splendor_subtract = {
+	scope = character
+
+	effect = {
+		var:DI_dynasty_selected_dynasty = {
+			add_dynasty_prestige_level = -1
+		}
+		debug_log = "DI legacy editor: splendor -1"
+	}
+}
+
+DI_dynasty_splendor_reset = {
+	scope = character
+
+	effect = {
+		var:DI_dynasty_selected_dynasty = {
+			add_dynasty_prestige_level = -10   # enough to reach level 0 from any level
+		}
+		debug_log = "DI legacy editor: splendor reset to 0"
+	}
+}
+
 ### Select Character Init ###
 DI_dynasty_perk_select_char_init = {
     scope = character
@@ -96,7 +133,8 @@ DI_dynasty_perk_select_char_init = {
             }
         }
         debug_log = "Initialized dynasty edit character set"
-        debug_log = "[scope:this.GetFullName]"
+        # NOTE: removed debug_log = "[scope:this.GetFullName]" — scope:this is not resolvable
+        # in the debug_log datacontext and produced a pdx_data_factory error on every open.
     }
 }
 
