@@ -85,6 +85,17 @@ enabled = "[Or(
 don't contradict the enabled state. The `IsNextUnlockablePerk` pips (:414/:429) can stay vanilla
 — they're informational, and in cheat mode showing the "natural" next perk is still useful.
 
+⚠️ **Stuck-flag hazard (v2 addition):** if the legacy window closes via Esc, the game-view
+stack, or a load screen, the "clear on close" logic may never fire — leaving **every** legacy
+window in cheat mode for the rest of the session. Defense-in-depth: clear
+`DI_legacy_editor_mode` (a) when the DI editor window closes, **and** (b) make the cheat
+condition itself verify the opened dynasty is the DI-selected one, e.g. gate on
+`And( Exists('DI_legacy_editor_mode'), <Dynasty.GetID equals selected dynasty's ID> )`
+(if the GUI equality data functions allow comparing against
+`GetPlayer.MakeScope.Var('DI_dynasty_selected_dynasty').Dynasty.GetID`). The second form makes
+a stuck flag harmless — worst case, cheat mode is enabled for a window showing exactly the
+dynasty you selected in the editor anyway.
+
 If the engine's `SelectPerk` does not re-validate dynast/renown internally (unknown — needs an
 in-game test), this turns the tree into a free editor for **any** dynasty, with **all modded
 tracks**, zero generator, zero compat patches.
@@ -207,6 +218,12 @@ so per-perk refund math is unreliable. Offer two explicit modes instead:
   will conflict (last-in-load-order wins). Legacy-tree UI mods are rare, but check compatibility
   notes before publishing. This is the same conflict class as any UI overhaul mod — normal and
   accepted on the Workshop.
+- ⚠️ **Patch-day maintenance (v2 addition):** a full copy of the vanilla file silently goes
+  stale on every major patch (you'd be shipping a 1.19 file into a 1.20 game). Release
+  checklist item: after each CK3 patch, diff the new vanilla `window_dynasty_legacy.gui`
+  against your override and re-apply your changes onto the new base. Budget ~15 min per patch,
+  and verify the datafunctions you rely on (`CanSelectPerk`, `IsNextUnlockablePerk`,
+  `SelectPerk`) still exist.
 
 ### Step 5 — Optional polish
 
@@ -245,9 +262,13 @@ Option A′ shape:
 | Maintenance              | vanilla file copy (patch-day risk) | self-owned files                   |
 | UI work                  | ~none (vanilla tree)               | build a grid                       |
 
-**Recommendation:** run Test 1. If it passes, Option A gives you the dynamic, shareable editor
-you wanted with minimal effort — and the hardcoded grid can still be added later for
-remove-perk and exact-renown features (the two plans are complementary, not exclusive).
+**Recommendation (v2, post-audit):** order of operations is now fixed across both docs:
+**Phase 0 cleanup → Test 1 (this doc) → the generated scripted editor (other doc) is built
+regardless.** If Test 1 passes, Option A becomes the viewing/buying UI and the scripted grid
+handles removal and renown control — complementary, not competing. If it fails (the honest
+expectation — C++ commands usually re-validate authority internally), Option A degrades to a
+read-only preview opened via `OpenGameViewData`, and no further time goes into it. Either way
+the scripted per-perk toggle grid is the non-negotiable core; Option A is a bonus.
 
 ---
 

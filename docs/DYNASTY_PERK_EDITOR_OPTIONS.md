@@ -7,10 +7,13 @@
 >   script-built list is impossible).
 > - Option D has been merged into Option A (it was a less precise version of the same idea).
 >
-> **Authoritative implementation plans:**
-> - `DYNASTY_PERK_EDITOR_PLAN.md` — generated scripted add/remove editor (the dependable path)
+> **Authoritative implementation plans (both at v2, audit-refined):**
+> - `DYNASTY_PERK_EDITOR_PLAN.md` — **generator-produced** per-perk toggle editor (the
+>   dependable path, non-negotiable core). v2: generator moved to Phase 1 step 0, per-perk
+>   toggles replace "add next" chains, example scope bugs fixed, sub-mod shipping model added.
 > - `DYNASTY_PERK_EDITOR_OPTION_A_PLAN.md` — vanilla-window override experiment (small test
->   effort, biggest payoff if foreign-dynasty purchasing works)
+>   effort, biggest payoff if foreign-dynasty purchasing works). v2: stuck-flag mitigation,
+>   patch-day checklist, fixed execution order (Phase 0 → Test 1 → scripted core regardless).
 >
 > The vanilla research below remains accurate and useful as background.
 
