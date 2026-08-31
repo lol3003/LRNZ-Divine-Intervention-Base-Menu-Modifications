@@ -65,33 +65,6 @@
  DI_present_traits_TT: "Une catégorie, cliquer ici affichera les présents de traits ci-dessous."
  DI_present_laws: "Lois"
  DI_present_laws_TT: "Une catégorie, cliquer ici affichera les présents de lois ci-dessous."
- # lifestyle category
- DI_ce_all_lifestyle_button: "Tous les Talents de Mode de Vie" # button label
- DI_ce_all_lifestyle_button_tt: "#Bold Clic Gauche#! pour compléter tous les arbres de mode de vie.\n#Bold Clic Droit#! pour effacer tous les arbres de mode de vie."
- DI_ce_martial_lifestyle_button: "Tous les Talents Martiaux" # button label
- DI_ce_martial_lifestyle_button_tt: "#Bold Clic Gauche#! pour compléter l'arbre de mode de vie martial.\n#Bold Clic Droit#! pour effacer l'arbre de mode de vie martial."
- DI_ce_diplomacy_lifestyle_button: "Tous les Talents Diplomatiques" # button label
- DI_ce_diplomacy_lifestyle_button_tt: "#Bold Clic Gauche#! pour compléter l'arbre de mode de vie diplomatique.\n#Bold Clic Droit#! pour effacer l'arbre de mode de vie diplomatique."
- DI_ce_stewardship_lifestyle_button: "Tous les Talents d'Intendance" # button label
- DI_ce_stewardship_lifestyle_button_tt: "#Bold Clic Gauche#! pour compléter l'arbre de mode de vie d'intendance.\n#Bold Clic Droit#! pour effacer l'arbre de mode de vie d'intendance."
- DI_ce_intrigue_lifestyle_button: "Tous les Talents d'Intrigue" # button label
- DI_ce_intrigue_lifestyle_button_tt: "#Bold Clic Gauche#! pour compléter l'arbre de mode de vie d'intrigue.\n#Bold Clic Droit#! pour effacer l'arbre de mode de vie d'intrigue."
- DI_ce_learning_lifestyle_button: "Tous les Talents d'Érudition" # button label
- DI_ce_learning_lifestyle_button_tt: "#Bold Clic Gauche#! pour compléter l'arbre de mode de vie d'érudition.\n#Bold Clic Droit#! pour effacer l'arbre de mode de vie d'érudition."
- DI_ce_wandering_lifestyle_button: "Mode de Vie Errant" # button label
- DI_ce_wandering_lifestyle_button_tt: "#Bold Clic Gauche#! pour ajouter l'arbre de mode de vie errant.\n#Bold Clic Droit#! pour retirer l'arbre de mode de vie errant."
- DI_present_add_lifestyle_all: "Tous les Talents de Mode de Vie" 
- DI_present_lifestyle_all_TT: "Remplit tous les arbres de mode de vie.\n#F Clic gauche pour ajouter, clic droit pour retirer#!"
- DI_present_lifestyle_martial: "Tous les Talents Martiaux"
- DI_present_lifestyle_martial_TT: "Remplit l'arbre de talents martiaux.\n#F Clic gauche pour ajouter, clic droit pour retirer#!"
- DI_present_lifestyle_diplomacy: "Tous les Talents Diplomatiques"
- DI_present_lifestyle_diplomacy_TT: "Remplit l'arbre de talents diplomatiques.\n#F Clic gauche pour ajouter, clic droit pour retirer#!"
- DI_present_lifestyle_stewardship: "Tous les Talents d'Intendance"
- DI_present_lifestyle_stewardship_TT: "Remplit l'arbre de talents d'intendance.\n#F Clic gauche pour ajouter, clic droit pour retirer#!"
- DI_present_lifestyle_intrigue: "Tous les Talents d'Intrigue"
- DI_present_lifestyle_intrigue_TT: "Remplit l'arbre de talents d'intrigue.\n#F Clic gauche pour ajouter, clic droit pour retirer#!"
- DI_present_lifestyle_learning: "Tous les Talents d'Érudition"
- DI_present_lifestyle_learning_TT: "Remplit l'arbre de talents d'érudition.\n#F Clic gauche pour ajouter, clic droit pour retirer#!"
  # health category
  DI_ce_eliminate_health_issues_button: "Éliminer les Problèmes de Santé" # button label
  DI_ce_eliminate_health_issues_button_tt: "#Bold Clic Gauche#! pour éliminer tous les problèmes de santé."
@@ -173,6 +146,28 @@
  DI_present_laws_gender_male_dominated: "Domination Masculine"
  DI_present_laws_gender_male_dominated_TT: "Doctrine de foi dominée par les hommes, clercs exclusivement masculins, adultère masculin accepté, adultère féminin désapprouvé ou criminel, loi du royaume exclusivement masculine, coutume martiale exclusivement masculine."
 ### Character Editor Skills ###
+ ### Character Editor Titles and Crown Authority ###
+ DI_ce_tab_titles: "Titles"
+ DI_ce_tab_crown_authority: "Crown Authority"
+ DI_ce_take_realm_titles_button: "Take All Realm Titles"
+ DI_ce_take_realm_titles_button_tt: "Consolidate every county-tier or higher title in each edited character's top realm into that edited character. With pinned editing disabled, the player is the edited character. Excludes noble-family and landless titles."
+ DI_ce_take_sub_realm_titles_button: "Take All Sub-Realm Titles"
+ DI_ce_take_sub_realm_titles_button_tt: "Consolidate every county-tier or higher title held by each edited character or anyone below them into that edited character. With pinned editing disabled, the player is the edited character."
+ DI_ce_take_vassal_titles_button: "Take All Vassal Titles"
+ DI_ce_take_vassal_titles_button_tt: "Consolidate every county-tier or higher title held by the vassals below each edited character into that edited character. The edited character's personal titles are excluded."
+ DI_ce_take_personal_titles_button: "Take Personal Titles"
+ DI_ce_take_personal_titles_button_tt: "Transfer every county-tier or higher title personally held by pinned characters to the player. This always uses pinned characters, regardless of the pinned-editing checkbox."
+ DI_ce_take_primary_title_button: "Take Primary Title"
+ DI_ce_take_primary_title_button_tt: "Transfer each pinned character's primary title to the player. This always uses pinned characters, regardless of the pinned-editing checkbox."
+ DI_ce_crown_authority_1_button: "Crown Authority 1 — Autonomous"
+ DI_ce_crown_authority_1_button_tt: "Set each eligible edited ruler to Crown Authority Level 1 (Autonomous Vassals)."
+ DI_ce_crown_authority_2_button: "Crown Authority 2 — Limited"
+ DI_ce_crown_authority_2_button_tt: "Set each eligible edited ruler to Crown Authority Level 2 (Limited Crown Authority)."
+ DI_ce_crown_authority_3_button: "Crown Authority 3 — High"
+ DI_ce_crown_authority_3_button_tt: "Set each eligible edited ruler to Crown Authority Level 3 (High Crown Authority)."
+ DI_ce_crown_authority_4_button: "Crown Authority 4 — Absolute"
+ DI_ce_crown_authority_4_button_tt: "Set each eligible edited ruler to Crown Authority Level 4 (Absolute Crown Authority). Rulers who do not use Crown Authority are skipped."
+
  DI_skills: "Compétences" # window title
  DI_skill_diplomacy_tt: "#P Clic gauche :#! Ajouter #P [GetPlayer.MakeScope.Var('DI_diplomacy_value').GetValue|0] #![diplomacy|E] \n#N Clic droit :#! Retirer #N [GetPlayer.MakeScope.Var('DI_diplomacy_value').GetValue|0]#! [diplomacy|E]"
  DI_skill_martial_tt: "#P Clic gauche :#! Ajouter #P [GetPlayer.MakeScope.Var('DI_martial_value').GetValue|0] #![martial|E] \n#N Clic droit :#! Retirer #N [GetPlayer.MakeScope.Var('DI_martial_value').GetValue|0]#! [martial|E]"
@@ -193,6 +188,10 @@
  DI_learning_node: "Érudition"
  DI_perk_point_learning_tt: "#P Clic gauche :#! Ajouter #P 1 #![learning|E] [perk|E] \n#N Clic droit :#! Retirer #N 1#! [learning|E] [perk|E]"
  DI_perk_point_tt: "#P Clic gauche :#! Ajouter #P 1 #! [Lifestyle.GetName|E] [perk|E] \n#N Clic droit :#! Retirer #N 1#! [Lifestyle.GetName|E] [perk|E]"
+ DI_ce_lifestyle_button: "All [Lifestyle.GetNameNoTooltip] Perks"
+ DI_ce_lifestyle_button_tt: "#Bold Left-Click#! to finish the [Lifestyle.GetName|E] lifestyle tree.\n#Bold Right-Click#! to clear the [Lifestyle.GetName|E] lifestyle tree."
+ DI_ce_all_lifestyle_button: "Tous les Talents de Mode de Vie" # button label
+ DI_ce_all_lifestyle_button_tt: "#Bold Clic Gauche#! pour compléter tous les arbres de mode de vie.\n#Bold Clic Droit#! pour effacer tous les arbres de mode de vie."
  ### Modifiers ###
  DI_modifiers: "Modificateurs" # window title
  DI_modifier_maa_type: "Sélectionner le Type d'Hommes d'Armes" # label
@@ -284,6 +283,7 @@
  DI_pinned_traits_tt: "Une liste des traits que vous avez épinglés, pour un accès plus facile."
  DI_trait_button_tt: "Clic gauche pour ajouter, clic droit pour retirer"
  DI_trait_xp_button_tt: "Clic gauche pour ajouter de l'XP de trait, clic droit pour retirer de l'XP de trait"
+ DI_tracked_trait_marker_tt: "#T [TraitLevelTrack.GetName] Level [TraitLevelTrackEntry.GetLevel]#!\nCurrent [trait_level_track_xp|E]: [ComplexBar.GetNextValue|0V]\nXP at selected level: [TraitLevelTrackEntry.GetXpRequired|0V]\nXP to add/remove: [Subtract_CFixedPoint( TraitLevelTrackEntry.GetXpRequired, ComplexBar.GetNextValue )|+0]"
  DI_physical_traits: "Physique"
  DI_physical_traits_tt: "Catégorie de traits physiques"
  DI_education_traits: "Éducation"
@@ -437,25 +437,8 @@
  DI_create_dejure_vassal_titles_tt: "Ceci créera tous les titres de jure qui sont en dessous des titres sélectionnés dans la hiérarchie de jure."
  DI_create_entire_dejure_tree: "Créer l'Arbre De Jure Entier" # button label
  DI_create_entire_dejure_tree_tt: "Ceci créera tous les titres de jure qui sont au-dessus et en dessous des titres sélectionnés dans la hiérarchie de jure."
- DI_00_castle_buildings: "Castle Buildings"
- DI_00_city_buildings: "City Buildings"
- DI_00_nomad_buildings: "Nomad Buildings"
- DI_00_temple_buildings: "Temple Buildings"
- DI_00_tribal_buildings: "Tribal Buildings"
- DI_temple_citadel_buildings: "Temple Citadel Buildings"
- DI_00_admin_buildings: "Admin Buildings"
- DI_00_common_buildings: "Common Buildings"
- DI_00_duchy_capital_buildings: "Duchy Capital Buildings"
- DI_00_standard_economy_buildings: "Standard Economy Buildings"
- DI_00_standard_fortification_buildings: "Standard Fortification Buildings"
- DI_00_standard_military_buildings: "Standard Military Buildings"
- DI_99_ach_buildings: "Ach Buildings"
- DI_tgp_great_project_buildings: "Tgp Great Project Buildings"
- DI_00_special_buildings: "Special Buildings"
- DI_00_special_mines: "Special Mines"
- DI_ccp3_special_buildings: "Ccp3 Special Buildings"
  game_concept_tribe_holding: "[Localize('game_concept_tribal_holding')]"
- 
+
  ### Dejure Title ###
  DI_dejure_title: "Titre De Jure" # window title
  ### Event Manager ###
@@ -471,6 +454,32 @@
  DI_char_spawner_100_stat_man: "Homme aux 100 Stats" # checkbox label
  DI_char_spawner_good_traits: "Bons Traits" # checkbox label
  DI_char_spawner_immortal: "Immortel" # checkbox label
+ DI_char_spawner_origins: "Origins"
+ DI_char_spawner_culture: "Culture"
+ DI_char_spawner_faith: "Faith"
+ DI_char_spawner_origin_target: "Target"
+ DI_char_spawner_origin_target_tt: "Use the culture or faith of the character receiving the spawned character."
+ DI_char_spawner_origin_random: "Random"
+ DI_char_spawner_random_culture_tt: "#Bold Left-click#! to use the configured random culture pool. #Bold Right-click#! to configure the pool."
+ DI_char_spawner_random_faith_tt: "#Bold Left-click#! to use the configured random faith pool. #Bold Right-click#! to configure the pool."
+ DI_char_spawner_select_culture_tt: "#Bold Left-click#! to use the displayed culture. #Bold Right-click#! to choose a different culture."
+ DI_char_spawner_select_faith_tt: "#Bold Left-click#! to use the displayed faith. #Bold Right-click#! to choose a different faith."
+ DI_char_spawner_select_faith: "Select Faith"
+ DI_char_spawner_random_options: "Random Options"
+ DI_char_spawner_random_culture_title: "Random Culture Pool"
+ DI_char_spawner_random_faith_title: "Random Faith Pool"
+ DI_char_spawner_random_global: "Global"
+ DI_char_spawner_random_same_heritage: "Same Heritage as Target"
+ DI_char_spawner_random_same_language: "Same Language as Target"
+ DI_char_spawner_random_same_religion: "Same Religion as Target"
+ DI_char_spawner_random_same_family: "Same Religious Family as Target"
+ DI_char_spawner_random_realm: "Target's Realm"
+ DI_char_spawner_random_low_acceptance: "Low Cultural Acceptance (0–29)"
+ DI_char_spawner_random_moderate_acceptance: "Moderate Cultural Acceptance (30–69)"
+ DI_char_spawner_random_high_acceptance: "High Cultural Acceptance (70–100)"
+ DI_char_spawner_random_faith_accepted: "Accepted by Target's Faith"
+ DI_char_spawner_random_faith_astray: "Astray to Target's Faith"
+ DI_char_spawner_random_faith_hostile: "Hostile or Evil to Target's Faith"
  DI_family_char_spawner: "Famille" # category tab label
  DI_family_char_spawner_tt: ""
  DI_councillors_char_spawner: "Conseillers" # category tab label
@@ -565,11 +574,12 @@
  DI_reset_all_pinned_relations: "Réinitialiser Toutes les Relations Épinglées" # button label
  DI_reset_all_pinned_relations_tt: "Réinitialise les relations entre tous les personnages épinglés."
  DI_apply_relations: "Appliquer les Relations" # button label
- DI_apply_relations_tt: "Applique les relations entre [GetPlayer.Custom('DI_flip_primary_character')] et [GetPlayer.Custom('DI_flip_secondary_character')]."
+ DI_apply_relations_tt: "Applique les relations cochées entre [GetPlayer.Custom('DI_flip_primary_character')] et [GetPlayer.Custom('DI_flip_secondary_character')].\n$DI_relation_add_compatibility_tt$"
  DI_apply_pinned_relations: "Appliquer les Relations Épinglées" # button label
- DI_apply_pinned_relations_tt: "Applique les relations entre [GetPlayer.Custom('DI_flip_primary_character')] et tous les personnages épinglés."
+ DI_apply_pinned_relations_tt: "Applique les relations cochées entre [GetPlayer.Custom('DI_flip_primary_character')] et tous les personnages épinglés.\n$DI_relation_add_compatibility_tt$"
  DI_apply_all_pinned_relations: "Appliquer Toutes les Relations Épinglées" # button label
- DI_apply_all_pinned_relations_tt: "Applique les relations entre tous les personnages épinglés."
+ DI_apply_all_pinned_relations_tt: "#Bold Clic gauche#! pour ajouter les relations cochées entre chaque paire de personnages épinglés.\n#Bold Clic droit#! pour supprimer toutes les relations cochées entre chaque paire de personnages épinglés.\n$DI_relation_add_compatibility_tt$"
+ DI_relation_add_compatibility_tt: "#warning L’ajout est désactivé uniquement si des relations de familles incompatibles sont cochées. Si plusieurs niveaux d’une même famille sont cochés, seul le plus élevé est ajouté. La suppression accepte toute combinaison.#!"
  # Treaties
  DI_dip_treaty_button: "Traité" # button label
  DI_dip_treaty_button_tt: "#Bold Clic Gauche#! pour signer un traité entre [GetPlayer.Custom('DI_flip_primary_character')] et [GetPlayer.Custom('DI_flip_secondary_character')].\n#Bold Clic Droit#! pour rompre un traité entre [GetPlayer.Custom('DI_flip_primary_character')] et [GetPlayer.Custom('DI_flip_secondary_character')]."
@@ -609,58 +619,59 @@
  DI_every_pinned_war: "Toutes les Guerres Épinglées" # button label
  # Family
  DI_dip_adoption_button: "Adopter" # button label
- DI_dip_adoption_button_tt: "[GetPlayer.Custom('DI_adopt_primary_character')][GetPlayer.Custom('DIAdoptAnd')][GetPlayer.Custom('DI_adopt_tertiary_character')][GetPlayer.Custom('DI_adopts')][GetPlayer.Custom('DI_adopt_secondary_character')]"
+ DI_dip_adoption_button_tt: "[GetPlayer.Custom('DI_adopt_primary_character')][GetPlayer.Custom('DIAdoptAnd')][GetPlayer.Custom('DI_adopt_tertiary_character')][GetPlayer.Custom('DI_adopts')][GetPlayer.Custom('DI_adopt_secondary_character')][GetPlayer.Custom('DI_adoption_triggered_desc')]"
  DI_dip_adoption_house_button: "Changer de Maison" # button label
- DI_dip_adoption_house_button_tt: "[GetPlayer.Custom('DI_flip_primary_character')] prend [GetPlayer.Custom('DI_flip_secondary_character')] dans sa maison[GetPlayer.Custom('DIAdoptOf')][GetPlayer.MakeScope.Var('DI_primary_character').Char.GetHouse.GetBaseName]."
+ DI_dip_adoption_house_button_tt: "[GetPlayer.Custom('DI_flip_primary_character')] prend [GetPlayer.Custom('DI_flip_secondary_character')] dans sa maison[GetPlayer.Custom('DIAdoptOf')][GetPlayer.MakeScope.Var('DI_primary_character').Char.GetHouse.GetBaseName].[GetPlayer.Custom('DI_adoption_house_triggered_desc')]"
  DI_dip_impregnate_button: "Engrosser" # button label
- DI_dip_impregnate_button_tt: "[GetPlayer.Custom('DI_flip_primary_character')] et [GetPlayer.Custom('DI_flip_tertiary_character')] commencent une grossesse. Ne fonctionne qu'avec un couple homme/femme."
+ DI_dip_impregnate_button_tt: "[GetPlayer.Custom('DI_flip_primary_character')] et [GetPlayer.Custom('DI_flip_tertiary_character')] commencent une grossesse. Ne fonctionne qu'avec un couple homme/femme.[GetPlayer.Custom('DI_pregnancy_triggered_desc')]"
  DI_dip_preg_gender_male_button: "Grossesse - Garçon" # button
- DI_dip_preg_gender_male_button_tt: "La grossesse de [GetPlayer.Custom('DI_flip_primary_character')] sera un garçon."
+ DI_dip_preg_gender_male_button_tt: "La grossesse de [GetPlayer.Custom('DI_flip_primary_character')] sera un garçon.[GetPlayer.Custom('DI_pregnancy_gender_triggered_desc')]"
  DI_dip_preg_gender_female_button: "Grossesse - Fille" # button
- DI_dip_preg_gender_female_button_tt: "La grossesse de [GetPlayer.Custom('DI_flip_primary_character')] sera une fille."
+ DI_dip_preg_gender_female_button_tt: "La grossesse de [GetPlayer.Custom('DI_flip_primary_character')] sera une fille.[GetPlayer.Custom('DI_pregnancy_gender_triggered_desc')]"
+ DI_dip_set_real_father_button: "Set Real Father" # button label
+ DI_dip_set_real_father_button_tt: "[GetPlayer.Custom('DI_flip_secondary_character')] is set as the real father of [GetPlayer.Custom('DI_flip_primary_character')].[GetPlayer.Custom('DI_set_real_father_triggered_desc')]"
+ DI_dip_set_father_as_real_father_button: "Reset Real Father" # button label
+ DI_dip_set_father_as_real_father_button_tt: "[GetPlayer.Custom('DI_father_check')][GetPlayer.Custom('DI_set_father_as_real_father_triggered_desc')]"
  DI_dip_marry_button: "Marier" # button label
- DI_dip_marry_button_tt: "[GetPlayer.Custom('DI_flip_primary_character')] et [GetPlayer.Custom('DI_flip_tertiary_character')] se marient."
+ DI_dip_marry_button_tt: "[GetPlayer.Custom('DI_flip_primary_character')] et [GetPlayer.Custom('DI_flip_tertiary_character')] se marient.[GetPlayer.Custom('DI_marry_triggered_desc')]"
  DI_dip_marry_matrilineal_button: "Mariage Matrilinéaire" # button label
- DI_dip_marry_matrilineal_button_tt: "[GetPlayer.Custom('DI_flip_primary_character')] et [GetPlayer.Custom('DI_flip_tertiary_character')] se marient matrilinéairement."
+ DI_dip_marry_matrilineal_button_tt: "[GetPlayer.Custom('DI_flip_primary_character')] et [GetPlayer.Custom('DI_flip_tertiary_character')] se marient matrilinéairement.[GetPlayer.Custom('DI_marry_triggered_desc')]"
  DI_dip_divorce_button: "Divorcer" # button label
- DI_dip_divorce_button_tt: "[GetPlayer.Custom('DI_flip_primary_character')] et [GetPlayer.Custom('DI_flip_tertiary_character')] divorcent."
+ DI_dip_divorce_button_tt: "[GetPlayer.Custom('DI_flip_primary_character')] et [GetPlayer.Custom('DI_flip_tertiary_character')] divorcent.[GetPlayer.Custom('DI_divorce_triggered_desc')]"
+ DI_dip_add_concubine_button: "Add Concubine" # button label
+ DI_dip_add_concubine_button_tt: "[GetPlayer.Custom('DI_flip_primary_character')] takes [GetPlayer.Custom('DI_flip_tertiary_character')]as a concubine.[GetPlayer.Custom('DI_add_concubine_triggered_desc')]"
+ DI_dip_remove_concubine_button: "Remove Concubine" # button label
+ DI_dip_remove_concubine_button_tt: "[GetPlayer.Custom('DI_flip_primary_character')] dismisses [GetPlayer.Custom('DI_flip_tertiary_character')]as their concubine.[GetPlayer.Custom('DI_remove_concubine_triggered_desc')]"
+ DI_dip_arrange_betrothal_button: "Betrothal" # button label
+ DI_dip_arrange_betrothal_button_tt: "[GetPlayer.Custom('DI_flip_primary_character')] and [GetPlayer.Custom('DI_flip_tertiary_character')]are betrothed.[GetPlayer.Custom('DI_betrothal_triggered_desc')]"
+ DI_dip_arrange_betrothal_matrilineal_button: "Betrothal Matrilineal" # button label
+ DI_dip_arrange_betrothal_matrilineal_button_tt: "[GetPlayer.Custom('DI_flip_primary_character')] and [GetPlayer.Custom('DI_flip_tertiary_character')]are betrothed matrilineally.[GetPlayer.Custom('DI_betrothal_triggered_desc')]"
+ DI_dip_break_betrothal_button: "Break Betrothal" # button label
+ DI_dip_break_betrothal_button_tt: "[GetPlayer.Custom('DI_betrothed_check')][GetPlayer.Custom('DI_break_betrothal_triggered_desc')]"
  DI_dip_make_siblings_button: "Rendre Frères/Sœurs" # button label
- DI_dip_make_siblings_button_tt: "[GetPlayer.Custom('DI_flip_secondary_character')] est adopté par les parents de [GetPlayer.Custom('DI_flip_primary_character')]."
+ DI_dip_make_siblings_button_tt: "[GetPlayer.Custom('DI_flip_secondary_character')] est adopté par les parents de [GetPlayer.Custom('DI_flip_primary_character')].[GetPlayer.Custom('DI_make_siblings_triggered_desc')]"
+ DI_dip_create_cadet_branch_button: "Create Cadet Branch" # button label
+ DI_dip_create_cadet_branch_button_tt: "[GetPlayer.Custom('DI_flip_primary_character')] creates a cadet branch of their house.[GetPlayer.Custom('DI_cadet_branch_triggered_desc')]"
  ### Artifact Creator ###
  DI_artifact_creator: "Créateur d'Artefacts" # window title
  DI_artifact_list: "Liste d'Artefacts"
  DI_artifact_type: "Type d'Artefact"
  DI_artifact_quality: "Qualité d'Artefact"
+ DI_artifact_category: "Category"
+ DI_artifact_subtype: "Subtype"
  DI_artifact_create: "Créer un Artefact"
  # artifact list
  DI_artifact_list_title: "Artefacts"
  DI_tt_take_artifact: "Prendre l'Artefact"
  DI_destroy_artifact_tt: "Détruire l'Artefact"
- # artifact types and qualities
- DI_artifact_weapon: "Arme"
- DI_artifact_armor: "Armure"
- DI_artifact_regalia: "Régalia"
- DI_artifact_trinket: "Babiole"
- DI_artifact_throne: "Trône"
- DI_artifact_pedestal: "Piédestal"
- DI_artifact_furniture: "Mobilier"
- DI_artifact_ornament: "Ornement"
- DI_artifact_armor_mail: "Cotte de Mailles"
- DI_artifact_armor_brigandine: "Brigandine"
- DI_artifact_armor_laminar: "Lamellaire"
- DI_artifact_armor_lamellar: "Lamellar"
- DI_artifact_armor_scale: "Armure d'Écailles"
- DI_artifact_armor_plate: "Armure de Plates"
- artifact_small_box: "Petite Boîte"
- artifact_medium_box: "Boîte Moyenne"
- artifact_divan: "Divan"
- artifact_table: "Table"
- artifact_small_shield: "Petit Bouclier Mural"
- artifact_large_shield: "Grand Bouclier Mural"
- DI_artifact_common: "Commun"
- DI_artifact_masterwork: "Chef-d'œuvre"
- DI_artifact_famed: "Renommé"
- DI_artifact_illustrious: "Illustre"
+ # Dropdown localization keys (with _loc suffix)
+ DI_quality_common_loc: "Common"
+ DI_quality_masterwork_loc: "Masterwork"
+ DI_quality_famed_loc: "Famed"
+ DI_quality_illustrious_loc: "Illustrious"
+ DI_artifact_category_display_loc: "[GetPlayer.MakeScope.Var('DI_artifact_category_display').GetFlagName]_loc"
+ DI_artifact_subtype_display_loc: "[GetPlayer.MakeScope.Var('DI_artifact_subtype_display').GetFlagName]_loc"
+ DI_artifact_quality_display_loc: "[GetPlayer.MakeScope.Var('DI_artifact_quality_display').GetFlagName]_loc"
  ### Culture Editor ###
  # window title is CULTURE_WINDOW_CULTURE
  DI_ce_convert_counties: "Convertir les Comtés"
@@ -717,14 +728,6 @@
  DI_innovations_by_era: "Innovations par Ère"
  DI_add_all_innovations: "Ajouter Toutes les Innovations"
  DI_remove_all_innovations: "Retirer Toutes les Innovations"
- DI_add_tribal_innovations: "Ajouter les Innovations Tribales"
- DI_remove_tribal_innovations: "Retirer les Innovations Tribales"
- DI_add_early_medieval_innovations: "Ajouter les Innovations du Haut Moyen Âge"
- DI_remove_early_medieval_innovations: "Retirer les Innovations du Haut Moyen Âge"
- DI_add_high_medieval_innovations: "Ajouter les Innovations du Moyen Âge Central"
- DI_remove_high_medieval_innovations: "Retirer les Innovations du Moyen Âge Central"
- DI_add_late_medieval_innovations: "Ajouter les Innovations du Bas Moyen Âge"
- DI_remove_late_medieval_innovations: "Retirer les Innovations du Bas Moyen Âge"
  ### Culture Pillars ###
  DI_martial_custom_window_title: "Coutumes Martiales" # window title
  DI_ethos_window_title: "Ethos" # window title
@@ -777,6 +780,8 @@
  DI_arrange_marriage_interaction: "#color_yellow #bold (DI)#!#! Arranger un Mariage"
  DI_arrange_marriage_desc: "Ouvre un menu où vous pouvez arranger un mariage avec le personnage."
  DI_learn_language_interaction: "#color_yellow #bold (DI)#!#! Apprendre la Langue"
+ DI_break_betrothal_interaction: "#color_yellow #bold (DI)#!#! Break Betrothal"
+ DI_break_betrothal_desc: "Breaks the betrothal between the character and their betrothed."
  DI_divorce_character_interaction: "#color_yellow #bold (DI)#!#! Forcer le Divorce"
  DI_divorce_character_desc: "Force le divorce du personnage."
  DI_designate_heir_interaction: "#color_yellow #bold (DI)#!#! Désigner comme Héritier"
@@ -806,6 +811,8 @@
  DI_add_to_court_desc: "Force le personnage à rejoindre votre cour en tant que courtisan."
  DI_add_concubine_interaction: "#color_yellow #bold (DI)#!#! Ajouter Concubine"
  DI_add_concubine_desc: "Fait du personnage une concubine du personnage joueur."
+ DI_remove_concubine_interaction: "#color_yellow #bold (DI)#!#! Remove Concubine"
+ DI_remove_concubine_desc: "Forcefully removes the character from their current concubine relationship."
  DI_impregnate_interaction: "#color_yellow #bold (DI)#!#! Engrosser"
  DI_impregnate_cheat_desc: "Si utilisé par un personnage joueur masculin sur une femme, l'engrosser. Si utilisé par un personnage joueur féminin sur un homme, tomber enceinte de lui."
  DI_impregnate_one_child: "Un Enfant"
@@ -940,6 +947,7 @@
  used_lifetime_invasion: "Invasion à Vie Utilisée"
  declared_major_religious_war_flag: "Guerre Religieuse Majeure Déclarée"
  DI_remove_character_flags_interaction: "#color_yellow #bold (DI)#!#! Retirer les Marqueurs de Personnage"
+ DI_add_character_flags_interaction: "#color_yellow #bold (DI)#!#! Add Character Flags"
  DI_take_artifact_interaction: "#color_yellow #bold (DI)#!#! Prendre l'Artefact"
  DI_make_house_head_interaction: "#color_yellow #bold (DI)#!#! Faire Chef de Maison"
  DI_remove_hook_interaction: "#color_yellow #bold (DI)#!#! Retirer l'Emprise"
@@ -986,9 +994,6 @@
  houseName: "Définir le Nom de la Maison"
  DI_get_house_name: "[recipient.GetDynastyHouseNameNoTooltip]"
  CHEAT_ACTIONS: "Actions d'Intervention Divine"
- all_loc: "Basculer Tout"
- hide_loc: "Basculer Masquer"
- capital_loc: "Vérifier les Capitales"
  castle_loc: "Vérifier les Châteaux"
  temple_loc: "Vérifier les Temples"
  city_loc: "Vérifier les Cités"
@@ -1006,5 +1011,96 @@
  pinned_characters_loc: "Titres des Personnages Épinglés"
  unpin_selected_loc: "Désépingler les Titres Sélectionnés"
  clear_pinned_loc: "Effacer Tous les Titres Épinglés"
- DI_title_manager_fiter_loc: "Filtrer les Titres"
+ DI_title_manager_filter_loc: "Filtrer les Titres"
  DI_province_manager_filter_loc: "Filtrer les Provinces"
+ DI_province_filter_all_loc: "Basculer Tout"
+ DI_province_filter_hide_loc: "Basculer Masquer"
+ DI_province_filter_capital_loc: "Vérifier les Capitales"
+ DI_province_filter_empty_loc: "Vérifier Non Détenus"
+
+ DI_category_pedestal_loc: "Pedestal"
+ DI_category_furniture_loc: "Furniture"
+ DI_category_ornament_loc: "Ornament"
+ DI_subtype_small_box_loc: "Small Box"
+ DI_subtype_medium_box_loc: "Medium Box"
+ DI_subtype_crown_loc: "Crown"
+ DI_subtype_divan_loc: "Divan"
+ DI_subtype_table_loc: "Table"
+ DI_subtype_small_shield_loc: "Small Shield"
+ DI_subtype_large_shield_loc: "Large Shield"
+
+ DI_category_alchemy_loc: "Alchemy"
+ DI_category_armor_loc: "Armor"
+ DI_category_book_loc: "Books"
+ DI_category_regalia_loc: "Regalia"
+ DI_category_throne_loc: "Throne"
+ DI_category_tournament_loc: "Tournament"
+ DI_category_trinket_loc: "Trinkets"
+ DI_category_weapon_loc: "Weapons"
+ DI_subtype_animal_hide_big_loc: "Animal Hide Big"
+ DI_subtype_animal_hide_loc: "Animal Hide"
+ DI_subtype_animal_skull_loc: "Animal Skull"
+ DI_subtype_animal_trinket_loc: "Animal Trinket"
+ DI_subtype_armor_brigandine_loc: "Armor Brigandine"
+ DI_subtype_armor_lamellar_loc: "Armor Lamellar"
+ DI_subtype_armor_laminar_loc: "Armor Laminar"
+ DI_subtype_armor_mail_loc: "Armor Mail"
+ DI_subtype_armor_plate_loc: "Armor Plate"
+ DI_subtype_armor_scale_loc: "Armor Scale"
+ DI_subtype_axe_loc: "Axe"
+ DI_subtype_bird_feather_loc: "Bird Feather"
+ DI_subtype_book_loc: "Book"
+ DI_subtype_bow_loc: "Bow"
+ DI_subtype_bowl_loc: "Bowl"
+ DI_subtype_box_loc: "Box"
+ DI_subtype_brooch_loc: "Brooch"
+ DI_subtype_brooch_pedestal_loc: "Brooch Pedestal"
+ DI_subtype_cabinet_loc: "Cabinet"
+ DI_subtype_chest_loc: "Chest"
+ DI_subtype_chronicle_loc: "Chronicle"
+ DI_subtype_composite_loc: "Composite"
+ DI_subtype_crossbow_loc: "Crossbow"
+ DI_subtype_dagger_loc: "Dagger"
+ DI_subtype_elixir_loc: "Elixir"
+ DI_subtype_goblet_loc: "Goblet"
+ DI_subtype_hammer_loc: "Hammer"
+ DI_subtype_helmet_loc: "Helmet"
+ DI_subtype_helmet_simple_loc: "Helmet Simple"
+ DI_subtype_journal_loc: "Journal"
+ DI_subtype_jug_loc: "Jug"
+ DI_subtype_longbow_loc: "Longbow"
+ DI_subtype_mace_loc: "Mace"
+ DI_subtype_miscellaneous_loc: "Miscellaneous"
+ DI_subtype_miscellaneous_when_not_court_loc: "Miscellaneous When Not Court"
+ DI_subtype_necklace_loc: "Necklace"
+ DI_subtype_necklace_pedestal_loc: "Necklace Pedestal"
+ DI_subtype_panacea_loc: "Panacea"
+ DI_subtype_pas_darmes_spurs_loc: "Pas Darmes Spurs"
+ DI_subtype_pas_darmes_token_loc: "Pas Darmes Token"
+ DI_subtype_pedestal_loc: "Pedestal"
+ DI_subtype_philosophers_stone_loc: "Philosophers Stone"
+ DI_subtype_plate_loc: "Plate"
+ DI_subtype_regalia_loc: "Regalia"
+ DI_subtype_regalia_simple_loc: "Regalia Simple"
+ DI_subtype_ring_loc: "Ring"
+ DI_subtype_scepter_pedestal_loc: "Scepter Pedestal"
+ DI_subtype_scientific_apparatus_loc: "Scientific Apparatus"
+ DI_subtype_sculpture_loc: "Sculpture"
+ DI_subtype_seal_of_investiture_court_loc: "Seal Of Investiture Court"
+ DI_subtype_seal_of_investiture_loc: "Seal Of Investiture"
+ DI_subtype_spear_loc: "Spear"
+ DI_subtype_sword_loc: "Sword"
+ DI_subtype_tapestry_loc: "Tapestry"
+ DI_subtype_throne_loc: "Throne"
+ DI_subtype_throne_special_loc: "Throne Special"
+ DI_subtype_tournament_favor_loc: "Tournament Favor"
+ DI_subtype_tun_barrel_loc: "Tun Barrel"
+ DI_subtype_urn_loc: "Urn"
+ DI_subtype_wall_big_loc: "Wall Big"
+ DI_subtype_wall_icon_court_large_loc: "Wall Icon Court Large"
+ DI_subtype_wall_icon_court_small_loc: "Wall Icon Court Small"
+ DI_subtype_wall_shield_loc: "Wall Shield"
+ DI_subtype_wall_shield_special_loc: "Wall Shield Special"
+ DI_subtype_wall_small_loc: "Wall Small"
+
+# --- Extra keys not present in English (review/remove if obsolete) ---

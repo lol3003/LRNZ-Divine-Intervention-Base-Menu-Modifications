@@ -520,8 +520,12 @@ window = {
 	using = Window_Decoration
 	movable = yes
 	visible = "[GetVariableSystem.Exists('DI_artifact_char_select_list_visible')]"
-	
-	
+        state = {
+            name = _show
+            using = Animation_FadeIn_Quick
+            on_finish = "[PdxGuiWidget.StackTop]"
+        }
+
 	vbox = {
 		using = Window_Margins
 		restrictparent_min = yes

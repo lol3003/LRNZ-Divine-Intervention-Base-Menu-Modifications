@@ -165,7 +165,8 @@ window = {
                                     }
 
                                     hbox = {
-                                        margin = { 20 0 }
+                                        margin_left = 20
+                                        margin_right = 5
 
                                         button_checkbox_label = {
                                             layoutpolicy_horizontal = expanding
@@ -198,7 +199,8 @@ window = {
                                     }
 
                                     hbox = {
-                                        margin = { 20 0 }
+                                        margin_left = 20
+                                        margin_right = 5
 
                                         button_checkbox_label = {
                                             layoutpolicy_horizontal = expanding
@@ -231,7 +233,8 @@ window = {
                                     }
 
                                     hbox = {
-                                        margin = { 20 0 }
+                                        margin_left = 20
+                                        margin_right = 5
 
                                         button_checkbox_label = {
                                             layoutpolicy_horizontal = expanding
@@ -265,7 +268,8 @@ window = {
                                     }
 
                                     hbox = {
-                                        margin = { 20 0 }
+                                        margin_left = 20
+                                        margin_right = 5
 
                                         button_checkbox_label = {
                                             layoutpolicy_horizontal = expanding
@@ -299,7 +303,8 @@ window = {
                                     }
 
                                     hbox = {
-                                        margin = { 20 0 }
+                                        margin_left = 20
+                                        margin_right = 5
 
                                         button_checkbox_label = {
                                             layoutpolicy_horizontal = expanding
@@ -333,7 +338,8 @@ window = {
                                     }
 
                                     hbox = {
-                                        margin = { 20 0 }
+                                        margin_left = 20
+                                        margin_right = 5
 
                                         button_checkbox_label = {
                                             layoutpolicy_horizontal = expanding
@@ -367,7 +373,8 @@ window = {
                                     }
 
                                     hbox = {
-                                        margin = { 20 0 }
+                                        margin_left = 20
+                                        margin_right = 5
 
                                         button_checkbox_label = {
                                             layoutpolicy_horizontal = expanding
@@ -401,7 +408,8 @@ window = {
                                     }
 
                                     hbox = {
-                                        margin = { 20 0 }
+                                        margin_left = 20
+                                        margin_right = 5
 
                                         button_checkbox_label = {
                                             layoutpolicy_horizontal = expanding
@@ -435,7 +443,8 @@ window = {
                                     }
 
                                     hbox = {
-                                        margin = { 20 0 }
+                                        margin_left = 20
+                                        margin_right = 5
 
                                         button_checkbox_label = {
                                             layoutpolicy_horizontal = expanding
@@ -444,6 +453,41 @@ window = {
                                             blockoverride "checkbox"
                                             {
                                                 checked = "[GetPlayer.MakeScope.Var('DI_soulmate').IsSet]"
+                                            }
+
+                                            blockoverride "text"
+                                            {
+                                                text = ""
+                                            }
+                                        }
+                                    }
+                                }
+
+                                # crush
+                                DI_Relation_Button = {
+                                    blockoverride "onclick_relation"
+                                    {
+                                        onclick = "[GetScriptedGui('DI_crush').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                                        onrightclick = "[GetScriptedGui('DI_remove_crush').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                                        button_ignore = none
+                                    }
+
+                                    blockoverride "text_relation"
+                                    {
+                                        text = "crush"
+                                    }
+
+                                    hbox = {
+                                        margin_left = 20
+                                        margin_right = 5
+
+                                        button_checkbox_label = {
+                                            layoutpolicy_horizontal = expanding
+                                            onclick = "[GetScriptedGui('DI_crush_toggle').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+
+                                            blockoverride "checkbox"
+                                            {
+                                                checked = "[GetPlayer.MakeScope.Var('DI_crush').IsSet]"
                                             }
 
                                             blockoverride "text"
@@ -469,7 +513,8 @@ window = {
                                     }
 
                                     hbox = {
-                                        margin = { 20 0 }
+                                        margin_left = 20
+                                        margin_right = 5
 
                                         button_checkbox_label = {
                                             layoutpolicy_horizontal = expanding
@@ -503,7 +548,8 @@ window = {
                                     }
 
                                     hbox = {
-                                        margin = { 20 0 }
+                                        margin_left = 20
+                                        margin_right = 5
 
                                         button_checkbox_label = {
                                             layoutpolicy_horizontal = expanding
@@ -571,6 +617,8 @@ window = {
                             text = DI_apply_all_pinned_relations
                             tooltip = DI_apply_all_pinned_relations_tt
                             onclick = "[GetScriptedGui('DI_apply_all_pinned_relations').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                            onrightclick = "[GetScriptedGui('DI_remove_selected_all_pinned_relations').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                            button_ignore = none
                         }
                     }
                 }
@@ -1029,6 +1077,7 @@ window = {
                                         layoutpolicy_horizontal = expanding
                                         size = { 0 50 }
 
+                                        enabled = "[GetScriptedGui('DI_dip_adoption').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                                         onclick = "[GetScriptedGui('DI_dip_adoption').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
 
                                         hbox = {
@@ -1058,6 +1107,7 @@ window = {
                                         layoutpolicy_horizontal = expanding
                                         size = { 0 50 }
 
+                                        enabled = "[GetScriptedGui('DI_dip_adoption_house').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                                         onclick = "[GetScriptedGui('DI_dip_adoption_house').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
 
                                         hbox = {
@@ -1080,6 +1130,7 @@ window = {
                                     }
                                 }
 
+                                # create cadet branch
                                 hbox = {
                                     layoutpolicy_horizontal = expanding
 
@@ -1087,6 +1138,37 @@ window = {
                                         layoutpolicy_horizontal = expanding
                                         size = { 0 50 }
 
+                                        enabled = "[GetScriptedGui('DI_dip_create_cadet_branch').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                                        onclick = "[GetScriptedGui('DI_dip_create_cadet_branch').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+
+                                        hbox = {
+                                            margin = { 5 0 }
+                                            margin_right = 10
+                                            spacing = 10
+
+                                            text_single = {
+                                                layoutpolicy_horizontal = expanding
+
+                                                text = DI_dip_create_cadet_branch_button
+
+                                                default_format = "#clickable"
+                                            }
+                                        }
+                                        tooltip = DI_dip_create_cadet_branch_button_tt
+                                    }
+                                    hbox = {
+                                        minimumsize = { 76 -1 }
+                                    }
+                                }
+
+                                hbox = {
+                                    layoutpolicy_horizontal = expanding
+
+                                    button_standard = {
+                                        layoutpolicy_horizontal = expanding
+                                        size = { 0 50 }
+
+                                        enabled = "[GetScriptedGui('DI_dip_impregnate').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                                         onclick = "[GetScriptedGui('DI_dip_impregnate').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
 
                                         hbox = {
@@ -1117,6 +1199,7 @@ window = {
                                         layoutpolicy_horizontal = expanding
                                         size = { 0 50 }
 
+                                        enabled = "[GetScriptedGui('DI_dip_preg_gender_male').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                                         onclick = "[GetScriptedGui('DI_dip_preg_gender_male').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
 
                                         hbox = {
@@ -1147,6 +1230,7 @@ window = {
                                         layoutpolicy_horizontal = expanding
                                         size = { 0 50 }
 
+                                        enabled = "[GetScriptedGui('DI_dip_preg_gender_female').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                                         onclick = "[GetScriptedGui('DI_dip_preg_gender_female').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
 
                                         hbox = {
@@ -1169,6 +1253,7 @@ window = {
                                     }
                                 }
 
+                                # set real father
                                 hbox = {
                                     layoutpolicy_horizontal = expanding
 
@@ -1176,6 +1261,68 @@ window = {
                                         layoutpolicy_horizontal = expanding
                                         size = { 0 50 }
 
+                                        enabled = "[GetScriptedGui('DI_dip_set_real_father').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                                        onclick = "[GetScriptedGui('DI_dip_set_real_father').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+
+                                        hbox = {
+                                            margin = { 5 0 }
+                                            margin_right = 10
+                                            spacing = 10
+
+                                            text_single = {
+                                                layoutpolicy_horizontal = expanding
+
+                                                text = DI_dip_set_real_father_button
+
+                                                default_format = "#clickable"
+                                            }
+                                        }
+                                        tooltip = DI_dip_set_real_father_button_tt
+                                    }
+                                    hbox = {
+                                        minimumsize = { 76 -1 }
+                                    }
+                                }
+
+                                # set father as real father
+                                hbox = {
+                                    layoutpolicy_horizontal = expanding
+
+                                    button_standard = {
+                                        layoutpolicy_horizontal = expanding
+                                        size = { 0 50 }
+
+                                        enabled = "[GetScriptedGui('DI_dip_set_father_as_real_father').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                                        onclick = "[GetScriptedGui('DI_dip_set_father_as_real_father').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+
+                                        hbox = {
+                                            margin = { 5 0 }
+                                            margin_right = 10
+                                            spacing = 10
+
+                                            text_single = {
+                                                layoutpolicy_horizontal = expanding
+
+                                                text = DI_dip_set_father_as_real_father_button
+
+                                                default_format = "#clickable"
+                                            }
+                                        }
+                                        tooltip = DI_dip_set_father_as_real_father_button_tt
+                                    }
+                                    hbox = {
+                                        minimumsize = { 76 -1 }
+                                    }
+                                }
+
+                                hbox = {
+                                    layoutpolicy_horizontal = expanding
+
+                                    button_standard = {
+                                        layoutpolicy_horizontal = expanding
+                                        size = { 0 50 }
+
+                                        enabled = "[GetScriptedGui('DI_dip_marry').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                                         onclick = "[GetScriptedGui('DI_dip_marry').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
 
                                         hbox = {
@@ -1206,6 +1353,7 @@ window = {
                                         layoutpolicy_horizontal = expanding
                                         size = { 0 50 }
 
+                                        enabled = "[GetScriptedGui('DI_dip_marry_matrilineal').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                                         onclick = "[GetScriptedGui('DI_dip_marry_matrilineal').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
 
                                         hbox = {
@@ -1236,6 +1384,7 @@ window = {
                                         layoutpolicy_horizontal = expanding
                                         size = { 0 50 }
 
+                                        enabled = "[GetScriptedGui('DI_dip_divorce').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                                         onclick = "[GetScriptedGui('DI_dip_divorce').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
 
                                         hbox = {
@@ -1258,6 +1407,157 @@ window = {
                                     }
                                 }
 
+                                # add concubine
+                                hbox = {
+                                    layoutpolicy_horizontal = expanding
+
+                                    button_standard = {
+                                        layoutpolicy_horizontal = expanding
+                                        size = { 0 50 }
+
+                                        enabled = "[GetScriptedGui('DI_dip_add_concubine').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                                        onclick = "[GetScriptedGui('DI_dip_add_concubine').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+
+                                        hbox = {
+                                            margin = { 5 0 }
+                                            margin_right = 10
+                                            spacing = 10
+
+                                            text_single = {
+                                                layoutpolicy_horizontal = expanding
+                                                text = DI_dip_add_concubine_button
+                                                default_format = "#clickable"
+                                            }
+                                        }
+                                        tooltip = DI_dip_add_concubine_button_tt
+                                    }
+                                    hbox = {
+                                        minimumsize = { 76 -1 }
+                                    }
+                                }
+
+                                # remove concubine
+                                hbox = {
+                                    layoutpolicy_horizontal = expanding
+
+                                    button_standard = {
+                                        layoutpolicy_horizontal = expanding
+                                        size = { 0 50 }
+
+                                        enabled = "[GetScriptedGui('DI_dip_remove_concubine').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                                        onclick = "[GetScriptedGui('DI_dip_remove_concubine').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+
+                                        hbox = {
+                                            margin = { 5 0 }
+                                            margin_right = 10
+                                            spacing = 10
+
+                                            text_single = {
+                                                layoutpolicy_horizontal = expanding
+                                                text = DI_dip_remove_concubine_button
+                                                default_format = "#clickable"
+                                            }
+                                        }
+                                        tooltip = DI_dip_remove_concubine_button_tt
+                                    }
+                                    hbox = {
+                                        minimumsize = { 76 -1 }
+                                    }
+                                }
+
+                                # arrange betrothal
+                                hbox = {
+                                    layoutpolicy_horizontal = expanding
+
+                                    button_standard = {
+                                        layoutpolicy_horizontal = expanding
+                                        size = { 0 50 }
+
+                                        enabled = "[GetScriptedGui('DI_dip_arrange_betrothal').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                                        onclick = "[GetScriptedGui('DI_dip_arrange_betrothal').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+
+                                        hbox = {
+                                            margin = { 5 0 }
+                                            margin_right = 10
+                                            spacing = 10
+
+                                            text_single = {
+                                                layoutpolicy_horizontal = expanding
+
+                                                text = DI_dip_arrange_betrothal_button
+
+                                                default_format = "#clickable"
+                                            }
+                                        }
+                                        tooltip = DI_dip_arrange_betrothal_button_tt
+                                    }
+                                    hbox = {
+                                        minimumsize = { 76 -1 }
+                                    }
+                                }
+
+                                # arrange betrothal matrilineal
+                                hbox = {
+                                    layoutpolicy_horizontal = expanding
+
+                                    button_standard = {
+                                        layoutpolicy_horizontal = expanding
+                                        size = { 0 50 }
+
+                                        enabled = "[GetScriptedGui('DI_dip_arrange_betrothal_matrilineal').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                                        onclick = "[GetScriptedGui('DI_dip_arrange_betrothal_matrilineal').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+
+                                        hbox = {
+                                            margin = { 5 0 }
+                                            margin_right = 10
+                                            spacing = 10
+
+                                            text_single = {
+                                                layoutpolicy_horizontal = expanding
+
+                                                text = DI_dip_arrange_betrothal_matrilineal_button
+
+                                                default_format = "#clickable"
+                                            }
+                                        }
+                                        tooltip = DI_dip_arrange_betrothal_matrilineal_button_tt
+                                    }
+                                    hbox = {
+                                        minimumsize = { 76 -1 }
+                                    }
+                                }
+
+                                # break betrothal
+                                hbox = {
+                                    layoutpolicy_horizontal = expanding
+
+                                    button_standard = {
+                                        layoutpolicy_horizontal = expanding
+                                        size = { 0 50 }
+
+                                        enabled = "[GetScriptedGui('DI_dip_break_betrothal').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                                        onclick = "[GetScriptedGui('DI_dip_break_betrothal').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+
+                                        hbox = {
+                                            margin = { 5 0 }
+                                            margin_right = 10
+                                            spacing = 10
+
+                                            text_single = {
+                                                layoutpolicy_horizontal = expanding
+
+                                                text = DI_dip_break_betrothal_button
+
+                                                default_format = "#clickable"
+                                            }
+                                        }
+                                        tooltip = DI_dip_break_betrothal_button_tt
+                                    }
+                                    hbox = {
+                                        minimumsize = { 76 -1 }
+                                    }
+                                }
+
                                 # Make Siblings
                                 hbox = {
                                     layoutpolicy_horizontal = expanding
@@ -1266,6 +1566,7 @@ window = {
                                         layoutpolicy_horizontal = expanding
                                         size = { 0 50 }
 
+                                        enabled = "[GetScriptedGui('DI_dip_make_siblings').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                                         onclick = "[GetScriptedGui('DI_dip_make_siblings').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
 
                                         hbox = {
@@ -1287,10 +1588,6 @@ window = {
                                         minimumsize = { 76 -1 }
                                     }
                                 }
-
-                                # Create Cadet Branch
-                                # This will take a primary character (the head of the dynasty who the house will belong to)
-                                # and a secondary character (the head of the new house)
                             }
                         }
                     }
@@ -1549,12 +1846,12 @@ types DIDiplomacyShared
             }
 
             hbox = {
-                margin = { 5 0 }
-                margin_right = 10
+                layoutpolicy_horizontal = expanding
+                margin = { 10 0 }
                 spacing = 10
 
                 text_single = {
-                    layoutpolicy_horizontal = expanding
+                    layoutpolicy_horizontal = shrinking
 
                     block "text_relation"
                     {
@@ -1563,6 +1860,8 @@ types DIDiplomacyShared
 
                     default_format = "#clickable"
                 }
+
+                expand = {}
             }
             tooltip = DI_relations_tt
         }

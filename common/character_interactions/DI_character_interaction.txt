@@ -80,7 +80,6 @@ DI_pin_character_interaction = {
     }
 
     send_option = {
-        is_default = yes
         flag = character
         localization = DI_pin_character
     }
@@ -683,6 +682,45 @@ DI_cultural_acceptance_interaction = {
     }
 }
 
+DI_add_character_flags_interaction = {
+    category = interaction_category_cheat_menu
+    icon = alliance
+    common_interaction = no
+
+    auto_accept = yes
+    use_diplomatic_range = no
+    ignores_pending_interaction_block = yes
+    send_options_exclusive = no
+
+    is_shown = {
+        scope:actor = {
+            is_ai = no
+            any_owned_story = {
+                story_type = DI_misc_variables_story
+                has_variable = DI_cheat_menu
+            }
+        }
+    }
+
+    send_option = { flag = used_lifetime_invasion }
+    send_option = { flag = declared_major_religious_war_flag }
+    send_option = { flag = trait_conqueror }
+
+    on_accept = {
+        scope:recipient = {
+            if = { limit = { always = scope:used_lifetime_invasion }
+                add_character_flag = used_lifetime_invasion
+            }
+            else_if = { limit = { always = scope:declared_major_religious_war_flag }
+                add_character_flag = declared_major_religious_war_flag
+            }
+            else_if = { limit = { always = scope:trait_conqueror }
+                set_variable = conqueror
+            }
+        }
+    }
+}
+
 DI_remove_character_flags_interaction = {
     category = interaction_category_cheat_menu
     icon = alliance
@@ -705,18 +743,21 @@ DI_remove_character_flags_interaction = {
 
     send_option = { flag = used_lifetime_invasion }
     send_option = { flag = declared_major_religious_war_flag }
+    send_option = { flag = trait_conqueror }
 
     on_accept = {
         scope:recipient = {
             if = { limit = { always = scope:used_lifetime_invasion }
-            remove_character_flag = used_lifetime_invasion
+                remove_character_flag = used_lifetime_invasion
+            }
+            else_if = { limit = { always = scope:declared_major_religious_war_flag }
+                remove_character_flag = declared_major_religious_war_flag
+            }
+            else_if = { limit = { always = scope:trait_conqueror }
+                remove_variable = conqueror
+            }
         }
-        else_if = { limit = { always = scope:declared_major_religious_war_flag }
-        remove_character_flag = declared_major_religious_war_flag
-    }
-
-}
-}
+    }   
 }
 
 DI_permanent_health = {
@@ -1545,6 +1586,41 @@ DI_arrange_marriage_interaction = {
             }
         }
     }
+}
+
+### Break Betrothal ###
+DI_break_betrothal_interaction = {
+    category = interaction_category_cheat_menu
+    icon = icon_marriage
+    desc = DI_break_betrothal_desc
+    common_interaction = no
+
+    auto_accept = yes
+    use_diplomatic_range = no
+    ignores_pending_interaction_block = yes
+
+    is_shown = {
+        scope:actor = {
+            is_ai = no
+            any_owned_story = {
+                story_type = DI_misc_variables_story
+                has_variable = DI_cheat_menu
+            }
+        }
+
+        scope:recipient = {
+            is_betrothed = yes
+            exists = betrothed
+        }
+    }
+
+    on_accept = {
+        scope:recipient = {
+            break_betrothal = betrothed
+        }
+    }
+
+    ai_will_do = { base = 0 }
 }
 
 ### Divorce Character ###
@@ -3457,6 +3533,47 @@ DI_add_concubine_interaction = {
     }
 }
 
+### Remove Character as Concubine ###
+DI_remove_concubine_interaction = {
+    category = interaction_category_cheat_menu
+    icon = concubine_icon
+    desc = DI_remove_concubine_desc
+    common_interaction = no
+
+    auto_accept = yes
+    use_diplomatic_range = no
+    ignores_pending_interaction_block = yes
+
+    is_shown = {
+        scope:actor = {
+            is_ai = no
+            any_owned_story = {
+                story_type = DI_misc_variables_story
+                has_variable = DI_cheat_menu
+            }
+        }
+
+        scope:recipient = {
+            OR = {
+                is_concubine_of = scope:actor
+
+                AND = {
+                    is_concubine = yes
+                    is_ai = yes
+                }
+            }
+        }
+    }
+
+    on_send = {
+        scope:recipient = {
+            this.concubinist = {
+                remove_concubine = scope:recipient
+            }
+        }
+    }
+}
+
 ### Impregnate Character ###
 DI_impregnate_interaction = {
     category = interaction_category_cheat_menu
@@ -4071,16 +4188,16 @@ DI_change_government_extended = {
     send_option = {
         flag = japan_administrative
         localization = DI_change_government_japan_administrative
-        is_valid = {
-            has_tgp_dlc_trigger = yes
-        }
+        # is_valid = {
+        #     has_tgp_dlc_trigger = yes
+        # }
     }
     send_option = {
         flag = japan_feudal
         localization = DI_change_government_japan_feudal
-        is_valid = {
-            has_tgp_dlc_trigger = yes
-        }
+        # is_valid = {
+        #     has_tgp_dlc_trigger = yes
+        # }
     }
     send_option = {
         flag = wanua
@@ -4118,24 +4235,30 @@ DI_change_government_extended = {
 
                 scope:japan_administrative = {
                     scope:recipient = {
+                        add_character_flag = can_become_japanese_feudal
+                        change_government = japan_feudal_government
                         change_government = japan_administrative_government
 
                         every_vassal_or_below = {
                             limit = {
                                 highest_held_title_tier > tier_barony
                             }
+                            add_character_flag = can_become_japanese_feudal
+                            change_government = japan_feudal_government
                             change_government = japan_administrative_government
                         }
                     }
                 }
                 scope:japan_feudal = {
                     scope:recipient = {
+                        add_character_flag = can_become_japanese_feudal
                         change_government = japan_feudal_government
 
                         every_vassal_or_below = {
                             limit = {
                                 highest_held_title_tier > tier_barony
                             }
+                            add_character_flag = can_become_japanese_feudal
                             change_government = japan_feudal_government
                         }
                     }

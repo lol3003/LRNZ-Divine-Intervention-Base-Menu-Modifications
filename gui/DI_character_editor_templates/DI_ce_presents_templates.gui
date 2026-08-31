@@ -1,305 +1,3 @@
-template DI_CE_Lifestyle_Tab
-{
-	vbox = {
-		name = "lifestyle_tab"
-		visible = "[And( GetVariableSystem.HasValue('char_editor_tab', 'presents'), GetVariableSystem.HasValue('ce_presents_tab', 'lifestyle'))]"
-		layoutpolicy_horizontal = expanding
-
-		margin = { 20 5 }
-
-		using = Animation_Tab_Switch
-
-		vbox = {
-			scrollbox = {
-				layoutpolicy_horizontal = expanding
-				size = { 400 350 }
-
-				blockoverride "scrollbox_content"
-				{
-					vbox = {
-						name = "presents_list"
-						layoutpolicy_horizontal = expanding
-						spacing = 5
-
-						# All Lifestyle Button
-						hbox = {
-							layoutpolicy_horizontal = expanding
-
-							button_standard = {
-								layoutpolicy_horizontal = expanding
-								size = { 0 50 }
-								button_ignore = none
-
-								onclick = "[GetScriptedGui('DI_ce_add_all_lifestyle').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-								onrightclick = "[GetScriptedGui('DI_ce_remove_all_lifestyle').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-								
-								hbox = {
-									margin = { 5 0 }
-									margin_right = 10
-									spacing = 10
-						
-									icon = {
-										size = { 35 35 }
-										framesize = { 160 160 }
-										frame = "1"
-										texture = "gfx/interface/icons/event_types/type_majesty.dds"
-									}
-
-									text_single = {
-										layoutpolicy_horizontal = expanding
-										
-										text = DI_ce_all_lifestyle_button
-						
-										default_format = "#clickable"
-									}
-								}
-								tooltip = DI_ce_all_lifestyle_button_tt
-							}
-							hbox = {
-								minimumsize = { 76 -1 }
-							}
-						}
-
-						# All Martial Lifestyle Button
-						hbox = {
-							layoutpolicy_horizontal = expanding
-
-							button_standard = {
-								layoutpolicy_horizontal = expanding
-								size = { 0 50 }
-								button_ignore = none
-
-								onclick = "[GetScriptedGui('DI_ce_add_martial_lifestyle').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-								onrightclick = "[GetScriptedGui('DI_ce_remove_martial_lifestyle').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-								
-								hbox = {
-									margin = { 5 0 }
-									margin_right = 10
-									spacing = 10
-						
-									icon = {
-										size = { 35 35 }
-										framesize = { 160 160 }
-										frame = "1"
-										texture = "gfx/interface/icons/lifestyles/martial_lifestyle.dds"
-									}
-
-									text_single = {
-										layoutpolicy_horizontal = expanding
-										
-										text = DI_ce_martial_lifestyle_button
-						
-										default_format = "#clickable"
-									}
-								}
-								tooltip = DI_ce_martial_lifestyle_button_tt
-							}
-							hbox = {
-								minimumsize = { 76 -1 }
-							}
-						}
-
-						# All Diplomacy Lifestyle Button
-						hbox = {
-							layoutpolicy_horizontal = expanding
-
-							button_standard = {
-								layoutpolicy_horizontal = expanding
-								size = { 0 50 }
-								button_ignore = none
-
-								onclick = "[GetScriptedGui('DI_ce_add_diplomacy_lifestyle').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-								onrightclick = "[GetScriptedGui('DI_ce_remove_diplomacy_lifestyle').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-								
-								hbox = {
-									margin = { 5 0 }
-									margin_right = 10
-									spacing = 10
-						
-									icon = {
-										size = { 35 35 }
-										framesize = { 160 160 }
-										frame = "1"
-										texture = "gfx/interface/icons/lifestyles/diplomacy_lifestyle.dds"
-									}
-
-									text_single = {
-										layoutpolicy_horizontal = expanding
-										
-										text = DI_ce_diplomacy_lifestyle_button
-						
-										default_format = "#clickable"
-									}
-								}
-								tooltip = DI_ce_diplomacy_lifestyle_button_tt
-							}
-							hbox = {
-								minimumsize = { 76 -1 }
-							}
-						}
-
-						# All Stewardship Lifestyle Button
-						hbox = {
-							layoutpolicy_horizontal = expanding
-
-							button_standard = {
-								layoutpolicy_horizontal = expanding
-								size = { 0 50 }
-								button_ignore = none
-
-								onclick = "[GetScriptedGui('DI_ce_add_stewardship_lifestyle').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-								onrightclick = "[GetScriptedGui('DI_ce_remove_stewardship_lifestyle').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-								
-								hbox = {
-									margin = { 5 0 }
-									margin_right = 10
-									spacing = 10
-						
-									icon = {
-										size = { 35 35 }
-										framesize = { 160 160 }
-										frame = "1"
-										texture = "gfx/interface/icons/lifestyles/stewardship_lifestyle.dds"
-									}
-
-									text_single = {
-										layoutpolicy_horizontal = expanding
-										
-										text = DI_ce_stewardship_lifestyle_button
-						
-										default_format = "#clickable"
-									}
-								}
-								tooltip = DI_ce_stewardship_lifestyle_button_tt
-							}
-							hbox = {
-								minimumsize = { 76 -1 }
-							}
-						}
-
-						# All Intrigue Lifestyle Button
-						hbox = {
-							layoutpolicy_horizontal = expanding
-
-							button_standard = {
-								layoutpolicy_horizontal = expanding
-								size = { 0 50 }
-								button_ignore = none
-
-								onclick = "[GetScriptedGui('DI_ce_add_intrigue_lifestyle').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-								onrightclick = "[GetScriptedGui('DI_ce_remove_intrigue_lifestyle').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-								
-								hbox = {
-									margin = { 5 0 }
-									margin_right = 10
-									spacing = 10
-						
-									icon = {
-										size = { 35 35 }
-										framesize = { 160 160 }
-										frame = "1"
-										texture = "gfx/interface/icons/lifestyles/intrigue_lifestyle.dds"
-									}
-
-									text_single = {
-										layoutpolicy_horizontal = expanding
-										
-										text = DI_ce_intrigue_lifestyle_button
-						
-										default_format = "#clickable"
-									}
-								}
-								tooltip = DI_ce_intrigue_lifestyle_button_tt
-							}
-							hbox = {
-								minimumsize = { 76 -1 }
-							}
-						}
-
-						# All Learning Lifestyle Button
-						hbox = {
-							layoutpolicy_horizontal = expanding
-
-							button_standard = {
-								layoutpolicy_horizontal = expanding
-								size = { 0 50 }
-								button_ignore = none
-
-								onclick = "[GetScriptedGui('DI_ce_add_learning_lifestyle').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-								onrightclick = "[GetScriptedGui('DI_ce_remove_learning_lifestyle').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-								
-								hbox = {
-									margin = { 5 0 }
-									margin_right = 10
-									spacing = 10
-						
-									icon = {
-										size = { 35 35 }
-										framesize = { 160 160 }
-										frame = "1"
-										texture = "gfx/interface/icons/lifestyles/learning_lifestyle.dds"
-									}
-
-									text_single = {
-										layoutpolicy_horizontal = expanding
-										
-										text = DI_ce_learning_lifestyle_button
-						
-										default_format = "#clickable"
-									}
-								}
-								tooltip = DI_ce_learning_lifestyle_button_tt
-							}
-							hbox = {
-								minimumsize = { 76 -1 }
-							}
-						}
-
-						# All Wandering Lifestyle Button
-						hbox = {
-							layoutpolicy_horizontal = expanding
-
-							button_standard = {
-								layoutpolicy_horizontal = expanding
-								size = { 0 50 }
-								button_ignore = none
-
-								onclick = "[GetScriptedGui('DI_ce_add_wandering_lifestyle').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-								onrightclick = "[GetScriptedGui('DI_ce_remove_wandering_lifestyle').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-								
-								hbox = {
-									margin = { 5 0 }
-									margin_right = 10
-									spacing = 10
-						
-									icon = {
-										size = { 35 35 }
-										framesize = { 160 160 }
-										frame = "1"
-										texture = "gfx/interface/icons/lifestyles/wanderer_lifestyle.dds"
-									}
-
-									text_single = {
-										layoutpolicy_horizontal = expanding
-										
-										text = DI_ce_wandering_lifestyle_button
-						
-										default_format = "#clickable"
-									}
-								}
-								tooltip = DI_ce_wandering_lifestyle_button_tt
-							}
-							hbox = {
-								minimumsize = { 76 -1 }
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
 template DI_CE_Health_Tab
 {
 	vbox = {
@@ -1213,6 +911,255 @@ template DI_CE_Laws_Tab
 	}
 }
 
+template DI_CE_Titles_Tab
+{
+	vbox = {
+		visible = "[And( GetVariableSystem.HasValue('char_editor_tab', 'presents'), GetVariableSystem.HasValue('ce_presents_tab', 'titles'))]"
+		layoutpolicy_horizontal = expanding
+		margin = { 20 5 }
+		using = Animation_Tab_Switch
+
+		vbox = {
+			scrollbox = {
+				layoutpolicy_horizontal = expanding
+				size = { 400 350 }
+
+				blockoverride "scrollbox_content"
+				{
+					vbox = {
+						name = "titles_list"
+						layoutpolicy_horizontal = expanding
+						spacing = 5
+
+						DI_ce_present_dark_button = {
+							name = "take_realm_titles"
+							blockoverride "button_onleftclick"
+							{
+								onclick = "[GetScriptedGui('DI_ce_take_realm_titles').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+							}
+							blockoverride "button_icon_texture"
+							{
+								texture = "gfx/interface/icons/character_interactions/revoke_title.dds"
+							}
+							blockoverride "button_text"
+							{
+								text = DI_ce_take_realm_titles_button
+							}
+							blockoverride "button_tooltip"
+							{
+								tooltip = DI_ce_take_realm_titles_button_tt
+							}
+						}
+
+						DI_ce_present_dark_button = {
+							name = "take_sub_realm_titles"
+							blockoverride "button_onleftclick"
+							{
+								onclick = "[GetScriptedGui('DI_ce_take_sub_realm_titles').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+							}
+							blockoverride "button_icon_texture"
+							{
+								texture = "gfx/interface/icons/character_interactions/revoke_title.dds"
+							}
+							blockoverride "button_text"
+							{
+								text = DI_ce_take_sub_realm_titles_button
+							}
+							blockoverride "button_tooltip"
+							{
+								tooltip = DI_ce_take_sub_realm_titles_button_tt
+							}
+						}
+
+						DI_ce_present_dark_button = {
+							name = "take_vassal_titles"
+							blockoverride "button_onleftclick"
+							{
+								onclick = "[GetScriptedGui('DI_ce_take_vassal_titles').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+							}
+							blockoverride "button_icon_texture"
+							{
+								texture = "gfx/interface/icons/character_interactions/revoke_title.dds"
+							}
+							blockoverride "button_text"
+							{
+								text = DI_ce_take_vassal_titles_button
+							}
+							blockoverride "button_tooltip"
+							{
+								tooltip = DI_ce_take_vassal_titles_button_tt
+							}
+						}
+
+						DI_ce_present_dark_button = {
+							name = "take_personal_titles"
+							blockoverride "button_onleftclick"
+							{
+								onclick = "[GetScriptedGui('DI_ce_take_personal_titles').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+							}
+							blockoverride "button_icon_texture"
+							{
+								texture = "gfx/interface/icons/character_interactions/revoke_title.dds"
+							}
+							blockoverride "button_text"
+							{
+								text = DI_ce_take_personal_titles_button
+							}
+							blockoverride "button_tooltip"
+							{
+								tooltip = DI_ce_take_personal_titles_button_tt
+							}
+						}
+
+						DI_ce_present_dark_button = {
+							name = "take_primary_title"
+							blockoverride "button_onleftclick"
+							{
+								onclick = "[GetScriptedGui('DI_ce_take_primary_title').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+							}
+							blockoverride "button_icon_texture"
+							{
+								texture = "gfx/interface/icons/character_interactions/revoke_title.dds"
+							}
+							blockoverride "button_text"
+							{
+								text = DI_ce_take_primary_title_button
+							}
+							blockoverride "button_tooltip"
+							{
+								tooltip = DI_ce_take_primary_title_button_tt
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+template DI_CE_Crown_Authority_Tab
+{
+	vbox = {
+		visible = "[And( GetVariableSystem.HasValue('char_editor_tab', 'presents'), GetVariableSystem.HasValue('ce_presents_tab', 'crown_authority'))]"
+		layoutpolicy_horizontal = expanding
+		margin = { 20 5 }
+		using = Animation_Tab_Switch
+
+		vbox = {
+			scrollbox = {
+				layoutpolicy_horizontal = expanding
+				size = { 400 350 }
+
+				blockoverride "scrollbox_content"
+				{
+					vbox = {
+						name = "crown_authority_list"
+						layoutpolicy_horizontal = expanding
+						spacing = 5
+
+						DI_ce_present_dark_button = {
+							name = "crown_authority_1"
+							blockoverride "button_onleftclick"
+							{
+								onclick = "[GetScriptedGui('DI_ce_set_crown_authority_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+							}
+							blockoverride "button_icon_texture"
+							{
+								texture = "gfx/interface/icons/laws/crown_authority_0.dds"
+							}
+							blockoverride "button_icon_modify_texture"
+							{
+								using = Master_Button_Modify_Texture
+							}
+							blockoverride "button_text"
+							{
+								text = DI_ce_crown_authority_1_button
+							}
+							blockoverride "button_tooltip"
+							{
+								tooltip = DI_ce_crown_authority_1_button_tt
+							}
+						}
+
+						DI_ce_present_dark_button = {
+							name = "crown_authority_2"
+							blockoverride "button_onleftclick"
+							{
+								onclick = "[GetScriptedGui('DI_ce_set_crown_authority_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+							}
+							blockoverride "button_icon_texture"
+							{
+								texture = "gfx/interface/icons/laws/crown_authority_1.dds"
+							}
+							blockoverride "button_icon_modify_texture"
+							{
+								using = Master_Button_Modify_Texture
+							}
+							blockoverride "button_text"
+							{
+								text = DI_ce_crown_authority_2_button
+							}
+							blockoverride "button_tooltip"
+							{
+								tooltip = DI_ce_crown_authority_2_button_tt
+							}
+						}
+
+						DI_ce_present_dark_button = {
+							name = "crown_authority_3"
+							blockoverride "button_onleftclick"
+							{
+								onclick = "[GetScriptedGui('DI_ce_set_crown_authority_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+							}
+							blockoverride "button_icon_texture"
+							{
+								texture = "gfx/interface/icons/laws/crown_authority_2.dds"
+							}
+							blockoverride "button_icon_modify_texture"
+							{
+								using = Master_Button_Modify_Texture
+							}
+							blockoverride "button_text"
+							{
+								text = DI_ce_crown_authority_3_button
+							}
+							blockoverride "button_tooltip"
+							{
+								tooltip = DI_ce_crown_authority_3_button_tt
+							}
+						}
+
+						DI_ce_present_dark_button = {
+							name = "crown_authority_4"
+							blockoverride "button_onleftclick"
+							{
+								onclick = "[GetScriptedGui('DI_ce_set_crown_authority_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+							}
+							blockoverride "button_icon_texture"
+							{
+								texture = "gfx/interface/icons/laws/crown_authority_3.dds"
+							}
+							blockoverride "button_icon_modify_texture"
+							{
+								using = Master_Button_Modify_Texture
+							}
+							blockoverride "button_text"
+							{
+								text = DI_ce_crown_authority_4_button
+							}
+							blockoverride "button_tooltip"
+							{
+								tooltip = DI_ce_crown_authority_4_button_tt
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
 # Present Tabs
 template DI_CE_Presents_Tabs
 {
@@ -1278,6 +1225,38 @@ template DI_CE_Presents_Tabs
 				text_single = {
 					parentanchor = center
 					text = DI_tab_laws
+					maximumsize = { 400 -1 }
+					default_format = "#low"
+				}
+			}
+		}
+
+		hbox = {
+			layoutpolicy_horizontal = expanding
+
+			# titles tab
+			button_tab = {
+				layoutpolicy_horizontal = expanding
+				onclick = "[GetVariableSystem.Set('ce_presents_tab', 'titles')]"
+				down = "[GetVariableSystem.HasValue('ce_presents_tab', 'titles')]"
+
+				text_single = {
+					parentanchor = center
+					text = DI_ce_tab_titles
+					maximumsize = { 400 -1 }
+					default_format = "#low"
+				}
+			}
+
+			# crown authority tab
+			button_tab = {
+				layoutpolicy_horizontal = expanding
+				onclick = "[GetVariableSystem.Set('ce_presents_tab', 'crown_authority')]"
+				down = "[GetVariableSystem.HasValue('ce_presents_tab', 'crown_authority')]"
+
+				text_single = {
+					parentanchor = center
+					text = DI_ce_tab_crown_authority
 					maximumsize = { 400 -1 }
 					default_format = "#low"
 				}
