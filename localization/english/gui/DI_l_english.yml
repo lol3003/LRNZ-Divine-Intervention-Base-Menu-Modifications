@@ -748,6 +748,9 @@
  DI_dynasty_to_copy: "Dynasty to Copy"
  DI_DYNASTY_EDITOR_SHOW_RENOWN:1 "[dynasty_prestige|E]: [dynasty_prestige_i][Dynasty.GetPrestige|V0]"
  DI_DYNASTY_EDITOR_SHOW_LEGACY_COST:0 "Cost: [dynasty_prestige_i][Dynasty.GetNextPerkCost|V0]"
+ DI_DYNASTY_EDITOR_CHEAT_MODE_ON:0 "Enable Cheat Mode (vanilla legacy window)"
+ DI_DYNASTY_EDITOR_CHEAT_MODE_OFF:0 "Disable Cheat Mode (vanilla legacy window)"
+ DI_DYNASTY_EDITOR_CHEAT_MODE_TT:0 "While enabled, the vanilla Dynasty Legacies window of the selected dynasty lets you unlock any perk in any order, ignoring prerequisites and renown cost. Only affects the dynasty selected in this editor."
  ### INTERACTIONS ###
  interaction_category_cheat_menu: "Divine Intervention" # category name
  DI_open_cheat_menu: "#color_yellow #bold (DI)#!#! Interactions On"

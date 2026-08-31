@@ -1,20 +1,21 @@
-### DYNASTY LEGACIES/Perk editor WINDOW
+﻿### DYNASTY LEGACIES WINDOW
+# OVERRIDE of vanilla gui/window_dynasty_legacy.gui (patch 1.19).
+# DI cheat mode: when the player has the DI_legacy_editor_mode variable set (toggled from the
+# DI dynasty perk editor window), any unowned perk can be selected in any order — no
+# IsNextUnlockablePerk prerequisite, no renown check. The cheat condition also verifies the
+# viewed dynasty is the one selected in the DI editor (GetID comparison), so a stuck flag
+# can never affect unrelated dynasties (see docs/DYNASTY_PERK_EDITOR_OPTION_A_PLAN.md v2).
+# PATCH-DAY: re-diff this file against the new vanilla base and re-apply the DI_ marked edits.
 
 window = {
-	name = "DI_dynasty_perk_editor_window"
-
-	# single root datacontext: the dynasty of the character selected in the DI picker
-	# (GetVariableSystem and GetPlayer are globally accessible and need no datacontext)
-	datacontext = "[GetPlayer.MakeScope.Var('DI_dynasty_selected_dynasty').Dynasty]"
-
-    visible = "[And(GetVariableSystem.Exists('DI_dynasty_perk_editor_window_visible'), GetPlayer.MakeScope.Var('DI_dynasty_selected_char').Char.IsValid)]" # "[GetVariableSystem.Exists('DI_dynasty_perk_editor_window_visible')]"   # 
-
-
-	size = { 80% 80% }
+	name = "dynasty_legacy_window"
+	widgetid = "dynasty_legacy_window"
+	datacontext = "[DynastyView.GetDynasty]"
+	size = { 100% 100% }
 	parentanchor = center|hcenter
-	movable = yes
+	movable = no
 	filter_mouse = all
-	layer = windows_layer
+	layer = middle
 
 	using = Window_Background_No_Edge
 
@@ -38,46 +39,21 @@ window = {
 
 	vbox = {
 		margin_top = 10
-			# DI EDIT (Option A Test 1): toggle for the vanilla legacy-window cheat mode.
-			# Sets/clears DI_legacy_editor_mode on the player; the vanilla window override
-			# (gui/window_dynasty_legacy.gui) reads this flag.
-			hbox = {
-				layoutpolicy_horizontal = expanding
-				margin_left = 40
-				margin_top = 5
 
-				button_standard = {
-					layoutpolicy_horizontal = expanding
-					visible = "[Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.Var('DI_legacy_editor_mode').GetValue, '(CFixedPoint)0' ) )]"
-					text = "DI_DYNASTY_EDITOR_CHEAT_MODE_ON"
-					onclick = "[GetScriptedGui('DI_dynasty_perk_editor_mode_on').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-					tooltip = "DI_DYNASTY_EDITOR_CHEAT_MODE_TT"
-					button_ignore = none
-				}
-
-				button_standard = {
-					layoutpolicy_horizontal = expanding
-					visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.Var('DI_legacy_editor_mode').GetValue, '(CFixedPoint)0' )]"
-					text = "DI_DYNASTY_EDITOR_CHEAT_MODE_OFF"
-					onclick = "[GetScriptedGui('DI_dynasty_perk_editor_mode_off').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-					tooltip = "DI_DYNASTY_EDITOR_CHEAT_MODE_TT"
-					button_ignore = none
-				}
-			}
-		header_standard = {  # Dynasty perk editor window header
+		header_standard = {
 			layoutpolicy_horizontal = expanding
 
 			blockoverride "header_text"
 			{
-				text = "DI_dynasty_perks_editor_heading" # Name at the top of the full size window
+				text = "DYNASTY_VIEW_HEADING"
 			}
 
 			blockoverride "button_close"
 			{
 				name = "button_close"
-				onclick = "[GetVariableSystem.Toggle('DI_dynasty_perk_editor_window_visible')]"
-				# shortcut = "close_window"
-				# tooltip = "CLOSE_TOOLTIP"
+				onclick = "[DynastyView.Close]"
+				shortcut = "close_window"
+				tooltip = "CLOSE_TOOLTIP"
 			}
 		}
 
@@ -94,15 +70,13 @@ window = {
 					margin_left = 40
 					margin_top = 10
 
-					using = DI_Dynasty_Select_Character
-
-					# widget = {                  # Guessing This displays Coat of arms, Modify this to show Character Selector to Modify The dynasty thats being Modified
-					# 	coa_dynasty_medium = {
-					# 		blockoverride "coa_button" {
-					# 			alwaystransparent = yes
-					# 		}
-					# 	}
-					# }
+					widget = {
+						coa_dynasty_medium = {
+							blockoverride "coa_button" {
+								alwaystransparent = yes
+							}
+						}
+					}
 
 					vbox = {
 						layoutpolicy_horizontal = expanding
@@ -121,13 +95,13 @@ window = {
 									margin = { 3 0 }
 
 									text_single = {
-										text = "DI_DYNASTY_EDITOR_SHOW_RENOWN" # May Not be Needed, This depends if i can add the perk While automatically offsetting costs and offsetting increasing costs, since the console command still does both of those.
+										text = "DYNASTY_VIEW_SHOW_RENOWN"
 									}
 
 									expand = {}
 
 									text_single = {
-										text = "DI_DYNASTY_EDITOR_SHOW_LEGACY_COST" # May Not be Needed, This depends if i can add the perk While automatically offsetting costs and offsetting increasing costs, since the console command still does both of those.
+										text = "DYNASTY_VIEW_SHOW_LEGACY_COST"
 									}
 								}
 
@@ -138,15 +112,15 @@ window = {
 								progressbar_standard = {
 									name = "progress"
 									size = { 250 12 }
-									value = "[FixedPointToProgressbarValue(Dynasty.GetNextPerkProgress)]" # Could be interesting But should not go for player Dynasty
+									value = "[FixedPointToProgressbarValue(Dynasty.GetNextPerkProgress)]"
 									min = 0
-									tooltip = "DYNASTY_HOUSE_VIEW_PROGRESS_TOOLTIP" # Vanilla Locatization:  DYNASTY_HOUSE_VIEW_PROGRESS_TOOLTIP:0 "Progress: [dynasty_prestige_i][Dynasty.GetPrestige|V0]/
+									tooltip = "DYNASTY_HOUSE_VIEW_PROGRESS_TOOLTIP"
 								}
 
 								text_single = {
 									layoutpolicy_horizontal = expanding
 									margin = { 3 0 }
-									text = "DYNASTY_VIEW_SHOW_LEGACIES"  # Vanilla Localization:  DYNASTY_VIEW_SHOW_LEGACIES:0 "Legacies: [DynastyView.GetTotalUnlockedPerks]"
+									text = "DYNASTY_VIEW_SHOW_LEGACIES"
 								}
 							}
 
@@ -154,17 +128,7 @@ window = {
 								layoutpolicy_vertical = expanding
 							}
 
-							### Add Copy dynasty char here
-
-							# using = DI_Dynasty_Select_Copy_Character
-
-							# divider_light = {
-							# 	layoutpolicy_vertical = expanding
-							# }
-
-							### Add Copy dynasty char here
-
-							vbox = {  # Explination At the Top of the Dynasty Lecay Window Should show an explination of how the editor modifies the dynasty perks, and if Reknown is still added or removed, and cost is increased
+							vbox = {
 								layoutpolicy_horizontal = expanding
 								margin_bottom = 7
 
@@ -178,7 +142,7 @@ window = {
 								}
 
 								text_multi = {
-									visible = "[Not(GetPlayer.IsDynast)]"    # This is funny, its a bug in vanilla wher this only checks if the player is leader of his own dynasty, which means it will also show this text when clicking on other dynasties.
+									visible = "[Not(GetPlayer.IsDynast)]"
 									layoutpolicy_horizontal = expanding
 									text = "DYNASTY_VIEW_SHOW_LEGACY_EXPLANATION_NOT_HEAD"
 									autoresize = yes
@@ -197,12 +161,9 @@ window = {
 		expand = {}
 	}
 
-	# Eveything Works until here, here is where the Dynasty legacy bars should be added.
-
 	widget = {
 		size = { 100% 100% }
 		parentanchor = center
-		name = "dynasty_legacies_container"
 
 		vbox = {
 			margin_top = 150
@@ -213,38 +174,111 @@ window = {
 			# 	using = Background_Bottom_Fade
 			# }
 
-			# vbox = {
-			# 	visible = "[LessThanOrEqualTo_int32(GetDataModelSize(DI_dynasty_selected_dynasty.GetLegacies), '(int32)7')]" #Ony visible if there are less then 7 legacies thats not even vanilla behaviour? #Have Not quite Figured out what "DynastyView" is may need to implement a whole new DI_DynastyView for this to function Correctly 
-			# 	datamodel = "[DI_dynasty_selected_dynasty.GetLegacies]"                                                                     # Vanilla Implementation is in Window_Dynasty_House.gui
-			# 	layoutpolicy_horizontal = expanding                                                                         # Can i use the Vanilla "GetLegacies"
-			# 	margin_bottom = 60
-
-			# 	spacing = 5
-
-			# 	item = {
-			# 		di_hbox_legacy_item = {   # Injecting Different entires
-			# 			layoutpolicy_horizontal = expanding
-			# 		}
-			# 	}
-			# }
-
-			# TODO Phase 1: hardcoded legacy track button grid goes here
-			# (see docs/DYNASTY_PERK_EDITOR_PLAN.md - vanilla has no runtime enumeration,
-			#  so tracks are hardcoded / generator-produced, not datamodel-driven)
 			vbox = {
+				visible = "[LessThanOrEqualTo_int32(GetDataModelSize(DynastyView.GetLegacies), '(int32)7')]"
+				datamodel = "[DynastyView.GetLegacies]"
+				layoutpolicy_horizontal = expanding
+				margin_bottom = 60
+
+				spacing = 5
+
+				item = {
+					hbox_legacy_item = {
+						layoutpolicy_horizontal = expanding
+					}
+				}
+			}
+
+			scrollbox = {
+				visible = "[GreaterThan_int32(GetDataModelSize(DynastyView.GetLegacies), '(int32)7')]"
 				layoutpolicy_horizontal = expanding
 				layoutpolicy_vertical = expanding
+
+				blockoverride "scrollbox_background_fade" {}
+
+				blockoverride "scrollbox_background" {}
+				blockoverride "scrollbox_content"
+				{
+
+					vbox = {
+						datamodel = "[DynastyView.GetLegacies]"
+						layoutpolicy_horizontal = expanding
+
+						spacing = 5
+
+						item = {
+							hbox_legacy_item = {
+								layoutpolicy_horizontal = expanding
+							}
+						}
+					}
+				}
 			}
 		}
 	}
 }
 
-# NOTE: the old top-level `di_confirmation_popup` block was removed (Phase 0 cleanup):
-# confirmation popups are not valid at file top level, and the editor design grants/removes
-# perks directly on left/right click without a trait-confirmation step.
+confirmation_popup = {
+	name = "dynasty_perk_confirmation_popup"
 
-types DI_DynastyLegacies {  #This is DynastyView how, how do i hijack that #Should be able to leave this completly vanilla, since but it should get all Dynasties available in game and maybe add an extra tiptool about left and right click 
-	type di_hbox_legacy_item = hbox {
+	blockoverride "extra_contents" {
+		fixedgridbox = {
+			name = "traits_grid"
+			addcolumn = 55
+			addrow = 55
+			maxhorizontalslots = 5
+			datamodel_wrap = 5
+			flipdirection = yes
+
+			datamodel = "[DynastyPerkConfirmation.GetAssociatedTraits]"
+
+			item = {
+				container = {
+					button_group = {
+						visible = "[Not( EqualTo_string( Trait.GetKey, DynastyPerkConfirmation.GetSelectedTrait.GetKey ) ) ]"
+						onclick = "[DynastyPerkConfirmation.SelectTrait( Trait.Self )]"
+						datacontext = "[GetPlayer]"
+
+						icon_trait = {
+							blockoverride "tooltip_placement"
+							{
+								using = tooltip_se
+							}
+							blockoverride "trait_glow"
+							{
+							}
+						}
+					}
+
+					button_group = {
+						datacontext = "[GetPlayer]"
+
+						visible = "[EqualTo_string( Trait.GetKey, DynastyPerkConfirmation.GetSelectedTrait.GetKey ) ]"
+						onclick = "[DynastyPerkConfirmation.SelectTrait( Trait.Self )]"
+
+						icon_trait = {
+							blockoverride "tooltip_placement"
+							{
+								using = tooltip_se
+							}
+							blockoverride "trait_glow"
+							{
+								glow = {
+									using = Color_Blue
+									using = Glow_Standard
+									glow_radius = 5
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+types DynastyLegacies {
+	type hbox_legacy_item = hbox {
 		expand = {}
 
 		### TEXT ###
@@ -357,8 +391,10 @@ types DI_DynastyLegacies {  #This is DynastyView how, how do i hijack that #Shou
 						button = {
 							size = { 296 128 }
 							visible = "[Not( Dynasty.HasPerk( DynastyPerk.Self ) )]"
-							# enabled = "[DynastyView.CanSelectPerk( DynastyPerk.Self )]"         # SHould always be enabled
-							onclick = "[DynastyView.SelectPerk( DynastyPerk.Self )]"            # Select perk should open the Confirmation popup
+							# DI EDIT: cheat mode enables any unowned perk in any order.
+							# Vanilla: enabled = "[DynastyView.CanSelectPerk( DynastyPerk.Self )]"
+							enabled = "[Or( DynastyView.CanSelectPerk( DynastyPerk.Self ), And( GreaterThan_CFixedPoint( GetPlayer.MakeScope.Var('DI_legacy_editor_mode').GetValue, '(CFixedPoint)0' ), EqualTo_uint32( Dynasty.GetID, GetPlayer.MakeScope.Var('DI_dynasty_selected_dynasty').Dynasty.GetID ) ) )]"
+							onclick = "[DynastyView.SelectPerk( DynastyPerk.Self )]"
 
 							background = {
 								size = { 100% 100% }
@@ -368,7 +404,8 @@ types DI_DynastyLegacies {  #This is DynastyView how, how do i hijack that #Shou
 							}
 
 							background = {
-								# visible = "[Not(DynastyView.CanSelectPerk( DynastyPerk.Self ))]"
+								# DI EDIT: hide the "locked" darkening in cheat mode too.
+								visible = "[And( Not(DynastyView.CanSelectPerk( DynastyPerk.Self )), Not( And( GreaterThan_CFixedPoint( GetPlayer.MakeScope.Var('DI_legacy_editor_mode').GetValue, '(CFixedPoint)0' ), EqualTo_uint32( Dynasty.GetID, GetPlayer.MakeScope.Var('DI_dynasty_selected_dynasty').Dynasty.GetID ) ) ) )]"
 								size = { 100% 100% }
 								texture = "gfx/interface/component_masks/mask_frame_horizontal.dds"
 								tintcolor = { 0 0 0 0.8 }
@@ -384,7 +421,9 @@ types DI_DynastyLegacies {  #This is DynastyView how, how do i hijack that #Shou
 							}
 
 							vbox = {
-								visible = "[Not(And(Dynasty.GetDynast.IsLocalPlayer, DynastyView.IsNextUnlockablePerk( DynastyPerk.Self )))]"
+								# DI EDIT: in cheat mode every unowned perk shows the highlighted
+								# "next unlock" styling, not just the natural next one.
+								visible = "[And( Not(And(Dynasty.GetDynast.IsLocalPlayer, DynastyView.IsNextUnlockablePerk( DynastyPerk.Self ))), Not( And( GreaterThan_CFixedPoint( GetPlayer.MakeScope.Var('DI_legacy_editor_mode').GetValue, '(CFixedPoint)0' ), EqualTo_uint32( Dynasty.GetID, GetPlayer.MakeScope.Var('DI_dynasty_selected_dynasty').Dynasty.GetID ) ) ) )]"
 								margin = { 10 5 }
 								margin_top = 18
 
@@ -399,7 +438,8 @@ types DI_DynastyLegacies {  #This is DynastyView how, how do i hijack that #Shou
 
 							### TEXT ###
 							vbox = {
-								visible = "[And(Dynasty.GetDynast.IsLocalPlayer, DynastyView.IsNextUnlockablePerk( DynastyPerk.Self ))]"
+								# DI EDIT: highlighted styling also shown in cheat mode (any unowned perk).
+								visible = "[Or( And(Dynasty.GetDynast.IsLocalPlayer, DynastyView.IsNextUnlockablePerk( DynastyPerk.Self )), And( GreaterThan_CFixedPoint( GetPlayer.MakeScope.Var('DI_legacy_editor_mode').GetValue, '(CFixedPoint)0' ), EqualTo_uint32( Dynasty.GetID, GetPlayer.MakeScope.Var('DI_dynasty_selected_dynasty').Dynasty.GetID ) ) )]"
 
 								vbox = {
 									layoutpolicy_vertical = expanding
@@ -415,19 +455,21 @@ types DI_DynastyLegacies {  #This is DynastyView how, how do i hijack that #Shou
 									}
 
 									text_single = {
-										# visible = "[DynastyView.CanSelectPerk( DynastyPerk.Self )]"
+										# DI EDIT: show "unlock" affordance in cheat mode too.
+										visible = "[Or( DynastyView.CanSelectPerk( DynastyPerk.Self ), And( GreaterThan_CFixedPoint( GetPlayer.MakeScope.Var('DI_legacy_editor_mode').GetValue, '(CFixedPoint)0' ), EqualTo_uint32( Dynasty.GetID, GetPlayer.MakeScope.Var('DI_dynasty_selected_dynasty').Dynasty.GetID ) ) )]"
 										text = "DYNASTY_VIEW_SHOW_UNLOCK"
 										default_format = "#I"
 									}
 								}
 
-								# tooltip_visible = "[DynastyView.CanSelectPerk( DynastyPerk.Self )]"
+								tooltip_visible = "[Or( DynastyView.CanSelectPerk( DynastyPerk.Self ), And( GreaterThan_CFixedPoint( GetPlayer.MakeScope.Var('DI_legacy_editor_mode').GetValue, '(CFixedPoint)0' ), EqualTo_uint32( Dynasty.GetID, GetPlayer.MakeScope.Var('DI_dynasty_selected_dynasty').Dynasty.GetID ) ) )]"
 								tooltip = "UNLOCK_DYNASTY_PERK_TOOLTIP"
 								using = tooltip_se
 							}
 
 							button_standard_clean = {
-								# visible = "[DynastyView.CanSelectPerk( DynastyPerk.Self )]"
+								# DI EDIT: attention animation in cheat mode too.
+								visible = "[Or( DynastyView.CanSelectPerk( DynastyPerk.Self ), And( GreaterThan_CFixedPoint( GetPlayer.MakeScope.Var('DI_legacy_editor_mode').GetValue, '(CFixedPoint)0' ), EqualTo_uint32( Dynasty.GetID, GetPlayer.MakeScope.Var('DI_dynasty_selected_dynasty').Dynasty.GetID ) ) )]"
 								size = { 100% 100% }
 								alwaystransparent = yes
 

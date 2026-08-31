@@ -21,7 +21,8 @@ DI_dynasty_selected_char = {
             }
         }
         debug_log = "Selected dynasty edit character set"
-        debug_log = "[scope:select_char.GetFullName]"
+        # NOTE: removed debug_log = "[scope:select_char.GetFullName]" — saved scopes are not
+        # resolvable in the debug_log datacontext and produced pdx_data_factory errors per click.
     }
 }
 
@@ -47,6 +48,33 @@ DI_dynasty_selected_char_copy = {  #Trying to Copy the Culture copy mechanic, fo
             }
         }
     }
+}
+
+### Select Character Init ###
+
+### Legacy editor cheat mode toggle (Option A Test 1) ###
+# Sets/clears DI_legacy_editor_mode on the player. The vanilla window override
+# (gui/window_dynasty_legacy.gui) gates free perk selection on this flag AND on the viewed
+# dynasty being the DI-selected one, so a stuck flag cannot affect other dynasties.
+DI_dynasty_perk_editor_mode_on = {
+	scope = character
+
+	effect = {
+		set_variable = {
+			name = DI_legacy_editor_mode
+			value = 1
+		}
+		debug_log = "DI legacy editor cheat mode ENABLED"
+	}
+}
+
+DI_dynasty_perk_editor_mode_off = {
+	scope = character
+
+	effect = {
+		remove_variable = DI_legacy_editor_mode
+		debug_log = "DI legacy editor cheat mode DISABLED"
+	}
 }
 
 ### Select Character Init ###
