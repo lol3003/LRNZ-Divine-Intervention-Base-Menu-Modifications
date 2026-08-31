@@ -29,15 +29,15 @@ plugs straight into this.
 
 ### How the window works
 
-| Concern | Mechanism | File:line |
-|---|---|---|
-| Dynasty binding | `datacontext = "[DynastyView.GetDynasty]"`, opened via `OpenGameViewData('dynasty_legacy_window', Dynasty.GetID)` | `window_dynasty_legacy.gui:7`, `window_dynasty_house.gui` |
-| Track list | `datamodel = "[DynastyView.GetLegacies]"` | :172, :197 |
-| Perk list per track | `datamodel = "[DynastyLegacy.GetPerks]"` | :378 |
-| Buy button | `onclick = "[DynastyView.SelectPerk( DynastyPerk.Self )]"` | :388 |
-| Buy gating | `enabled = "[DynastyView.CanSelectPerk( DynastyPerk.Self )]"` | :387 |
-| Already-owned check | `visible = "[Not( Dynasty.HasPerk( DynastyPerk.Self ) )]"` | :386 |
-| Dynast-only text | `visible = "[GetPlayer.IsDynast]"` vs `Not(GetPlayer.IsDynast)` | :129, :138 |
+| Concern             | Mechanism                                                                                                             | File:line                                                     |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| Dynasty binding     | `datacontext = "[DynastyView.GetDynasty]"`, opened via `OpenGameViewData('dynasty_legacy_window', Dynasty.GetID)` | `window_dynasty_legacy.gui:7`, `window_dynasty_house.gui` |
+| Track list          | `datamodel = "[DynastyView.GetLegacies]"`                                                                           | :172, :197                                                    |
+| Perk list per track | `datamodel = "[DynastyLegacy.GetPerks]"`                                                                            | :378                                                          |
+| Buy button          | `onclick = "[DynastyView.SelectPerk( DynastyPerk.Self )]"`                                                          | :388                                                          |
+| Buy gating          | `enabled = "[DynastyView.CanSelectPerk( DynastyPerk.Self )]"`                                                       | :387                                                          |
+| Already-owned check | `visible = "[Not( Dynasty.HasPerk( DynastyPerk.Self ) )]"`                                                          | :386                                                          |
+| Dynast-only text    | `visible = "[GetPlayer.IsDynast]"` vs `Not(GetPlayer.IsDynast)`                                                   | :129, :138                                                    |
 
 ### The two blockers (and their workarounds)
 
@@ -52,21 +52,44 @@ we cannot replace the buy logic with our own scripted gui per-perk.
 
 ### The workaround that makes Option A viable
 
-**Keep vanilla's own `DynastyView.SelectPerk` as the purchase mechanism** and simply override the
-`enabled` condition. The override file changes:
+**Keep vanilla's own `DynastyView.SelectPerk` as the purchase mechanism** and override the
+`enabled` condition. Two audit corrections shape the override:
+
+**1. This is a cheat editor — prerequisites are explicitly unwanted.** The user wants *any perk
+at any time*, so we deliberately do **not** keep `IsNextUnlockablePerk` ordering. The override
+enables every unowned perk:
 
 ```paradox
 # vanilla:
 enabled = "[DynastyView.CanSelectPerk( DynastyPerk.Self )]"
-# mod override:
+# mod override (cheat mode: any unowned perk, any order):
 enabled = "[Not( Dynasty.HasPerk( DynastyPerk.Self ) )]"
 ```
 
-If the engine's `SelectPerk` does not re-validate dynast/renown internally (unknown — needs an
-in-game test), this single change turns the tree into a free editor for **any** dynasty, with
-**all modded tracks**, zero generator, zero compat patches.
+**2. The override affects every legacy window in the game, not just DI openings.** Vanilla has
+*other* widgets keyed to the same conditions (locked shading at :398, next-perk pips at
+:414/:429 using `IsNextUnlockablePerk`, dynast text at :129/:138). A naive override produces
+contradictory UI (clickable button with locked shading). The override must be **gated** so
+normal gameplay keeps vanilla rules:
 
-⚠️ **This is the one unknown that decides everything** — see Test 1 below.
+```paradox
+# editor mode is ON only when the DI editor flag variable is set:
+#   (set/clear 'DI_legacy_editor_mode' from the DI editor window's open/close)
+enabled = "[Or(
+    And( GetVariableSystem.Exists('DI_legacy_editor_mode'), Not( Dynasty.HasPerk( DynastyPerk.Self ) ) ),
+    DynastyView.CanSelectPerk( DynastyPerk.Self )
+)]"
+```
+
+…and similarly gate the other `CanSelectPerk`-keyed widgets (locked shading at :398) so they
+don't contradict the enabled state. The `IsNextUnlockablePerk` pips (:414/:429) can stay vanilla
+— they're informational, and in cheat mode showing the "natural" next perk is still useful.
+
+If the engine's `SelectPerk` does not re-validate dynast/renown internally (unknown — needs an
+in-game test), this turns the tree into a free editor for **any** dynasty, with **all modded
+tracks**, zero generator, zero compat patches.
+
+⚠️ **This is the one unknown that decides everything** — see the expanded test matrix below.
 
 ---
 
@@ -75,13 +98,13 @@ in-game test), this single change turns the tree into a free editor for **any** 
 Copying the file into the mod gives **total freedom over layout, widgets, text, and behavior** —
 it's a full replacement, not a patch. Concretely:
 
-| What | Editable? | Notes |
-|---|---|---|
-| Layout, size, position, styling | ✅ fully | It's our file now |
-| Add new widgets (portraits, buttons, panels) | ✅ fully | Can embed the `DI_Dynasty_Select_Character` template, DI buttons, etc. |
-| `visible` / `enabled` conditions | ✅ fully | This is the `CanSelectPerk` bypass |
-| Text / localization | ✅ fully | |
-| `onclick` behavior | ⚠️ partially — see below | The data you can pass to script is the limit |
+| What                                         | Editable?                   | Notes                                                                   |
+| -------------------------------------------- | --------------------------- | ----------------------------------------------------------------------- |
+| Layout, size, position, styling              | ✅ fully                    | It's our file now                                                       |
+| Add new widgets (portraits, buttons, panels) | ✅ fully                    | Can embed the`DI_Dynasty_Select_Character` template, DI buttons, etc. |
+| `visible` / `enabled` conditions         | ✅ fully                    | This is the`CanSelectPerk` bypass                                     |
+| Text / localization                          | ✅ fully                    |                                                                         |
+| `onclick` behavior                         | ⚠️ partially — see below | The data you can pass to script is the limit                            |
 
 **Adding your portrait character switcher: yes, easily.** The window is just a widget tree; you can
 drop in `using = DI_Dynasty_Select_Character` (your existing template) or any DI widget, plus
@@ -107,13 +130,13 @@ Because of **what the button is allowed to tell script**, not because of the cli
 
 ### What this means practically
 
-| Click behavior change | Possible? |
-|---|---|
-| Enable buying for any dynasty (keep `SelectPerk`) | ✅ — the `enabled` override (Test 1) |
-| Add DI widgets/portraits around the tree | ✅ freely |
-| Route the click to our own script **per perk** | ❌ no perk key/scope access |
-| Route the click to our own script **per track** | ❌ same problem (no track key access) |
-| Add separate DI buttons (e.g. "add next perk in <hardcoded track>") alongside the tree | ✅ — those buttons don't need the tree's datacontext |
+| Click behavior change                                                                             | Possible?                                             |
+| ------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| Enable buying for any dynasty (keep`SelectPerk`)                                                | ✅ — the`enabled` override (Test 1)                |
+| Add DI widgets/portraits around the tree                                                          | ✅ freely                                             |
+| Route the click to our own script**per perk**                                               | ❌ no perk key/scope access                           |
+| Route the click to our own script**per track**                                              | ❌ same problem (no track key access)                 |
+| Add separate DI buttons (e.g. "add next perk in<hardcoded track></hardcoded>") alongside the tree | ✅ — those buttons don't need the tree's datacontext |
 
 So the realistic Option A shape is: **vanilla tree (with `enabled` bypass) for viewing + buying,
 plus your DI selection UI embedded, plus optional hardcoded DI buttons for features the tree
@@ -121,41 +144,60 @@ can't do** (remove-perk, exact renown refund). If Test 1 shows `SelectPerk` re-v
 refuses for other dynasties, the tree degrades to a viewer and granting falls back to the
 hardcoded buttons — the two plans merge rather than compete.
 
+### Test 1 — proof of concept (do this first)
 
+**Prerequisite:** complete Phase 0 baseline cleanup in `DYNASTY_PERK_EDITOR_PLAN.md` first —
+the current WIP has parser errors that would pollute `gui_warnings.log` and make results
+ambiguous.
 
-### Test 1 — proof of concept (do this first, ~30 min)
+1. Copy `H:\SteamLibrary\...\game\gui\window_dynasty_legacy.gui` into the mod's `gui/` folder,
+   based **exactly on the installed 1.19.0.6 vanilla file**.
+2. Apply the gated `enabled` override shown above (cheat mode: any unowned perk, any order).
+3. Run the expanded test matrix. **Pass criterion: the perk actually gets granted — a clickable
+   button alone proves nothing** (a C++ command likely validates authority/order/renown
+   internally).
 
-1. Copy `H:\SteamLibrary\...\game\gui\window_dynasty_legacy.gui` into the mod's `gui/` folder.
-2. Change the one `enabled` line as shown above (leave everything else identical).
-3. Launch, open console (`~`), `effect = { add_dynasty_prestige = 5000 }`, open your dynasty's
-   legacy window → confirm buying still works normally (override didn't break the player case).
-4. Then open another dynasty's tree (e.g. via the dynasty house view of a vassal's dynasty) →
-   check whether the perk buttons are now clickable and whether clicking actually grants the perk.
+| # | Case | Expectation to verify |
+|---|---|---|
+| 1 | Player dynasty, enough renown | Buy works; renown deducted |
+| 2 | Player dynasty, insufficient renown | Cheat mode: buy succeeds; renown goes negative or grant fails — record which |
+| 3 | Foreign dynasty (not player's), enough renown | **The critical case** — does the perk actually get granted? |
+| 4 | Foreign dynasty, insufficient renown | As above with cost involved |
+| 5 | Out-of-order perk (tier 3 with 0 owned) | Cheat mode should grant it — confirm no engine veto |
+| 6 | Perk with associated-trait confirmation popup | Does the confirmation flow complete for foreign dynasties? |
+| 7 | Renown before/after each case | Record exact numbers (screenshot the tooltip) |
+| 8 | Persistence | Close window, re-open; save + reload — perks persist? |
+| 9 | Logs after every case | `error.log` + `gui_warnings.log` clean of new entries |
 
 **Outcomes:**
-- ✅ Works → Option A is fully viable, continue with steps below.
-- ❌ Buttons clickable but nothing happens / error → engine re-validates; fall back to
-  **Option A′** (below) or the hardcoded plan.
+
+- ✅ Case 3 grants the perk → Option A is fully viable; continue with steps below.
+- ❌ Clickable but nothing happens / error → engine re-validates; the tree stays a **viewer**,
+  granting falls back to the generated scripted editor (Phase 1 of the other plan). This is the
+  expected outcome per the audit — don't burn more time on A if it fails.
 - ❌ Buttons still disabled → `enabled` isn't the only gate; inspect `gui_warnings.log` and
   reconsider.
 
 ### Step 2 — Integrate with the DI selection flow
 
 - Keep your existing char/dynasty picker (`DI_dynasty_selected_dynasty` variable).
-- Add an "Edit Legacies" button in your editor window:
+- The DI editor window's "Edit Legacies" button sets the `DI_legacy_editor_mode` variable, then:
   ```paradox
   onclick = "[OpenGameViewData( 'dynasty_legacy_window',
       GetPlayer.MakeScope.Var('DI_dynasty_selected_dynasty').Dynasty.GetID )]"
   ```
-- This opens the (overridden) legacy tree for the selected dynasty.
+- Closing the legacy window / the DI editor clears `DI_legacy_editor_mode` so ordinary legacy
+  tree openings keep vanilla rules.
 
-### Step 3 — Renown handling
+### Step 3 — Renown handling (two explicit modes)
 
-If `SelectPerk` deducts renown (likely — same as script `add_dynasty_perk`):
-- Simplest: a "Renown +5000" cheat button in the DI editor window
-  (`add_dynasty_prestige = 5000`), click before/after buying.
-- Fancier: override the cost display or auto-refund — not possible per-click without perk keys,
-  so the cheat button is the pragmatic answer.
+The cost formula is `250 + TOTAL unlocked perks × 500` (dynasty-wide, not per-track position) —
+so per-perk refund math is unreliable. Offer two explicit modes instead:
+
+- **Free edit (default for a cheat tool):** a "Renown +10000" button in the DI editor window;
+  click before buying so purchases never fail. Disclose that this inflates renown *level*
+  progress (unavoidable — level derives from total prestige gained).
+- **Normal cost:** buy with renown as-is, vanilla behavior.
 
 ### Step 4 — Workshop-safe packaging
 
@@ -193,15 +235,15 @@ Option A′ shape:
 
 ## Comparison with the hardcoded plan
 
-| | Option A (this doc) | Hardcoded grid (other doc) |
-|---|---|---|
-| Modded tracks | ✅ automatic | ⚠️ via generator re-run |
-| Workshop shareable | ✅ yes (one file override) | ⚠️ generator is external tooling |
-| Add perks to any dynasty | ❓ pending Test 1 | ✅ yes (selected dynasty variable) |
-| Remove perks | ❌ not per-perk | ✅ `remove_dynasty_perk` |
-| Renown handling | cheat button | exact per-perk refund |
-| Maintenance | vanilla file copy (patch-day risk) | self-owned files |
-| UI work | ~none (vanilla tree) | build a grid |
+|                          | Option A (this doc)                | Hardcoded grid (other doc)         |
+| ------------------------ | ---------------------------------- | ---------------------------------- |
+| Modded tracks            | ✅ automatic                       | ⚠️ via generator re-run          |
+| Workshop shareable       | ✅ yes (one file override)         | ⚠️ generator is external tooling |
+| Add perks to any dynasty | ❓ pending Test 1                  | ✅ yes (selected dynasty variable) |
+| Remove perks             | ❌ not per-perk                    | ✅`remove_dynasty_perk`          |
+| Renown handling          | cheat button                       | exact per-perk refund              |
+| Maintenance              | vanilla file copy (patch-day risk) | self-owned files                   |
+| UI work                  | ~none (vanilla tree)               | build a grid                       |
 
 **Recommendation:** run Test 1. If it passes, Option A gives you the dynamic, shareable editor
 you wanted with minimal effort — and the hardcoded grid can still be added later for

@@ -22,7 +22,11 @@ dynasty = {
 }
 ```
 
-- Works inside a `dynasty` scope → we can target `scope:DI_dynasty_selected_dynasty.Dynasty`
+- Works inside a `dynasty` scope → we can target the selected dynasty. **Scope access fix:** the
+  selection is stored as a *player-scope variable* (set via `scope:target.set_variable`), so the
+  correct script access is `scope:player.var:DI_dynasty_selected_dynasty` (or `var:DI_...` when
+  already inside the player scope) — **not** `scope:DI_dynasty_selected_dynasty` (that syntax is
+  for `save_scope_as` saved scopes, which this is not).
 - ⚠️ **COST WARNING (confirmed):** `add_dynasty_perk` **deducts renown** from the dynasty.
   Evidence:
   - `DYNASTY_PRESTIGE_COST_LONG` loc = `"Renown: [dynasty_prestige_i] $VALUE|0$"` — dynasty
@@ -87,6 +91,29 @@ Logs are in `Documents/Paradox Interactive/Crusader Kings III/logs/`:
 
 ---
 
+## Phase 0 — Clean the test baseline (do before any Option A testing)
+
+The current WIP has real parser errors that would contaminate any Option A test results
+(unrelated `gui_warnings.log` noise). Fix or remove:
+
+- [ ] `gui/DI_dynasty_perk_editor.gui:219` — invalid `GetAllDynasties.GetLegacies` datamodel
+      (GetAllDynasties has no GetLegacies). Remove or replace with a working source.
+- [ ] `gui/DI_dynasty_perk_editor.gui:236` — invalid top-level `di_confirmation_popup`
+      (confirmation popups must be declared inside a window/`confirmation_popup` context).
+- [ ] `gui/DI_dynasty_perk_editor.gui:6-8` — three competing root `datacontext` declarations;
+      only the last wins. Keep one (the `Var('DI_dynasty_selected_dynasty').Dynasty` one) and
+      delete the rest.
+- [ ] `gui/DI_misc.gui` copy selector calls `DI_dynasty_select_char_copy` but the defined
+      scripted gui is `DI_dynasty_selected_char_copy` — rename one to match (or defer the whole
+      copy feature; it's not needed for MVP).
+- [ ] Delete dead code: `DI_Dynastey_perk_list` (undefined `scope:legacy`), the empty
+      `if = { limit = {...} }` in `DI_dynasty_selected_char_copy`, the commented
+      `DI_dynasty_perk_helper`.
+- [ ] After cleanup: launch once and confirm `error.log` / `gui_warnings.log` are free of
+      dynasty-editor-related entries. That is the clean baseline.
+
+---
+
 ## Phase 1 — Core editor: hardcoded tracks + add-next-perk (MVP)
 
 **Goal:** Working "add next perk in track" buttons for all 20 vanilla tracks.
@@ -94,52 +121,66 @@ Logs are in `Documents/Paradox Interactive/Crusader Kings III/logs/`:
 ### 1.1 Create the scripted effects
 New file: `common/scripted_effects/DI_dynasty_perk_effects.txt`
 
-One effect per track, following the mod's lifestyle-present pattern (`NOT has → add`),
-**with renown refund** (see cost warning above):
+One effect per track, following the mod's lifestyle-present pattern (`NOT has → add`).
+
+**Renown cost — corrected model (audit finding):** the cost formula is
+`250 + TOTAL unlocked dynasty perks × 500` — based on the dynasty's **total** perk count across
+all tracks, **not** the perk's position within its own track. Per-track refunds (250/750/…)
+are therefore wrong once the dynasty owns perks elsewhere.
+
+Since this editor is explicitly a **cheat** (any perk, any time, no prerequisites), offer two
+explicit modes instead of refund math:
+
+- **"Free edit" mode (default):** grant sufficient renown alongside the perk so the purchase
+  never fails and renown stays non-negative. Simplest correct form: grant a large flat amount
+  (e.g. `add_dynasty_prestige = 10000`) — note this inflates renown *level* progress, which is
+  unavoidable since level derives from total prestige gained.
+- **"Normal cost" mode:** let CK3 deduct renown; pair with a separate "Renown +5000" button.
 
 ```paradox
 DI_dynasty_add_warfare_perk = {
     scope = character
     effect = {
-        scope:DI_dynasty_selected_dynasty.Dynasty = {
-            if = {
-                limit = { NOT = { has_dynasty_perk = warfare_legacy_1 } }
-                add_dynasty_perk = warfare_legacy_1
-                add_dynasty_prestige = 250       # refund: 250 + 500*0
+        # root is the player (SetRoot(GetPlayer.MakeScope) from GUI);
+        # the selected dynasty lives in the player's variable storage
+        scope:player = {
+            var:DI_dynasty_selected_dynasty = {
+                if = {
+                    limit = { NOT = { has_dynasty_perk = warfare_legacy_1 } }
+                    add_dynasty_perk = warfare_legacy_1
+                }
+                else_if = {
+                    limit = { NOT = { has_dynasty_perk = warfare_legacy_2 } }
+                    add_dynasty_perk = warfare_legacy_2
+                }
+                else_if = {
+                    limit = { NOT = { has_dynasty_perk = warfare_legacy_3 } }
+                    add_dynasty_perk = warfare_legacy_3
+                }
+                else_if = {
+                    limit = { NOT = { has_dynasty_perk = warfare_legacy_4 } }
+                    add_dynasty_perk = warfare_legacy_4
+                }
+                else_if = {
+                    limit = { NOT = { has_dynasty_perk = warfare_legacy_5 } }
+                    add_dynasty_perk = warfare_legacy_5
+                }
             }
-            else_if = {
-                limit = { NOT = { has_dynasty_perk = warfare_legacy_2 } }
-                add_dynasty_perk = warfare_legacy_2
-                add_dynasty_prestige = 750       # refund: 250 + 500*1
-            }
-            else_if = {
-                limit = { NOT = { has_dynasty_perk = warfare_legacy_3 } }
-                add_dynasty_perk = warfare_legacy_3
-                add_dynasty_prestige = 1250      # refund: 250 + 500*2
-            }
-            else_if = {
-                limit = { NOT = { has_dynasty_perk = warfare_legacy_4 } }
-                add_dynasty_perk = warfare_legacy_4
-                add_dynasty_prestige = 1750      # refund: 250 + 500*3
-            }
-            else_if = {
-                limit = { NOT = { has_dynasty_perk = warfare_legacy_5 } }
-                add_dynasty_perk = warfare_legacy_5
-                add_dynasty_prestige = 2250      # refund: 250 + 500*4
-            }
+            # free-edit mode: keep renown positive so the grant always succeeds
+            add_dynasty_prestige = 10000
         }
     }
 }
 ```
 
-> Note: refunding renown still increments the renown *level* progress — that's unavoidable
-> (the level is derived from total prestige gained). If that's undesirable, the alternative is
-> not refunding and letting the editor consume renown like a normal purchase, or adding a
-> separate "Renown +5000" cheat button the user clicks as needed.
+> If precise cost-neutral granting is ever wanted, the refund must be computed from the dynasty's
+> **total** owned perk count (`250 + total_perks × 500`) *before* the grant — countable via the
+> auto-generated `<track>_legacy_track_perks` triggers summed across all tracks. Defer unless
+> requested; the flat-grant cheat mode is simpler and fits the cheat intent.
 
-Repeat for all 20 tracks (keys listed in the appendix below). Removal is also possible:
-`remove_dynasty_perk = <key>` (confirmed in effects.log) — add a right-click "remove last perk"
-variant per track (walk the track backwards with `has_dynasty_perk` checks).
+Removal is also available: `remove_dynasty_perk = <key>` (confirmed in effects.log) — add a
+right-click "remove last perk" variant per track (walk the track backwards with
+`has_dynasty_perk` checks).
 
 **Bonus from script_docs:** the auto-generated `<track>_legacy_track_perks` triggers (e.g.
 `warfare_legacy_track_perks >= 3`) let tooltips show the current perk count per track — and since
@@ -237,7 +278,7 @@ this only covers the player dynasty and adds little over Phase 1. Parked unless 
 are ever confirmed.
 
 **Conclusion unchanged:** Phase 1 (scripted `add_dynasty_perk` + refund) targeting the selected
-dynasty via `scope:DI_dynasty_selected_dynasty` remains the right core; Phase 3a's generator
+dynasty via the player's `DI_dynasty_selected_dynasty` variable remains the right core; Phase 3a's generator
 covers modded tracks.
 
 ---

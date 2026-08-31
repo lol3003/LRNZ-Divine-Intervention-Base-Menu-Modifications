@@ -1,5 +1,21 @@
 # Dynasty Legacy Perk Editor — Research & Implementation Options
 
+> ⚠️ **HISTORICAL RESEARCH DOCUMENT — superseded.**
+> This was written before the script documentation was generated. Since then:
+> - `add_dynasty_perk` / `remove_dynasty_perk` were confirmed to exist (effects.log).
+> - **No** dynasty-perk/legacy iterator exists → **Option B is REJECTED** (its dynamic
+>   script-built list is impossible).
+> - Option D has been merged into Option A (it was a less precise version of the same idea).
+>
+> **Authoritative implementation plans:**
+> - `DYNASTY_PERK_EDITOR_PLAN.md` — generated scripted add/remove editor (the dependable path)
+> - `DYNASTY_PERK_EDITOR_OPTION_A_PLAN.md` — vanilla-window override experiment (small test
+>   effort, biggest payoff if foreign-dynasty purchasing works)
+>
+> The vanilla research below remains accurate and useful as background.
+
+---
+
 > Status: **Work in progress** (branch `Adding-Dynasty-Legacy-Perk-Picking`)
 > Goal: Dynamically list and grant **all** dynasty legacy tracks (including mod-added ones) for an
 > arbitrary selected dynasty, from a custom editor window in the Divine Intervention menu.
@@ -88,7 +104,7 @@ onclick = "[OpenGameViewData( 'dynasty_legacy_window', GetPlayer.MakeScope.Var('
 
 ---
 
-## Option B — Script-driven dynamic list (chosen direction)
+## Option B — Script-driven dynamic list (**REJECTED** — see header)
 
 **Idea:** Use **script** (not GUI) to enumerate legacy tracks into a saved list, then read that list
 in GUI via `GetPlayer.MakeScope.GetList('...')` — the same pattern the mod already uses for
