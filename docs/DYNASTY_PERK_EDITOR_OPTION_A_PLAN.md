@@ -70,7 +70,58 @@ in-game test), this single change turns the tree into a free editor for **any** 
 
 ---
 
-## Implementation plan
+## How much of the window UI can we edit? (answer: essentially all of it)
+
+Copying the file into the mod gives **total freedom over layout, widgets, text, and behavior** —
+it's a full replacement, not a patch. Concretely:
+
+| What | Editable? | Notes |
+|---|---|---|
+| Layout, size, position, styling | ✅ fully | It's our file now |
+| Add new widgets (portraits, buttons, panels) | ✅ fully | Can embed the `DI_Dynasty_Select_Character` template, DI buttons, etc. |
+| `visible` / `enabled` conditions | ✅ fully | This is the `CanSelectPerk` bypass |
+| Text / localization | ✅ fully | |
+| `onclick` behavior | ⚠️ partially — see below | The data you can pass to script is the limit |
+
+**Adding your portrait character switcher: yes, easily.** The window is just a widget tree; you can
+drop in `using = DI_Dynasty_Select_Character` (your existing template) or any DI widget, plus
+`GetVariableSystem` toggles, scripted-gui buttons, whatever. The only thing to keep in mind is that
+the window's root datacontext is `[DynastyView.GetDynasty]` — your added widgets can use their own
+`datacontext` lines (like your editor window does with `GetPlayer.MakeScope.Var(...)`) to access
+DI variables. Your existing UI being "based on it anyway" makes this trivial.
+
+## Why can't we just change what clicking a perk button does?
+
+Because of **what the button is allowed to tell script**, not because of the click itself:
+
+1. Changing `onclick` is trivial — e.g. `onclick = "[GetScriptedGui('DI_x').Execute(...)]"`.
+2. The problem is the **arguments**. Our script effect needs to know *which perk* to grant
+   (`add_dynasty_perk = <key>`). Passing a scope works via `GuiScope.SetRoot(...).AddScope(...)`
+   (vanilla does this with `Faith.MakeScope`, `Character.MakeScope`, etc.) — **but that requires
+   the object to have a `MakeScope` / scope link.**
+3. Verified against the script docs: `DynastyPerk` has **no scope link** (not in
+   `event_targets.log`) and exposes only `GetNameNoTooltip`, `GetEffectDescription`, `Self` —
+   **no `GetKey`**. `DynastyLegacy` (the track) likewise has no key/scope access.
+4. So a clicked perk button cannot communicate "I am `warfare_legacy_2`" to script. The engine's
+   `DynastyView.SelectPerk` can do it because it's C++ with direct registry access.
+
+### What this means practically
+
+| Click behavior change | Possible? |
+|---|---|
+| Enable buying for any dynasty (keep `SelectPerk`) | ✅ — the `enabled` override (Test 1) |
+| Add DI widgets/portraits around the tree | ✅ freely |
+| Route the click to our own script **per perk** | ❌ no perk key/scope access |
+| Route the click to our own script **per track** | ❌ same problem (no track key access) |
+| Add separate DI buttons (e.g. "add next perk in <hardcoded track>") alongside the tree | ✅ — those buttons don't need the tree's datacontext |
+
+So the realistic Option A shape is: **vanilla tree (with `enabled` bypass) for viewing + buying,
+plus your DI selection UI embedded, plus optional hardcoded DI buttons for features the tree
+can't do** (remove-perk, exact renown refund). If Test 1 shows `SelectPerk` re-validates and
+refuses for other dynasties, the tree degrades to a viewer and granting falls back to the
+hardcoded buttons — the two plans merge rather than compete.
+
+
 
 ### Test 1 — proof of concept (do this first, ~30 min)
 
