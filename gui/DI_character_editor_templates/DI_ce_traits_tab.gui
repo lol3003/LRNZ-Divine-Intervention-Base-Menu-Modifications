@@ -706,7 +706,7 @@ template DI_character_trait_tooltip {
 
         blockoverride "description_text" {
             block "actual_description_text" {
-                text = "[Trait.GetFullDescription( Character.Self, Faith.Self )]"
+                text = "[Trait.GetFullDescription( Character.Self, Character.GetFaith )]"
             }
         }
 
@@ -782,63 +782,10 @@ template DI_character_trait_tooltip {
 
                                             blockoverride "marker"
                                             {
-                                                widget_level_marker = {
-                                                    scale = 0.75
-                                                    datacontext = "[TraitLevelTrack.GetEntryForXp( ComplexBarItem.GetValue )]"
-                                                    visible = "[GreaterThanOrEqualTo_int32( TraitLevelTrackEntry.GetLevel, '(int32)0' )]"
-
-                                                    blockoverride "visible_active"
-                                                    {
-                                                        visible = "[EqualTo_int32( Character.GetTraitTrackLevel( Trait.Self, TraitLevelTrack.Self ), TraitLevelTrackEntry.GetLevel )]"
-                                                    }
-
-                                                    blockoverride "visible_inactive"
-                                                    {
-                                                        visible = "[Not( EqualTo_int32( Character.GetTraitTrackLevel( Trait.Self, TraitLevelTrack.Self ), TraitLevelTrackEntry.GetLevel ) )]"
-                                                    }
-
-                                                    blockoverride "marker_tooltip"
-                                                    {
-                                                        tooltip = "TRAIT_LEVEL_TRACK_TT"
-                                                        using = tooltip_se
-                                                    }
-
-                                                    blockoverride "marker_text"
-                                                    {
-                                                        text = "[TraitLevelTrackEntry.GetLevel]"
-                                                    }
-                                                }
+                                                widget_DI_tracked_trait_marker_buttons = {}
                                             }
                                         }
                                     }
-                                }
-                            }
-                            hbox = {
-                                spacing = 5
-                                margin_left = 18
-
-                                button_round = {
-                                    size = { 30 30 }
-                                    raw_text = "0"
-                                    onclick = "[GetScriptedGui('DI_add_trait_xp_0').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).AddScope('track', MakeScopeFlag(TraitLevelTrack.GetName)).End)]"
-                                }
-
-                                button_round = {
-                                    size = { 30 30 }
-                                    raw_text = "1"
-                                    onclick = "[GetScriptedGui('DI_add_trait_xp_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).AddScope('track', MakeScopeFlag(TraitLevelTrack.GetName)).End)]"
-                                }
-
-                                button_round = {
-                                    size = { 30 30 }
-                                    raw_text = "2"
-                                    onclick = "[GetScriptedGui('DI_add_trait_xp_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).AddScope('track', MakeScopeFlag(TraitLevelTrack.GetName)).End)]"
-                                }
-
-                                text_label_center = {
-                                    visible = "[InDebugMode]"
-                                    layoutpolicy_horizontal = expanding
-                                    text = "[TraitLevelTrack.GetName]"
                                 }
                             }
                         }
@@ -927,37 +874,93 @@ types DI_trait_menu_types
         spacing = 3
 
         item = {
-            hbox = {
+            vbox = {
                 datacontext = "[Scope.Trait]"
                 layoutpolicy_horizontal = expanding
+                spacing = 5
+
                 block "test_visible"
                 {
                     visible = yes
                 }
+
+                hbox = {
+                    layoutpolicy_horizontal = expanding
+
+                    button_standard = {
+                        name = "trait_item"
+                        layoutpolicy_horizontal = expanding
+                        size = { 0 50 }
+                        button_ignore = none
+
+                        onclick = "[GetScriptedGui('DI_add_trait').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).End)]"
+                        onrightclick = "[GetScriptedGui('DI_remove_trait').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).End)]"
+
+                        hbox = {
+                            margin = { 5 0 }
+                            margin_right = 10
+                            spacing = 10
+
+                            DI_icon_trait = {
+                                blockoverride "faith_context"
+                                {
+                                    datacontext = "[GetPlayer.GetFaith]"
+                                }
+                                blockoverride "tooltip_placement"
+                                {
+                                    using = tooltip_ws
+                                }
+                            }
+
+                            text_single = {
+                                layoutpolicy_horizontal = expanding
+
+                                text = "[Trait.GetNameNoTooltip( Character.Self )]"
+
+                                default_format = "#clickable"
+                            }
+                        }
+                        tooltip = DI_trait_button_tt
+                    }
+
+                    hbox = {
+                        margin = { 20 0 }
+
+                        button_pin = {
+                            name = "button_pin"
+                            visible = "[Not(GetScriptedGui('DI_trait_pinned').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).End))]"
+                            onclick = "[GetScriptedGui('DI_pin_trait').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).End)]"
+                            size = { 25 25 }
+                        }
+
+                        button_unpin = {
+                            name = "button_unpin"
+                            visible = "[GetScriptedGui('DI_trait_pinned').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).End)]"
+                            onclick = "[GetScriptedGui('DI_unpin_trait').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).End)]"
+                            size = { 25 25 }
+                        }
+                    }
+                }
+
                 vbox = {
                     layoutpolicy_horizontal = expanding
                     datamodel = "[Trait.GetLevelTracks]"
-                    spacing = 5
+                    spacing = 10
+                    visible = "[DataModelHasItems( Trait.GetLevelTracks )]"
+                    margin_left = 20
+                    margin_bottom = 10
                     allow_outside = yes
 
                     item = {
                         hbox = {
                             layoutpolicy_horizontal = expanding
                             allow_outside = yes
-                            spacing = 5
+                            spacing = 10
                             margin_right = 20
 
-                            vbox = {
-                                margin_top = 6
-
-                                button = {
-                                    size = { 50 50 }
-                                    texture = "[TraitLevelTrack.GetIcon( Trait.Self, Character.Self )]"
-                                    button_ignore = none
-                                    onclick = "[GetScriptedGui('DI_add_trait').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).End)]"
-                                    onrightclick = "[GetScriptedGui('DI_remove_trait').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).End)]"
-                                    tooltip = DI_trait_button_tt
-                                }
+                            icon = {
+                                size = { 30 30 }
+                                texture = "[TraitLevelTrack.GetIcon( Trait.Self, Character.Self )]"
                             }
 
                             vbox = {
@@ -970,7 +973,7 @@ types DI_trait_menu_types
                                 }
 
                                 widget = {
-                                    size = { 0 25 }
+                                    size = { 0 15 }
                                     layoutpolicy_horizontal = expanding
                                     allow_outside = yes
 
@@ -989,132 +992,7 @@ types DI_trait_menu_types
 
                                         blockoverride "marker"
                                         {
-                                            widget = {
-                                                parentanchor = center
-                                                size = { 0 40 }
-                                                position = { -15 5 }
-                                                allow_outside = yes
-
-                                                button_round = {
-                                                    scale = 0.75
-                                                    visible = "[LessThan_int32(GetDataModelSize(Trait.GetLevelTracks), '(int32)2')]"
-                                                    datacontext = "[TraitLevelTrack.GetEntryForXp( ComplexBarItem.GetValue )]"
-                                                    raw_text = "[TraitLevelTrackEntry.GetLevel]"
-                                                    onclick = "[GetScriptedGui('DI_add_trait_xp').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).AddScope('track', MakeScopeFlag(TraitLevelTrack.GetName)).AddScope('xp', MakeScopeValue(TraitLevelTrackEntry.GetXpRequired)).End)]"
-                                                }
-                                                # Foot
-                                                button_round = {
-                                                    scale = 0.75
-                                                    visible = "[EqualTo_string( TraitLevelTrack.GetName, Localize('trait_track_foot'))]"
-                                                    datacontext = "[TraitLevelTrack.GetEntryForXp( ComplexBarItem.GetValue )]"
-                                                    raw_text = "[TraitLevelTrackEntry.GetLevel]"
-                                                    onclick = "[GetScriptedGui('DI_add_trait_xp').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).AddScope('track', MakeScopeFlag('Foot')).AddScope('xp', MakeScopeValue(TraitLevelTrackEntry.GetXpRequired)).End)]"
-                                                }
-                                                # Bow
-                                                button_round = {
-                                                    scale = 0.75
-                                                    visible = "[EqualTo_string( TraitLevelTrack.GetName, Localize('trait_track_bow'))]"
-                                                    datacontext = "[TraitLevelTrack.GetEntryForXp( ComplexBarItem.GetValue )]"
-                                                    raw_text = "[TraitLevelTrackEntry.GetLevel]"
-                                                    onclick = "[GetScriptedGui('DI_add_trait_xp').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).AddScope('track', MakeScopeFlag('Bow')).AddScope('xp', MakeScopeValue(TraitLevelTrackEntry.GetXpRequired)).End)]"
-                                                }
-                                                # Horse
-                                                button_round = {
-                                                    scale = 0.75
-                                                    visible = "[EqualTo_string( TraitLevelTrack.GetName, Localize('trait_track_horse'))]"
-                                                    datacontext = "[TraitLevelTrack.GetEntryForXp( ComplexBarItem.GetValue )]"
-                                                    raw_text = "[TraitLevelTrackEntry.GetLevel]"
-                                                    onclick = "[GetScriptedGui('DI_add_trait_xp').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).AddScope('track', MakeScopeFlag('Horse')).AddScope('xp', MakeScopeValue(TraitLevelTrackEntry.GetXpRequired)).End)]"
-                                                }
-                                                # Wit
-                                                button_round = {
-                                                    scale = 0.75
-                                                    visible = "[EqualTo_string( TraitLevelTrack.GetName, Localize('trait_track_wit'))]"
-                                                    datacontext = "[TraitLevelTrack.GetEntryForXp( ComplexBarItem.GetValue )]"
-                                                    raw_text = "[TraitLevelTrackEntry.GetLevel]"
-                                                    onclick = "[GetScriptedGui('DI_add_trait_xp').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).AddScope('track', MakeScopeFlag('Wit')).AddScope('xp', MakeScopeValue(TraitLevelTrackEntry.GetXpRequired)).End)]"
-                                                }
-                                                # Bandit
-                                                button_round = {
-                                                    scale = 0.75
-                                                    visible = "[EqualTo_string( TraitLevelTrack.GetName, Localize('trait_track_bandit'))]"
-                                                    datacontext = "[TraitLevelTrack.GetEntryForXp( ComplexBarItem.GetValue )]"
-                                                    raw_text = "[TraitLevelTrackEntry.GetLevel]"
-                                                    onclick = "[GetScriptedGui('DI_add_trait_xp').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).AddScope('track', MakeScopeFlag('Bandit')).AddScope('xp', MakeScopeValue(TraitLevelTrackEntry.GetXpRequired)).End)]"
-                                                }
-
-                                                # Trickster
-                                                button_round = {
-                                                    scale = 0.75
-                                                    visible = "[EqualTo_string( TraitLevelTrack.GetName, Localize('trait_track_trickster'))]"
-                                                    datacontext = "[TraitLevelTrack.GetEntryForXp( ComplexBarItem.GetValue )]"
-                                                    raw_text = "[TraitLevelTrackEntry.GetLevel]"
-                                                    onclick = "[GetScriptedGui('DI_add_trait_xp').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).AddScope('track', MakeScopeFlag('Trickster')).AddScope('xp', MakeScopeValue(TraitLevelTrackEntry.GetXpRequired)).End)]"
-                                                }
-
-                                                # Thief
-                                                button_round = {
-                                                    scale = 0.75
-                                                    visible = "[EqualTo_string( TraitLevelTrack.GetName, Localize('trait_track_thief'))]"
-                                                    datacontext = "[TraitLevelTrack.GetEntryForXp( ComplexBarItem.GetValue )]"
-                                                    raw_text = "[TraitLevelTrackEntry.GetLevel]"
-                                                    onclick = "[GetScriptedGui('DI_add_trait_xp').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).AddScope('track', MakeScopeFlag('Thief')).AddScope('xp', MakeScopeValue(TraitLevelTrackEntry.GetXpRequired)).End)]"
-                                                }
-
-                                                # Poacher
-                                                button_round = {
-                                                    scale = 0.75
-                                                    visible = "[EqualTo_string( TraitLevelTrack.GetName, Localize('trait_track_poacher'))]"
-                                                    datacontext = "[TraitLevelTrack.GetEntryForXp( ComplexBarItem.GetValue )]"
-                                                    raw_text = "[TraitLevelTrackEntry.GetLevel]"
-                                                    onclick = "[GetScriptedGui('DI_add_trait_xp').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).AddScope('track', MakeScopeFlag('Poacher')).AddScope('xp', MakeScopeValue(TraitLevelTrackEntry.GetXpRequired)).End)]"
-                                                }
-
-                                                # Marauder
-                                                button_round = {
-                                                    scale = 0.75
-                                                    visible = "[EqualTo_string( TraitLevelTrack.GetName, Localize('trait_track_marauder'))]"
-                                                    datacontext = "[TraitLevelTrack.GetEntryForXp( ComplexBarItem.GetValue )]"
-                                                    raw_text = "[TraitLevelTrackEntry.GetLevel]"
-                                                    onclick = "[GetScriptedGui('DI_add_trait_xp').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).AddScope('track', MakeScopeFlag('Marauder')).AddScope('xp', MakeScopeValue(TraitLevelTrackEntry.GetXpRequired)).End)]"
-                                                }
-
-                                                # Travel
-                                                button_round = {
-                                                    scale = 0.75
-                                                    visible = "[EqualTo_string( TraitLevelTrack.GetName, Localize('trait_track_travel'))]"
-                                                    datacontext = "[TraitLevelTrack.GetEntryForXp( ComplexBarItem.GetValue )]"
-                                                    raw_text = "[TraitLevelTrackEntry.GetLevel]"
-                                                    onclick = "[GetScriptedGui('DI_add_trait_xp').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).AddScope('track', MakeScopeFlag('Wanderer')).AddScope('xp', MakeScopeValue(TraitLevelTrackEntry.GetXpRequired)).End)]"
-                                                }
-
-                                                # Danger
-                                                button_round = {
-                                                    scale = 0.75
-                                                    visible = "[EqualTo_string( TraitLevelTrack.GetName, Localize('trait_track_danger'))]"
-                                                    datacontext = "[TraitLevelTrack.GetEntryForXp( ComplexBarItem.GetValue )]"
-                                                    raw_text = "[TraitLevelTrackEntry.GetLevel]"
-                                                    onclick = "[GetScriptedGui('DI_add_trait_xp').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).AddScope('track', MakeScopeFlag('Seasoned')).AddScope('xp', MakeScopeValue(TraitLevelTrackEntry.GetXpRequired)).End)]"
-                                                }
-
-                                                # Hunter
-                                                button_round = {
-                                                    scale = 0.75
-                                                    visible = "[EqualTo_string( TraitLevelTrack.GetName, Localize('trait_track_hunter'))]"
-                                                    datacontext = "[TraitLevelTrack.GetEntryForXp( ComplexBarItem.GetValue )]"
-                                                    raw_text = "[TraitLevelTrackEntry.GetLevel]"
-                                                    onclick = "[GetScriptedGui('DI_add_trait_xp').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).AddScope('track', MakeScopeFlag('Venator')).AddScope('xp', MakeScopeValue(TraitLevelTrackEntry.GetXpRequired)).End)]"
-                                                }
-
-                                                # Falconer
-                                                button_round = {
-                                                    scale = 0.75
-                                                    visible = "[EqualTo_string( TraitLevelTrack.GetName, Localize('trait_track_falconer'))]"
-                                                    datacontext = "[TraitLevelTrack.GetEntryForXp( ComplexBarItem.GetValue )]"
-                                                    raw_text = "[TraitLevelTrackEntry.GetLevel]"
-                                                    onclick = "[GetScriptedGui('DI_add_trait_xp').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('trait', Trait.MakeScope).AddScope('track', MakeScopeFlag('Falconer')).AddScope('xp', MakeScopeValue(TraitLevelTrackEntry.GetXpRequired)).End)]"
-                                                }
-                                            }
+                                            widget_DI_tracked_trait_marker_buttons = {}
                                         }
                                     }
                                 }
