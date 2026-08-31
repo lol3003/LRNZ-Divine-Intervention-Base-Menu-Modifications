@@ -63,6 +63,30 @@ still cover modded legacies via a small compatibility pattern (see Phase 3).
 
 ---
 
+## ✅ Script docs generated (in-game `script_docs` console command) — findings
+
+Logs are in `Documents/Paradox Interactive/Crusader Kings III/logs/`:
+`effects.log`, `triggers.log`, `event_scopes.log`, `event_targets.log`.
+
+### Confirmed effects (both dynasty scope)
+| Effect | Signature |
+|---|---|
+| `add_dynasty_perk` | `add_dynasty_perk = key` — adds perk (deducts renown) |
+| `remove_dynasty_perk` | `remove_dynasty_perk = key` — **removal IS possible!** Phase 2 remove-buttons are go |
+
+### Confirmed triggers (dynasty scope)
+| Trigger | Signature |
+|---|---|
+| `has_dynasty_perk` | `has_dynasty_perk = key` |
+| `<track>_legacy_track_perks` | **auto-generated per track** (20 vanilla ones found) — compares perk count: `warfare_legacy_track_perks >= 3`. **Mods adding tracks get their own trigger automatically** → tooltips/progress display can be dynamic per track! |
+
+### Still missing
+- No `every_/any_dynasty_perk` iterator → runtime enumeration remains impossible →
+  Phase 3a generator still required for modded track coverage.
+- No dynasty→perk scope links in `event_targets.log`.
+
+---
+
 ## Phase 1 — Core editor: hardcoded tracks + add-next-perk (MVP)
 
 **Goal:** Working "add next perk in track" buttons for all 20 vanilla tracks.
@@ -113,9 +137,14 @@ DI_dynasty_add_warfare_perk = {
 > not refunding and letting the editor consume renown like a normal purchase, or adding a
 > separate "Renown +5000" cheat button the user clicks as needed.
 
-Repeat for all 20 tracks (keys listed in the appendix below). Also add a
-`DI_dynasty_remove_last_perk` variant per track if desired (check `remove_dynasty_perk` exists in
-`effects.log` — if not, skip removal in v1).
+Repeat for all 20 tracks (keys listed in the appendix below). Removal is also possible:
+`remove_dynasty_perk = <key>` (confirmed in effects.log) — add a right-click "remove last perk"
+variant per track (walk the track backwards with `has_dynasty_perk` checks).
+
+**Bonus from script_docs:** the auto-generated `<track>_legacy_track_perks` triggers (e.g.
+`warfare_legacy_track_perks >= 3`) let tooltips show the current perk count per track — and since
+these triggers are auto-generated for *every* track (including mod-added ones), any modded tracks
+added by the generator automatically get working count tooltips too.
 
 ### 1.2 Build the UI
 In `gui/DI_dynasty_perk_editor.gui`, replace the placeholder content with a grid of buttons —
@@ -145,7 +174,8 @@ copy the styling of the lifestyle present buttons (`DI_ce_present_dark_button` t
       Needs the `_copy` variables you already built.
 - [ ] Renown display already works (`Dynasty.GetPrestige`) — optionally add a
       `add_dynasty_prestige = 5000` cheat button next to the grid.
-- [ ] Remove-last-perk (if a remove effect exists — check `effects.log`).
+- [x] ~~Remove-last-perk~~ — `remove_dynasty_perk = <key>` confirmed in effects.log; implement
+      right-click remove walking the track backwards.
 - [ ] Localization for all buttons/tooltips (follow `DI_l_english.yml` conventions).
 - [ ] Clean up dead code (see cleanup list in DYNASTY_PERK_EDITOR_OPTIONS.md).
 
