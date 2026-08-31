@@ -345,8 +345,9 @@ types DI_DynastyGeneratedPerks {
             }
         }
 
-        # ---- ep1_culture_legacy_track (5 perks) ----
+        # ---- ep1_culture_legacy_track (5 perks) [DLC: hybridize_culture] ----
         vbox = {
+            visible = "[HasDlcFeature( 'hybridize_culture' )]"
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
@@ -393,8 +394,9 @@ types DI_DynastyGeneratedPerks {
             }
         }
 
-        # ---- ep2_activities_legacy_track (5 perks) ----
+        # ---- ep2_activities_legacy_track (5 perks) [DLC: tours_and_tournaments] ----
         vbox = {
+            visible = "[HasDlcFeature( 'tours_and_tournaments' )]"
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
@@ -441,8 +443,9 @@ types DI_DynastyGeneratedPerks {
             }
         }
 
-        # ---- fp1_adventure_legacy_track (5 perks) ----
+        # ---- fp1_adventure_legacy_track (5 perks) [DLC: the_northern_lords] ----
         vbox = {
+            visible = "[HasDlcFeature( 'the_northern_lords' )]"
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
@@ -489,8 +492,9 @@ types DI_DynastyGeneratedPerks {
             }
         }
 
-        # ---- fp1_pillage_legacy_track (5 perks) ----
+        # ---- fp1_pillage_legacy_track (5 perks) [DLC: the_northern_lords] ----
         vbox = {
+            visible = "[HasDlcFeature( 'the_northern_lords' )]"
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
@@ -537,8 +541,9 @@ types DI_DynastyGeneratedPerks {
             }
         }
 
-        # ---- fp2_urbanism_legacy_track (5 perks) ----
+        # ---- fp2_urbanism_legacy_track (5 perks) [DLC: the_fate_of_iberia] ----
         vbox = {
+            visible = "[HasDlcFeature( 'the_fate_of_iberia' )]"
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
@@ -585,8 +590,9 @@ types DI_DynastyGeneratedPerks {
             }
         }
 
-        # ---- fp2_coterie_legacy_track (5 perks) ----
+        # ---- fp2_coterie_legacy_track (5 perks) [DLC: the_fate_of_iberia] ----
         vbox = {
+            visible = "[HasDlcFeature( 'the_fate_of_iberia' )]"
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
@@ -633,8 +639,9 @@ types DI_DynastyGeneratedPerks {
             }
         }
 
-        # ---- fp3_khvarenah_legacy_track (5 perks) ----
+        # ---- fp3_khvarenah_legacy_track (5 perks) [DLC: legacy_of_persia] ----
         vbox = {
+            visible = "[HasDlcFeature( 'legacy_of_persia' )]"
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
@@ -681,8 +688,9 @@ types DI_DynastyGeneratedPerks {
             }
         }
 
-        # ---- ce1_heroic_track (5 perks) ----
+        # ---- ce1_heroic_track (5 perks) [DLC: legends] ----
         vbox = {
+            visible = "[HasDlcFeature( 'legends' )]"
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
@@ -729,8 +737,9 @@ types DI_DynastyGeneratedPerks {
             }
         }
 
-        # ---- ce1_legitimacy_legacy_track (5 perks) ----
+        # ---- ce1_legitimacy_legacy_track (5 perks) [DLC: legends_of_the_dead] ----
         vbox = {
+            visible = "[HasDlcFeature( 'legends_of_the_dead' )]"
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
@@ -777,8 +786,9 @@ types DI_DynastyGeneratedPerks {
             }
         }
 
-        # ---- ep3_administrative_legacy_track (5 perks) ----
+        # ---- ep3_administrative_legacy_track (5 perks) [DLC: roads_to_power] ----
         vbox = {
+            visible = "[HasDlcFeature( 'roads_to_power' )]"
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
@@ -825,8 +835,9 @@ types DI_DynastyGeneratedPerks {
             }
         }
 
-        # ---- mpo_nomad_legacy_track (5 perks) ----
+        # ---- mpo_nomad_legacy_track (5 perks) [DLC: khans_of_the_steppe] ----
         vbox = {
+            visible = "[HasDlcFeature( 'khans_of_the_steppe' )]"
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
@@ -873,8 +884,9 @@ types DI_DynastyGeneratedPerks {
             }
         }
 
-        # ---- tgp_china_legacy_track (5 perks) ----
+        # ---- tgp_china_legacy_track (5 perks) [DLC: all_under_heaven] ----
         vbox = {
+            visible = "[HasDlcFeature( 'all_under_heaven' )]"
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
@@ -921,8 +933,9 @@ types DI_DynastyGeneratedPerks {
             }
         }
 
-        # ---- tgp_japan_legacy_track (5 perks) ----
+        # ---- tgp_japan_legacy_track (5 perks) [DLC: all_under_heaven] ----
         vbox = {
+            visible = "[HasDlcFeature( 'all_under_heaven' )]"
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
@@ -969,8 +982,9 @@ types DI_DynastyGeneratedPerks {
             }
         }
 
-        # ---- tgp_southeast_asia_legacy_track (5 perks) ----
+        # ---- tgp_southeast_asia_legacy_track (5 perks) [DLC: all_under_heaven] ----
         vbox = {
+            visible = "[HasDlcFeature( 'all_under_heaven' )]"
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 

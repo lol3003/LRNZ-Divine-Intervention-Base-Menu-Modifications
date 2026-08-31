@@ -35,6 +35,16 @@ $outGui     = Join-Path $ModDir "gui\DI_generated_perk_grid.gui"
 # Set to 0 to disable top-up entirely (then free mode = normal cost).
 $FreeModeTopUp = 2750
 
+# --- DLC gating ----------------------------------------------------------------
+# Tracks can be DLC-gated in vanilla via is_shown = { has_dlc_feature = X }.
+# The generator parses that gate and wraps each track row in the grid with
+# HasDlcFeature('X') so the row is hidden when the DLC is missing (no errors,
+# no dead buttons). Tracks without a gate are always shown.
+# NOTE: only the FIRST has_dlc_feature in is_shown is used; vanilla tracks use
+# exactly one (sometimes followed by OR game-rule/government conditions, which
+# are ignored - worst case a gated track shows for players who disabled the
+# "unrestricted legacies" game rule, which is acceptable for a cheat menu).
+
 # --- Parse --------------------------------------------------------------------
 function Get-Perks {
     param([string[]]$Directories)
@@ -66,9 +76,49 @@ function Get-Perks {
     return $perks
 }
 
+# Parse legacy track files: track key -> DLC feature (or $null if ungated)
+function Get-TrackDlcGates {
+    param([string[]]$Directories)
+    $gates = @{}
+    foreach ($dir in $Directories) {
+        if (-not (Test-Path $dir)) { continue }
+        foreach ($file in Get-ChildItem $dir -Filter '*.txt' | Sort-Object Name) {
+            $lines = Get-Content $file.FullName
+            $currentKey = $null
+            $depth = 0
+            $inIsShown = $false
+            foreach ($line in $lines) {
+                $trimmed = ($line -replace '#.*$', '').TrimEnd()
+                if ($trimmed -match '^(\w+)\s*=\s*\{\s*$' -and $depth -eq 0) {
+                    $currentKey = $Matches[1]
+                    $depth = 1
+                    $inIsShown = $false
+                    continue
+                }
+                if ($null -ne $currentKey) {
+                    if ($trimmed -match '^\s*is_shown\s*=\s*\{') { $inIsShown = $true }
+                    $chars = $trimmed.ToCharArray() | Where-Object { $_ -eq '{' -or $_ -eq '}' }
+                    foreach ($c in $chars) { if ($c -eq '{') { $depth++ } else { $depth-- } }
+                    if ($depth -le 0) { $currentKey = $null; $depth = 0; $inIsShown = $false; continue }
+                    if ($inIsShown -and $trimmed -match 'has_dlc_feature\s*=\s*(\w+)') {
+                        if (-not $gates.ContainsKey($currentKey)) { $gates[$currentKey] = $Matches[1] }
+                    }
+                }
+            }
+        }
+    }
+    return $gates
+}
+
 Write-Host "Parsing perk files..."
 $perks = Get-Perks -Directories $perkDirs
 if ($perks.Count -eq 0) { throw "No perks parsed - check -GameDir" }
+
+# parse DLC gates from the same dirs' sibling dynasty_legacies folders
+$legacyDirs = $perkDirs | ForEach-Object { $_ -replace 'dynasty_perks$', 'dynasty_legacies' }
+$trackGates = Get-TrackDlcGates -Directories $legacyDirs
+$gatedCount = ($trackGates.Values | Where-Object { $_ }).Count
+Write-Host "Parsed $($perks.Count) perks across $($tracks.Count) tracks ($gatedCount DLC-gated)"
 
 # group by track, preserving first-seen order
 $tracks = [ordered]@{}
@@ -133,8 +183,14 @@ $gui = [System.Text.StringBuilder]::new()
 [void]$gui.AppendLine("")
 foreach ($t in $tracks.Keys) {
     $perkList = $tracks[$t]
-    [void]$gui.AppendLine("        # ---- $t ($($perkList.Count) perks) ----")
+    $gate = $null
+    if ($trackGates.ContainsKey($t)) { $gate = $trackGates[$t] }
+    [void]$gui.AppendLine("        # ---- $t ($($perkList.Count) perks)$(if ($gate) { " [DLC: $gate]" }) ----")
     [void]$gui.AppendLine("        vbox = {")
+    if ($gate) {
+        # hide the whole track row when the DLC feature is missing
+        [void]$gui.AppendLine("            visible = ""[HasDlcFeature( '$gate' )]""")
+    }
     [void]$gui.AppendLine("            layoutpolicy_horizontal = expanding")
     [void]$gui.AppendLine("            margin = { 5 5 }")
     [void]$gui.AppendLine("")
