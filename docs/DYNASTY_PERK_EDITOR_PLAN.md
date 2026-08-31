@@ -153,6 +153,13 @@ copy the styling of the lifestyle present buttons (`DI_ce_present_dark_button` t
 
 ## Phase 3 — Modded legacy compatibility (the "dynamic" wish, approximated)
 
+> **To answer the "when does the list regenerate" question directly:** the hardcoded effect/GUI
+> files are ordinary mod files — the game reads them **at startup, exactly like vanilla reads its
+> own** `common/dynasty_perks/`. There is **no separate script that runs at game start**. The only
+> manual step is re-running the *generator* (a PowerShell tool on your PC, not part of the mod)
+> when your mod list changes; it rewrites the mod files, and the next game launch picks them up
+> automatically. In-game, everything is instant and native.
+
 Script can't enumerate, but **we can generate the effect file**. Two approaches:
 
 ### 3a. Generator script (recommended)
@@ -169,6 +176,39 @@ without runtime enumeration — the list is computed at build time instead.
 The AGOT submod likely adds its own legacy tracks — when you play AGOT, run the generator with
 the AGOT mod folder included and ship an AGOT variant of the effects file (same pattern the
 AGOT-modifications repo already uses for other overrides).
+
+---
+
+## 🔑 New finding — the console `run` mechanism (possible true-dynamic path)
+
+While researching the "Gain all Dynasty Legacies" cheat (the one that leaves renown negative),
+it turned out to be a **hardcoded C++ console command** (`gain_all_dynasty_perks`) — not script.
+It grants all perks **without deducting renown** (renown goes negative per your screenshot), which
+confirms the console path bypasses costs entirely.
+
+More interesting, vanilla's debug console window reveals:
+
+```paradox
+onclick = "[ExecuteConsoleCommand('run run.txt')]"
+# tooltip: "LMB to execute script in run.txt, LMB+Shift: run_shift.txt, RMB: run_rmb.txt ..."
+```
+
+- The console `run` command executes a Paradox script file from the CK3 user folder
+  (`Documents/Paradox Interactive/Crusader Kings III/run.txt`).
+- `ExecuteConsoleCommand(...)` is callable from **any GUI** — so a mod button can trigger it.
+- **Limitation:** every vanilla usage passes a *static string* — there is no evidence
+  `ExecuteConsoleCommand` accepts dynamic arguments (e.g. concatenating a scope's dynasty ID).
+  So we cannot pass the selected dynasty through this path from GUI alone.
+
+**Possible use:** a "Gain ALL legacies (incl. mods)" button that runs a *generated*
+`run.txt`-style file listing every `add_dynasty_perk` for the player's dynasty — but since the
+console commands act on the *player's* dynasty and can't take our selected-dynasty argument,
+this only covers the player dynasty and adds little over Phase 1. Parked unless dynamic args
+are ever confirmed.
+
+**Conclusion unchanged:** Phase 1 (scripted `add_dynasty_perk` + refund) targeting the selected
+dynasty via `scope:DI_dynasty_selected_dynasty` remains the right core; Phase 3a's generator
+covers modded tracks.
 
 ---
 
