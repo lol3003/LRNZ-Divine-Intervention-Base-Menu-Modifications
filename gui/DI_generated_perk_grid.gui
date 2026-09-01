@@ -1,4 +1,4 @@
-### GENERATED FILE - do not hand-edit. Regenerate with: tools/generate_perk_editor.ps1
+﻿### GENERATED FILE - do not hand-edit. Regenerate with: tools/generate_perk_editor.ps1
 ### Per-perk toggle grid for the DI dynasty perk editor.
 ### NOTE: has_dynasty_perk is a script trigger, not a GUI datafunction, so
 ### owned state cannot be shown in the UI - buttons are always clickable and
@@ -14,10 +14,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "blood_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/blood_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('blood_legacy_track_name')]"
+                    tooltip = "[Localize('blood_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_blood_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_blood_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_blood_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -25,33 +45,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "blood_legacy_1"
-                    tooltip = "blood_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_blood_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_blood_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_blood_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_blood_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('blood_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/blood_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('blood_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "blood_legacy_2"
-                    tooltip = "blood_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_blood_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_blood_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_blood_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_blood_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('blood_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/blood_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('blood_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "blood_legacy_3"
-                    tooltip = "blood_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_blood_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_blood_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_blood_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_blood_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('blood_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/blood_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('blood_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "blood_legacy_4"
-                    tooltip = "blood_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_blood_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_blood_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_blood_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_blood_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('blood_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/blood_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('blood_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "blood_legacy_5"
-                    tooltip = "blood_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_blood_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_blood_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_blood_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_blood_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('blood_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/blood_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('blood_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -62,10 +177,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "warfare_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/warfare_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('warfare_legacy_track_name')]"
+                    tooltip = "[Localize('warfare_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_warfare_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_warfare_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_warfare_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -73,33 +208,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "warfare_legacy_1"
-                    tooltip = "warfare_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_warfare_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_warfare_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_warfare_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_warfare_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('warfare_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/warfare_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('warfare_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "warfare_legacy_2"
-                    tooltip = "warfare_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_warfare_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_warfare_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_warfare_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_warfare_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('warfare_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/warfare_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('warfare_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "warfare_legacy_3"
-                    tooltip = "warfare_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_warfare_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_warfare_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_warfare_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_warfare_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('warfare_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/warfare_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('warfare_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "warfare_legacy_4"
-                    tooltip = "warfare_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_warfare_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_warfare_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_warfare_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_warfare_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('warfare_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/warfare_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('warfare_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "warfare_legacy_5"
-                    tooltip = "warfare_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_warfare_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_warfare_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_warfare_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_warfare_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('warfare_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/warfare_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('warfare_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -110,10 +340,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "law_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/law_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('law_legacy_track_name')]"
+                    tooltip = "[Localize('law_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_law_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_law_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_law_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -121,33 +371,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "law_legacy_1"
-                    tooltip = "law_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_law_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_law_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_law_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_law_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('law_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/law_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('law_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "law_legacy_2"
-                    tooltip = "law_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_law_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_law_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_law_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_law_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('law_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/law_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('law_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "law_legacy_3"
-                    tooltip = "law_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_law_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_law_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_law_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_law_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('law_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/law_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('law_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "law_legacy_4"
-                    tooltip = "law_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_law_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_law_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_law_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_law_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('law_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/law_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('law_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "law_legacy_5"
-                    tooltip = "law_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_law_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_law_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_law_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_law_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('law_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/law_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('law_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -158,10 +503,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "guile_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/guile_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('guile_legacy_track_name')]"
+                    tooltip = "[Localize('guile_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_guile_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_guile_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_guile_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -169,33 +534,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "guile_legacy_1"
-                    tooltip = "guile_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_guile_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_guile_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_guile_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_guile_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('guile_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/guile_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('guile_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "guile_legacy_2"
-                    tooltip = "guile_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_guile_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_guile_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_guile_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_guile_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('guile_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/guile_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('guile_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "guile_legacy_3"
-                    tooltip = "guile_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_guile_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_guile_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_guile_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_guile_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('guile_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/guile_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('guile_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "guile_legacy_4"
-                    tooltip = "guile_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_guile_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_guile_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_guile_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_guile_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('guile_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/guile_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('guile_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "guile_legacy_5"
-                    tooltip = "guile_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_guile_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_guile_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_guile_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_guile_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('guile_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/guile_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('guile_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -206,10 +666,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "erudition_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/erudition_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('erudition_legacy_track_name')]"
+                    tooltip = "[Localize('erudition_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_erudition_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_erudition_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_erudition_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -217,33 +697,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "erudition_legacy_1"
-                    tooltip = "erudition_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_erudition_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_erudition_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_erudition_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_erudition_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('erudition_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/erudition_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('erudition_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "erudition_legacy_2"
-                    tooltip = "erudition_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_erudition_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_erudition_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_erudition_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_erudition_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('erudition_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/erudition_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('erudition_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "erudition_legacy_3"
-                    tooltip = "erudition_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_erudition_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_erudition_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_erudition_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_erudition_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('erudition_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/erudition_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('erudition_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "erudition_legacy_4"
-                    tooltip = "erudition_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_erudition_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_erudition_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_erudition_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_erudition_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('erudition_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/erudition_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('erudition_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "erudition_legacy_5"
-                    tooltip = "erudition_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_erudition_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_erudition_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_erudition_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_erudition_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('erudition_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/erudition_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('erudition_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -254,10 +829,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "glory_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/glory_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('glory_legacy_track_name')]"
+                    tooltip = "[Localize('glory_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_glory_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_glory_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_glory_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -265,33 +860,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "glory_legacy_1"
-                    tooltip = "glory_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_glory_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_glory_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_glory_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_glory_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('glory_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/glory_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('glory_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "glory_legacy_2"
-                    tooltip = "glory_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_glory_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_glory_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_glory_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_glory_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('glory_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/glory_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('glory_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "glory_legacy_3"
-                    tooltip = "glory_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_glory_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_glory_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_glory_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_glory_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('glory_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/glory_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('glory_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "glory_legacy_4"
-                    tooltip = "glory_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_glory_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_glory_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_glory_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_glory_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('glory_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/glory_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('glory_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "glory_legacy_5"
-                    tooltip = "glory_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_glory_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_glory_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_glory_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_glory_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('glory_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/glory_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('glory_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -302,10 +992,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "kin_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/kin_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('kin_legacy_track_name')]"
+                    tooltip = "[Localize('kin_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_kin_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_kin_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_kin_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -313,33 +1023,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "kin_legacy_1"
-                    tooltip = "kin_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_kin_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_kin_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_kin_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_kin_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('kin_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/kin_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('kin_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "kin_legacy_2"
-                    tooltip = "kin_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_kin_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_kin_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_kin_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_kin_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('kin_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/kin_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('kin_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "kin_legacy_3"
-                    tooltip = "kin_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_kin_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_kin_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_kin_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_kin_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('kin_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/kin_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('kin_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "kin_legacy_4"
-                    tooltip = "kin_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_kin_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_kin_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_kin_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_kin_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('kin_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/kin_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('kin_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "kin_legacy_5"
-                    tooltip = "kin_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_kin_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_kin_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_kin_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_kin_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('kin_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/kin_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('kin_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -351,10 +1156,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "ep1_culture_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/ep1_culture_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('ep1_culture_legacy_track_name')]"
+                    tooltip = "[Localize('ep1_culture_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_ep1_culture_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_ep1_culture_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_ep1_culture_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -362,33 +1187,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "ep1_culture_legacy_1"
-                    tooltip = "ep1_culture_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ep1_culture_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ep1_culture_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ep1_culture_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ep1_culture_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ep1_culture_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ep1_culture_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ep1_culture_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ep1_culture_legacy_2"
-                    tooltip = "ep1_culture_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ep1_culture_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ep1_culture_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ep1_culture_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ep1_culture_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ep1_culture_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ep1_culture_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ep1_culture_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ep1_culture_legacy_3"
-                    tooltip = "ep1_culture_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ep1_culture_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ep1_culture_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ep1_culture_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ep1_culture_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ep1_culture_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ep1_culture_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ep1_culture_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ep1_culture_legacy_4"
-                    tooltip = "ep1_culture_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ep1_culture_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ep1_culture_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ep1_culture_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ep1_culture_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ep1_culture_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ep1_culture_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ep1_culture_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ep1_culture_legacy_5"
-                    tooltip = "ep1_culture_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ep1_culture_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ep1_culture_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ep1_culture_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ep1_culture_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ep1_culture_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ep1_culture_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ep1_culture_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -400,10 +1320,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "ep2_activities_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/ep2_activities_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('ep2_activities_legacy_track_name')]"
+                    tooltip = "[Localize('ep2_activities_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_ep2_activities_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_ep2_activities_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_ep2_activities_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -411,33 +1351,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "ep2_activities_legacy_2"
-                    tooltip = "ep2_activities_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ep2_activities_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ep2_activities_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ep2_activities_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ep2_activities_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ep2_activities_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ep2_activities_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ep2_activities_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ep2_activities_legacy_1"
-                    tooltip = "ep2_activities_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ep2_activities_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ep2_activities_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ep2_activities_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ep2_activities_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ep2_activities_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ep2_activities_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ep2_activities_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ep2_activities_legacy_3"
-                    tooltip = "ep2_activities_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ep2_activities_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ep2_activities_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ep2_activities_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ep2_activities_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ep2_activities_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ep2_activities_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ep2_activities_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ep2_activities_legacy_4"
-                    tooltip = "ep2_activities_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ep2_activities_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ep2_activities_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ep2_activities_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ep2_activities_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ep2_activities_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ep2_activities_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ep2_activities_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ep2_activities_legacy_5"
-                    tooltip = "ep2_activities_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ep2_activities_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ep2_activities_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ep2_activities_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ep2_activities_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ep2_activities_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ep2_activities_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ep2_activities_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -449,10 +1484,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "fp1_adventure_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/fp1_adventure_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('fp1_adventure_legacy_track_name')]"
+                    tooltip = "[Localize('fp1_adventure_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_fp1_adventure_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_fp1_adventure_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_fp1_adventure_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -460,33 +1515,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "fp1_adventure_legacy_1"
-                    tooltip = "fp1_adventure_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp1_adventure_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp1_adventure_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp1_adventure_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_adventure_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp1_adventure_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp1_adventure_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp1_adventure_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp1_adventure_legacy_2"
-                    tooltip = "fp1_adventure_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp1_adventure_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp1_adventure_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp1_adventure_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_adventure_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp1_adventure_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp1_adventure_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp1_adventure_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp1_adventure_legacy_3"
-                    tooltip = "fp1_adventure_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp1_adventure_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp1_adventure_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp1_adventure_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_adventure_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp1_adventure_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp1_adventure_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp1_adventure_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp1_adventure_legacy_4"
-                    tooltip = "fp1_adventure_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp1_adventure_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp1_adventure_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp1_adventure_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_adventure_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp1_adventure_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp1_adventure_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp1_adventure_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp1_adventure_legacy_5"
-                    tooltip = "fp1_adventure_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp1_adventure_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp1_adventure_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp1_adventure_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_adventure_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp1_adventure_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp1_adventure_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp1_adventure_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -498,10 +1648,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "fp1_pillage_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/fp1_pillage_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('fp1_pillage_legacy_track_name')]"
+                    tooltip = "[Localize('fp1_pillage_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_fp1_pillage_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_fp1_pillage_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_fp1_pillage_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -509,33 +1679,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "fp1_pillage_legacy_1"
-                    tooltip = "fp1_pillage_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp1_pillage_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp1_pillage_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp1_pillage_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_pillage_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp1_pillage_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp1_pillage_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp1_pillage_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp1_pillage_legacy_2"
-                    tooltip = "fp1_pillage_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp1_pillage_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp1_pillage_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp1_pillage_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_pillage_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp1_pillage_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp1_pillage_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp1_pillage_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp1_pillage_legacy_3"
-                    tooltip = "fp1_pillage_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp1_pillage_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp1_pillage_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp1_pillage_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_pillage_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp1_pillage_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp1_pillage_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp1_pillage_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp1_pillage_legacy_4"
-                    tooltip = "fp1_pillage_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp1_pillage_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp1_pillage_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp1_pillage_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_pillage_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp1_pillage_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp1_pillage_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp1_pillage_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp1_pillage_legacy_5"
-                    tooltip = "fp1_pillage_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp1_pillage_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp1_pillage_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp1_pillage_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_pillage_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp1_pillage_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp1_pillage_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp1_pillage_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -547,10 +1812,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "fp2_urbanism_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/fp2_urbanism_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('fp2_urbanism_legacy_track_name')]"
+                    tooltip = "[Localize('fp2_urbanism_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_fp2_urbanism_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_fp2_urbanism_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_fp2_urbanism_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -558,33 +1843,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "fp2_urbanism_legacy_1"
-                    tooltip = "fp2_urbanism_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp2_urbanism_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp2_urbanism_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp2_urbanism_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_urbanism_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp2_urbanism_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp2_urbanism_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp2_urbanism_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp2_urbanism_legacy_2"
-                    tooltip = "fp2_urbanism_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp2_urbanism_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp2_urbanism_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp2_urbanism_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_urbanism_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp2_urbanism_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp2_urbanism_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp2_urbanism_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp2_urbanism_legacy_3"
-                    tooltip = "fp2_urbanism_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp2_urbanism_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp2_urbanism_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp2_urbanism_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_urbanism_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp2_urbanism_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp2_urbanism_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp2_urbanism_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp2_urbanism_legacy_4"
-                    tooltip = "fp2_urbanism_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp2_urbanism_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp2_urbanism_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp2_urbanism_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_urbanism_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp2_urbanism_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp2_urbanism_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp2_urbanism_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp2_urbanism_legacy_5"
-                    tooltip = "fp2_urbanism_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp2_urbanism_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp2_urbanism_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp2_urbanism_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_urbanism_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp2_urbanism_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp2_urbanism_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp2_urbanism_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -596,10 +1976,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "fp2_coterie_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/fp2_coterie_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('fp2_coterie_legacy_track_name')]"
+                    tooltip = "[Localize('fp2_coterie_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_fp2_coterie_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_fp2_coterie_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_fp2_coterie_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -607,33 +2007,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "fp2_coterie_legacy_1"
-                    tooltip = "fp2_coterie_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp2_coterie_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp2_coterie_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp2_coterie_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_coterie_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp2_coterie_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp2_coterie_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp2_coterie_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp2_coterie_legacy_2"
-                    tooltip = "fp2_coterie_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp2_coterie_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp2_coterie_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp2_coterie_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_coterie_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp2_coterie_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp2_coterie_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp2_coterie_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp2_coterie_legacy_3"
-                    tooltip = "fp2_coterie_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp2_coterie_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp2_coterie_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp2_coterie_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_coterie_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp2_coterie_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp2_coterie_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp2_coterie_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp2_coterie_legacy_4"
-                    tooltip = "fp2_coterie_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp2_coterie_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp2_coterie_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp2_coterie_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_coterie_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp2_coterie_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp2_coterie_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp2_coterie_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp2_coterie_legacy_5"
-                    tooltip = "fp2_coterie_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp2_coterie_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp2_coterie_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp2_coterie_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_coterie_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp2_coterie_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp2_coterie_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp2_coterie_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -645,10 +2140,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "fp3_khvarenah_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/fp3_khvarenah_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('fp3_khvarenah_legacy_track_name')]"
+                    tooltip = "[Localize('fp3_khvarenah_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_fp3_khvarenah_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_fp3_khvarenah_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_fp3_khvarenah_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -656,33 +2171,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "fp3_khvarenah_legacy_1"
-                    tooltip = "fp3_khvarenah_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp3_khvarenah_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp3_khvarenah_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp3_khvarenah_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp3_khvarenah_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp3_khvarenah_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp3_khvarenah_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp3_khvarenah_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp3_khvarenah_legacy_2"
-                    tooltip = "fp3_khvarenah_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp3_khvarenah_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp3_khvarenah_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp3_khvarenah_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp3_khvarenah_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp3_khvarenah_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp3_khvarenah_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp3_khvarenah_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp3_khvarenah_legacy_3"
-                    tooltip = "fp3_khvarenah_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp3_khvarenah_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp3_khvarenah_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp3_khvarenah_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp3_khvarenah_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp3_khvarenah_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp3_khvarenah_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp3_khvarenah_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp3_khvarenah_legacy_4"
-                    tooltip = "fp3_khvarenah_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp3_khvarenah_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp3_khvarenah_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp3_khvarenah_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp3_khvarenah_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp3_khvarenah_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp3_khvarenah_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp3_khvarenah_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "fp3_khvarenah_legacy_5"
-                    tooltip = "fp3_khvarenah_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_fp3_khvarenah_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_fp3_khvarenah_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_fp3_khvarenah_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_fp3_khvarenah_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('fp3_khvarenah_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/fp3_khvarenah_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('fp3_khvarenah_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -694,10 +2304,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "ce1_heroic_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/ce1_heroic_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('ce1_heroic_track_name')]"
+                    tooltip = "[Localize('ce1_heroic_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_ce1_heroic_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_ce1_heroic_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_ce1_heroic_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -705,33 +2335,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "ce1_heroic_legacy_1"
-                    tooltip = "ce1_heroic_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ce1_heroic_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ce1_heroic_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ce1_heroic_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_heroic_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ce1_heroic_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ce1_heroic_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ce1_heroic_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ce1_heroic_legacy_2"
-                    tooltip = "ce1_heroic_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ce1_heroic_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ce1_heroic_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ce1_heroic_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_heroic_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ce1_heroic_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ce1_heroic_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ce1_heroic_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ce1_heroic_legacy_3"
-                    tooltip = "ce1_heroic_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ce1_heroic_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ce1_heroic_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ce1_heroic_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_heroic_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ce1_heroic_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ce1_heroic_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ce1_heroic_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ce1_heroic_legacy_4"
-                    tooltip = "ce1_heroic_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ce1_heroic_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ce1_heroic_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ce1_heroic_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_heroic_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ce1_heroic_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ce1_heroic_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ce1_heroic_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ce1_heroic_legacy_5"
-                    tooltip = "ce1_heroic_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ce1_heroic_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ce1_heroic_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ce1_heroic_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_heroic_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ce1_heroic_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ce1_heroic_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ce1_heroic_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -743,10 +2468,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "ce1_legitimacy_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/ce1_legitimacy_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('ce1_legitimacy_legacy_track_name')]"
+                    tooltip = "[Localize('ce1_legitimacy_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_ce1_legitimacy_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_ce1_legitimacy_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_ce1_legitimacy_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -754,33 +2499,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "ce1_legitimacy_legacy_1"
-                    tooltip = "ce1_legitimacy_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ce1_legitimacy_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ce1_legitimacy_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ce1_legitimacy_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_legitimacy_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ce1_legitimacy_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ce1_legitimacy_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ce1_legitimacy_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ce1_legitimacy_legacy_2"
-                    tooltip = "ce1_legitimacy_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ce1_legitimacy_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ce1_legitimacy_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ce1_legitimacy_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_legitimacy_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ce1_legitimacy_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ce1_legitimacy_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ce1_legitimacy_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ce1_legitimacy_legacy_3"
-                    tooltip = "ce1_legitimacy_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ce1_legitimacy_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ce1_legitimacy_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ce1_legitimacy_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_legitimacy_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ce1_legitimacy_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ce1_legitimacy_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ce1_legitimacy_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ce1_legitimacy_legacy_4"
-                    tooltip = "ce1_legitimacy_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ce1_legitimacy_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ce1_legitimacy_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ce1_legitimacy_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_legitimacy_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ce1_legitimacy_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ce1_legitimacy_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ce1_legitimacy_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ce1_legitimacy_legacy_5"
-                    tooltip = "ce1_legitimacy_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ce1_legitimacy_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ce1_legitimacy_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ce1_legitimacy_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_legitimacy_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ce1_legitimacy_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ce1_legitimacy_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ce1_legitimacy_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -792,10 +2632,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "ep3_administrative_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/ep3_administrative_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('ep3_administrative_legacy_track_name')]"
+                    tooltip = "[Localize('ep3_administrative_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_ep3_administrative_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_ep3_administrative_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_ep3_administrative_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -803,33 +2663,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "ep3_administrative_legacy_1"
-                    tooltip = "ep3_administrative_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ep3_administrative_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ep3_administrative_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ep3_administrative_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ep3_administrative_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ep3_administrative_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ep3_administrative_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ep3_administrative_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ep3_administrative_legacy_2"
-                    tooltip = "ep3_administrative_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ep3_administrative_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ep3_administrative_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ep3_administrative_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ep3_administrative_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ep3_administrative_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ep3_administrative_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ep3_administrative_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ep3_administrative_legacy_3"
-                    tooltip = "ep3_administrative_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ep3_administrative_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ep3_administrative_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ep3_administrative_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ep3_administrative_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ep3_administrative_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ep3_administrative_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ep3_administrative_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ep3_administrative_legacy_4"
-                    tooltip = "ep3_administrative_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ep3_administrative_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ep3_administrative_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ep3_administrative_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ep3_administrative_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ep3_administrative_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ep3_administrative_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ep3_administrative_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "ep3_administrative_legacy_5"
-                    tooltip = "ep3_administrative_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_ep3_administrative_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_ep3_administrative_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_ep3_administrative_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_ep3_administrative_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('ep3_administrative_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/ep3_administrative_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('ep3_administrative_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -841,10 +2796,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "mpo_nomad_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/mpo_nomad_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('mpo_nomad_legacy_track_name')]"
+                    tooltip = "[Localize('mpo_nomad_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_mpo_nomad_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_mpo_nomad_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_mpo_nomad_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -852,33 +2827,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "mpo_nomad_legacy_1"
-                    tooltip = "mpo_nomad_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_mpo_nomad_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_mpo_nomad_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_mpo_nomad_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_mpo_nomad_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('mpo_nomad_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/mpo_nomad_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('mpo_nomad_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "mpo_nomad_legacy_2"
-                    tooltip = "mpo_nomad_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_mpo_nomad_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_mpo_nomad_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_mpo_nomad_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_mpo_nomad_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('mpo_nomad_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/mpo_nomad_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('mpo_nomad_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "mpo_nomad_legacy_3"
-                    tooltip = "mpo_nomad_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_mpo_nomad_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_mpo_nomad_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_mpo_nomad_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_mpo_nomad_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('mpo_nomad_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/mpo_nomad_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('mpo_nomad_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "mpo_nomad_legacy_4"
-                    tooltip = "mpo_nomad_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_mpo_nomad_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_mpo_nomad_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_mpo_nomad_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_mpo_nomad_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('mpo_nomad_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/mpo_nomad_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('mpo_nomad_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "mpo_nomad_legacy_5"
-                    tooltip = "mpo_nomad_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_mpo_nomad_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_mpo_nomad_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_mpo_nomad_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_mpo_nomad_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('mpo_nomad_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/mpo_nomad_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('mpo_nomad_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -890,10 +2960,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "tgp_china_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/tgp_china_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('tgp_china_legacy_track_name')]"
+                    tooltip = "[Localize('tgp_china_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_tgp_china_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_tgp_china_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_tgp_china_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -901,33 +2991,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "tgp_chinese_legacy_1"
-                    tooltip = "tgp_chinese_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_tgp_chinese_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_tgp_chinese_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_tgp_chinese_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_chinese_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('tgp_chinese_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/tgp_china_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('tgp_chinese_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "tgp_chinese_legacy_2"
-                    tooltip = "tgp_chinese_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_tgp_chinese_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_tgp_chinese_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_tgp_chinese_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_chinese_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('tgp_chinese_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/tgp_china_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('tgp_chinese_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "tgp_chinese_legacy_3"
-                    tooltip = "tgp_chinese_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_tgp_chinese_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_tgp_chinese_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_tgp_chinese_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_chinese_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('tgp_chinese_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/tgp_china_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('tgp_chinese_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "tgp_chinese_legacy_4"
-                    tooltip = "tgp_chinese_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_tgp_chinese_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_tgp_chinese_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_tgp_chinese_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_chinese_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('tgp_chinese_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/tgp_china_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('tgp_chinese_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "tgp_chinese_legacy_5"
-                    tooltip = "tgp_chinese_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_tgp_chinese_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_tgp_chinese_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_tgp_chinese_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_chinese_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('tgp_chinese_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/tgp_china_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('tgp_chinese_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -939,10 +3124,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "tgp_japan_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/tgp_japan_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('tgp_japan_legacy_track_name')]"
+                    tooltip = "[Localize('tgp_japan_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_tgp_japan_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_tgp_japan_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_tgp_japan_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -950,33 +3155,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "tgp_japan_legacy_1"
-                    tooltip = "tgp_japan_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_tgp_japan_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_tgp_japan_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_tgp_japan_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_japan_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('tgp_japan_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/tgp_japan_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('tgp_japan_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "tgp_japan_legacy_2"
-                    tooltip = "tgp_japan_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_tgp_japan_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_tgp_japan_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_tgp_japan_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_japan_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('tgp_japan_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/tgp_japan_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('tgp_japan_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "tgp_japan_legacy_3"
-                    tooltip = "tgp_japan_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_tgp_japan_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_tgp_japan_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_tgp_japan_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_japan_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('tgp_japan_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/tgp_japan_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('tgp_japan_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "tgp_japan_legacy_4"
-                    tooltip = "tgp_japan_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_tgp_japan_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_tgp_japan_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_tgp_japan_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_japan_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('tgp_japan_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/tgp_japan_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('tgp_japan_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "tgp_japan_legacy_5"
-                    tooltip = "tgp_japan_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_tgp_japan_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_tgp_japan_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_tgp_japan_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_japan_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('tgp_japan_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/tgp_japan_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('tgp_japan_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -988,10 +3288,30 @@ types DI_DynastyGeneratedPerks {
             layoutpolicy_horizontal = expanding
             margin = { 5 5 }
 
-            text_single = {
+            hbox = {
                 layoutpolicy_horizontal = expanding
-                text = "tgp_southeast_asia_legacy_track"
-                default_format = "#high"
+                spacing = 8
+
+                icon = {
+                    texture = "gfx/interface/icons/dynasty/tgp_southeast_asia_legacy_track.dds"
+                    size = { 24 24 }
+                }
+
+                text_single = {
+                    layoutpolicy_horizontal = expanding
+                    text = "[Localize('tgp_southeast_asia_legacy_track_name')]"
+                    tooltip = "[Localize('tgp_southeast_asia_legacy_track_desc')]"
+                    default_format = ""#high""
+                }
+
+                button_standard = {
+                    size = { 130 26 }
+                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON
+                    enabled = "[GetScriptedGui('DI_track_add_all_tgp_southeast_asia_legacy_track').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_track_add_all_tgp_southeast_asia_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_track_remove_all_tgp_southeast_asia_legacy_track').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT
+                }
             }
 
             flowcontainer = {
@@ -999,33 +3319,128 @@ types DI_DynastyGeneratedPerks {
                 spacing = 5
 
                 button_standard = {
-                    text = "tgp_sea_legacy_1"
-                    tooltip = "tgp_sea_legacy_1"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_tgp_sea_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_tgp_sea_legacy_1').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_tgp_sea_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_sea_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('tgp_sea_legacy_1_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/tgp_southeast_asia_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('tgp_sea_legacy_1_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "tgp_sea_legacy_2"
-                    tooltip = "tgp_sea_legacy_2"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_tgp_sea_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_tgp_sea_legacy_2').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_tgp_sea_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_sea_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('tgp_sea_legacy_2_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/tgp_southeast_asia_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('tgp_sea_legacy_2_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "tgp_sea_legacy_3"
-                    tooltip = "tgp_sea_legacy_3"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_tgp_sea_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_tgp_sea_legacy_3').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_tgp_sea_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_sea_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('tgp_sea_legacy_3_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/tgp_southeast_asia_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('tgp_sea_legacy_3_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "tgp_sea_legacy_4"
-                    tooltip = "tgp_sea_legacy_4"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_tgp_sea_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_tgp_sea_legacy_4').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_tgp_sea_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_sea_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('tgp_sea_legacy_4_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/tgp_southeast_asia_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('tgp_sea_legacy_4_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
                 button_standard = {
-                    text = "tgp_sea_legacy_5"
-                    tooltip = "tgp_sea_legacy_5"
-                    onclick = "[GetScriptedGui('DI_perk_toggle_tgp_sea_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    size = { 260 44 }
+                    button_ignore = none
+                    enabled = "[GetScriptedGui('DI_perk_add_tgp_sea_legacy_5').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onclick = "[GetScriptedGui('DI_perk_add_tgp_sea_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_sea_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                    tooltip = "[Localize('tgp_sea_legacy_5_name')]"
+
+                    hbox = {
+                        margin = { 5 0 }
+                        spacing = 8
+
+                        icon = {
+                            size = { 34 34 }
+                            texture = "gfx/interface/icons/dynasty/tgp_southeast_asia_legacy_track.dds"
+                        }
+
+                        text_single = {
+                            layoutpolicy_horizontal = expanding
+                            text = "[Localize('tgp_sea_legacy_5_name')]"
+                            default_format = ""#clickable""
+                        }
+                    }
                 }
 
             }
@@ -1033,4 +3448,3 @@ types DI_DynastyGeneratedPerks {
 
     }
 }
-

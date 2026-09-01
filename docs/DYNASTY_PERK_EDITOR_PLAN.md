@@ -29,6 +29,163 @@
 > - Phase 3 rewritten as a full spec with UX flow, output modes, and playset integration —
 >   **spec is a draft; user will add more specifications later.**
 
+> **v4 (2026-08-31 audit).** Implementation audit findings:
+> - **FIXED — scope bug in generated toggles:** the free-mode `add_dynasty_prestige` top-up
+>   was emitted at root *character* scope, but the effect is dynasty-scope only. `error.log`
+>   confirmed `Inconsistent effect scopes (character vs. dynasty)` for **every generated
+>   toggle** (~110 load errors). Generator template fixed (top-up moved inside
+>   `var:DI_dynasty_selected_dynasty`, gated via `root = { has_variable = ... }`) and files
+>   regenerated. **Action: relaunch once and confirm these errors are gone from error.log.**
+> - **DLC trees ARE handled correctly** (the main worry — verdict: fine):
+>   - All DLC legacy/perk definitions live in `game/common/` and load for **everyone**
+>     regardless of ownership — perk keys are always defined, so `has_dynasty_perk` /
+>     `add_dynasty_perk` on DLC perks **never errors** for users without the DLC. The
+>     `HasDlcFeature(...)` row-hiding is cosmetic parity with vanilla, not error prevention.
+>   - Vanilla gates tracks exactly the way the generator does: `is_shown = { has_dlc_feature
+>     = X }` in `common/dynasty_legacies/*.txt` (verified in all 10 DLC files), and vanilla GUI
+>     itself uses `HasDlcFeature('...')` (verified in `frontend_bookmarks.gui`). The
+>     generator's gate parsing matches vanilla's own pattern — this is the idiomatic approach.
+>   - Gate→track attribution verified correct, including the edge cases: single-line
+>     `is_shown` blocks (99_legacies.txt), the commented-out gate in 97_ep1_legacies.txt
+>     (correctly ignored), and 94_ce1_legacies.txt having two differently-gated tracks
+>     (`ce1_heroic_track` → `legends`, `ce1_legitimacy_legacy_track` → `legends_of_the_dead`).
+>   - Note: `HasDlcFeature`/script `has_dlc_feature` check the **host's** DLC — irrelevant in
+>     single player, correct behavior in multiplayer.
+>   - Design choice to consider: hidden DLC rows mean a user without Northern Lords *can't*
+>     cheat in pillage perks, even though the script would allow it (keys defined). Optional:
+>     a "show DLC-gated tracks" window toggle. Your call — vanilla parity is the safer default.
+> - **Appendix track table was wrong** (real keys differ, 21 tracks not 20) — see corrected
+>   note in the appendix. The generator reading real files is exactly why this doesn't matter.
+> - Minor: generator log line referenced `$tracks` before it was built — fixed.
+
+> **v5 (2026-09-01, in-game test results).**
+> - **`add_dynasty_perk` renown deduction CONFIRMED in-game** (cost varies per perk, matching
+>   `250 + 500 × total owned`). The flat +2750 top-up was replaced by an **exact pre-grant
+>   refund** via generated script value `DI_dynasty_perk_cost_next`
+>   (`common/script_values/DI_generated_perk_values.txt`): 250 base + 500 per owned perk using
+>   the auto-generated `<track>_legacy_track_perks` triggers. Net renown change ≈ 0 → **no
+>   splendor level inflation** (splendor tracks current prestige, per the user's own earlier
+>   observation that re-adding prestige pushes the level back up).
+> - **Buttons now vanilla-styled** (`DI_ce_present_dark_button` family): track icon
+>   (`gfx/interface/icons/dynasty/<track>.dds` — verified to exist in vanilla), localized perk
+>   names via `<perk_key>_name` loc keys, track headers via `<track>_name`/`<track>_desc`.
+>   Note: perks have **no** `_desc` loc keys (vanilla builds perk tooltips in C++); button
+>   tooltips fall back to the perk name for now. `fp3_persianate_legacy_track.dds` is an
+>   orphaned vanilla icon with no track/perk defs — correctly ignored by the generator.
+> - **Layout overlap fixed:** the grid was in a floating overlay widget (`margin_top = 150`)
+>   over the header/selector; scrollbox moved into the main vbox flow. Also fixed earlier:
+>   inverted free-mode toggle button, free mode now defaults ON at window open (`default`).
+> - **Open test item:** does `remove_dynasty_perk` refund renown? If yes, toggling a perk off
+>   gains renown — check in-game and compensate if unwanted.
+
+> **v6 (2026-09-01, second in-game test).**
+> - **Click semantics split (user requirement):** left click = add, right click = remove,
+>   inapplicable direction is a no-op. Perk buttons grey out when owned (the add scripted
+>   gui's `is_shown` = `NOT has_dynasty_perk`, surfaced via `GetScriptedGui(...).IsValid` —
+>   the mod's standard enabled pattern). This also gives owned-state visual feedback for
+>   free, solving the old "can't show owned state" limitation.
+> - **Per-track buttons added** (user request): each track header has a "Track" button —
+>   left click unlocks all missing perks in the track, right click removes all owned.
+>   Effects skip already-in-target-state perks so renown is only touched on real grants.
+> - **Loc mystery solved ("only Bureaucrats loaded"):** the AGOT-replace theory was WRONG
+>   (user wasn't running AGOT; AGOT's replace file keeps the vanilla keys anyway). Actual
+>   cause: **bare loc keys in modded GUI `text =`/`tooltip =` properties don't resolve** —
+>   vanilla never does that; its keys are only reached via `$key$` loc links or
+>   `GetDynastyPerk(...).GetName` (C++ path). "Bureaucrats" was the single exception because
+>   it's the only perk whose name also appears in a `*_modifier` loc key rendered through a
+>   working text path elsewhere. **Fix: the generator now emits
+>   `[Localize('<perk>_name')]` explicitly** for all button text/tooltips and track headers.
+>   Fallback if Localize misbehaves: generate `DI_perk_<key>_name: "$<key>_name$"` loc keys.
+>   (Side note: AGOT does ship `localization/replace/english/dynasty_legacies/legacies_l_english.yml`
+>   which wholesale replaces vanilla's base legacy loc when AGOT IS loaded — keep in mind
+>   for the AGOT sub-mod; it renamed `blood_legacy_5_name` → "Old Kings".)
+> - **Splendor note (SUPERSEDED by v6.1):** there is NO `set_dynasty_prestige` effect
+>   (checked effects.log) — only `add_dynasty_prestige`. ~~splendor tracks current prestige~~
+>   WRONG, corrected in v6.1: splendor tracks **lifetime earned** prestige.
+> - Tooltip limitation stands: perks have no `_desc` loc keys (C++-built tooltips), button
+>   tooltip = perk name. Perk *effect* text could be added later via custom loc calling
+>   `GetDynastyPerk('<key>').GetEffectDescription` if desired.
+> - **CRASH FIX (same day):** `flowcontainer` rejects `hbox`/`vbox` roots as direct children
+>   (`pdx_gui_container.cpp:142`, crash on map load). `DI_ce_present_dark_button` is an hbox →
+>   added `DI_ce_present_dark_widget_button` (identical but widget-rooted) in
+>   `DI_char_editor_templates.gui`; the generator now uses it for perk buttons.
+> - **v6.1 (same day, test 3):**
+>   - Perk buttons unclickable → the `enabled=` greying inside the button was disabling its
+>     own hit area; fixed by putting `button_ignore = none` on the widget wrapper.
+>   - Free mode default → widget `default=` never fired; moved to the window's `_show`/`_hide`
+>     state `on_start` (ON at open, OFF at close), which is the reliable lifecycle hook.
+>   - **Splendor CONFIRMED to track lifetime earned prestige, not current balance:** user
+>     observed level increasing with renown flat at -6133. Net-zero refund keeps the
+>     *balance* flat but splendor still climbs (+cost then -cost = lifetime gain). There is
+>     no `set_dynasty_prestige` and no splendor-agnostic grant — a truly splendor-neutral
+>     free mode is impossible via script; the editor's free mode is therefore defined as
+>     **renown-cost-free, not splendor-free**. Noted in the cheat-mode tooltip.
+> - **v6.2 (same day, test 4):**
+>   - **Template+blockoverride buttons abandoned.** The `DI_ce_present_dark_*_button` family
+>     lost right-clicks and clicks entirely (button_standard_clean + blockoverride appears to
+>     mishandle input). Perk buttons switched to the mod's proven pattern — plain
+>     `button_standard` with inline icon+text content, `onclick`/`onrightclick`/`enabled`
+>     directly on the button (as in the skills tab / title manager). `DI_ce_present_dark_
+>     widget_button` kept in the templates file but no longer used by the generator.
+>   - Top controls consolidated into one fixed-size row after the header (free-mode toggle
+>     210px + splendor label/−1/+1/reset) — the previous expanding rows spread buttons across
+>     the full window width.
+>   - Reminder: GUI changes need a game restart; testing without one shows stale UI.
+
+> **v7 (2026-09-01, end-of-day status — CURRENT STATE)**
+>
+> **✅ Working (user-confirmed in-game):**
+> - Per-perk buttons: left click adds, right click removes, owned perks grey out
+>   (`enabled` = add sgui's `is_shown` via `IsValid`)
+> - Track buttons: left click unlocks whole track, right click locks whole track
+> - Perk/track names and icons render (via explicit `[Localize('<key>_name')]`)
+> - Cross-dynasty selection (char picker → `DI_dynasty_selected_dynasty`) works
+> - Free mode: renown stays flat (exact pre-grant refund), defaults ON at window open,
+>   OFF at close (state `on_start` hooks), toggleable mid-session
+> - Splendor editor row: +1/−1/Reset-to-0 via `add_dynasty_prestige_level`
+> - Window scrolls; all 21 tracks reachable
+>
+> **⚠️ Known limitations (by design / unfixable via script):**
+> - Splendor level creeps up in free mode even with exact refunds — it tracks *lifetime
+>   earned* prestige and `LEVEL_DROP_MAX_RETAINED_PROGRESS_PRESTIGE = 0.5` makes drops
+>   asymmetric. No script fix exists (no `set_dynasty_prestige`); the splendor row is the
+>   user-side correction. Vanilla's own scripted precedent (Mongol event) is *sloppier*
+>   (brute-force +10000 renown + 5 levels).
+> - Perk tooltips = perk name only. **v8: effect tooltips confirmed IMPOSSIBLE** — the only
+>   effect-text API is `DynastyPerk.GetEffectDescription(GetPlayer)` (vanilla cooltip.gui),
+>   which requires a DynastyPerk *datacontext*. That context comes only from engine-bound
+>   datamodels (`DynastyView.GetLegacies` / `DynastyLegacy.GetPerks`), and there is no
+>   `GetDynastyPerk(key)` global lookup, no Dynasty→Legacy promotion, and no `_desc` loc keys
+>   (effect text is C++-built). The earlier "custom loc" idea is dead. Perk-name tooltips stay.
+> - Owned state = greyed button only; no per-perk tooltip count/checkmark.
+>
+> **❓ Not yet re-tested after latest changes (restart pending at time of writing):**
+> - Window at 50% width (was 80%, ~40% dead space)
+> - Controls consolidated top-left; header shows selected dynasty's name via loc key
+>   `DI_dynasty_perks_editor_heading` = `"[Dynasty.GetNameNoTooltip|U] Dynasty — Legacy
+>   Perk Editor"`
+> - Dead `dynasty_legacies_container` overlay widget removed (it caused the original
+>   overlap bugs)
+>
+> **📋 Next steps, in priority order:**
+> 1. **Restart + regression pass:** verify the v7 layout (50% width, control bar, dynasty
+>    name in header) and re-confirm clicks/track buttons still work after the layout rework.
+>    Also answer the last open test-matrix item: does `remove_dynasty_perk` refund renown?
+>    (If yes, toggling off gains renown → add a compensating deduction.)
+> 2. **Out-of-order grant check** (plan test matrix item #1): click a tier-3 perk with 0
+>    owned — confirm scripted grants ignore track order (expected) or handle if not.
+> 3. **Trait-selection perk check** (item #2): `blood_legacy_4` (Architected Ancestry) —
+>    scripted grant behavior unknown (default trait / nothing extra / error).
+> 4. **Phase 2 polish:** localization pass for other languages (only english has the new
+>    keys); silence the `DI_dynasty_selected_*_copy` "set but never used" warnings (comment
+>    out setters in `DI_dynasty_selected_char_copy` until the copy feature is built); the
+>    explanation text loc (`DYNASTY_VIEW_SHOW_LEGACY_EXPLANATION_*`) hardcodes the *player's*
+>    dynasty — consider a DI-owned loc with the selected dynasty's name.
+> 5. **Phase 3:** the Mod Support Generator (`tools/generate_mod_perks.ps1`) — DRAFT spec
+>    below, user to add more specifications before implementation.
+> 6. **Workshop readiness:** the `is_shown`-driven greying means the editor needs no
+>    compat patches for vanilla; sub-mods only needed for modded tracks (Phase 3).
+
 ---
 
 ## 🎉 Key research findings (new — verified in vanilla files)
@@ -415,7 +572,14 @@ same generator covers modded tracks via sub-mods (Phase 3).
 
 ---
 
-## Appendix — Vanilla legacy tracks (20)
+## Appendix — Vanilla legacy tracks
+
+> ⚠️ **v4 correction:** this hand-written table was inaccurate — the generator (which reads
+> the real files) found **21 tracks / 105 perks**, and several key prefixes differ:
+> `ce1_heroic_track` exists (5 perks, gate `legends`), and the TGP tracks are actually
+> `tgp_chinese_legacy_*`, `tgp_japan_legacy_*`, `tgp_sea_legacy_*` (not `tgp_china_` /
+> `tgp_southeast_asia_`). **Trust the generated files, not this table.** Keeping the table only
+> as a rough orientation of which DLC owns which track.
 
 | Track key | Source |
 |---|---|

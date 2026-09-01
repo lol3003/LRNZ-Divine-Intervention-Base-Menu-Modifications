@@ -1,0 +1,115 @@
+﻿# =============================================================================
+# GENERATED FILE - do not hand-edit.
+# Regenerate with: tools/generate_perk_editor.ps1
+# Exact renown cost of the next dynasty perk (vanilla formula), evaluated in
+# dynasty scope. Used by the generated perk toggles' free-edit mode.
+# =============================================================================
+
+DI_dynasty_perk_cost_next = {
+    value = 250   # PERK_COST_BASE
+    if = { limit = { blood_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { blood_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { blood_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { blood_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { blood_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { warfare_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { warfare_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { warfare_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { warfare_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { warfare_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { law_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { law_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { law_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { law_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { law_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { guile_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { guile_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { guile_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { guile_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { guile_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { erudition_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { erudition_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { erudition_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { erudition_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { erudition_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { glory_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { glory_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { glory_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { glory_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { glory_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { kin_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { kin_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { kin_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { kin_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { kin_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ep1_culture_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ep1_culture_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ep1_culture_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ep1_culture_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ep1_culture_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ep2_activities_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ep2_activities_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ep2_activities_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ep2_activities_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ep2_activities_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp1_adventure_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp1_adventure_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp1_adventure_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp1_adventure_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp1_adventure_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp1_pillage_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp1_pillage_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp1_pillage_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp1_pillage_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp1_pillage_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp2_urbanism_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp2_urbanism_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp2_urbanism_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp2_urbanism_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp2_urbanism_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp2_coterie_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp2_coterie_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp2_coterie_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp2_coterie_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp2_coterie_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp3_khvarenah_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp3_khvarenah_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp3_khvarenah_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp3_khvarenah_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { fp3_khvarenah_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ce1_heroic_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ce1_heroic_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ce1_heroic_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ce1_heroic_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ce1_heroic_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ce1_legitimacy_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ce1_legitimacy_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ce1_legitimacy_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ce1_legitimacy_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ce1_legitimacy_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ep3_administrative_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ep3_administrative_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ep3_administrative_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ep3_administrative_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { ep3_administrative_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { mpo_nomad_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { mpo_nomad_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { mpo_nomad_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { mpo_nomad_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { mpo_nomad_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { tgp_china_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { tgp_china_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { tgp_china_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { tgp_china_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { tgp_china_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { tgp_japan_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { tgp_japan_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { tgp_japan_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { tgp_japan_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { tgp_japan_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { tgp_southeast_asia_legacy_track_perks >= 1 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { tgp_southeast_asia_legacy_track_perks >= 2 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { tgp_southeast_asia_legacy_track_perks >= 3 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { tgp_southeast_asia_legacy_track_perks >= 4 } add = 500 }   # PERK_COST_MULTIPLIER
+    if = { limit = { tgp_southeast_asia_legacy_track_perks >= 5 } add = 500 }   # PERK_COST_MULTIPLIER
+}

@@ -1,5 +1,11 @@
 # Dynasty Perk Editor — Option A Plan (Hybrid: reuse vanilla's legacy window)
 
+> **⚠️ CLOSED — Test 1 FAILED (2026-08-31).** The gated override made perk buttons clickable,
+> but `DynastyView.SelectPerk` re-validates dynast authority/renown internally in C++ and
+> silently ignored the clicks. The override was removed. This document is kept as research
+> background only — the scripted per-perk toggle grid (`DYNASTY_PERK_EDITOR_PLAN.md`, Phase 1)
+> is the editor. Do not revive unless a future patch changes `SelectPerk` behavior.
+
 > Companion to `DYNASTY_PERK_EDITOR_PLAN.md` (hardcoded-grid plan). This doc explores the
 > alternative: **override vanilla's `window_dynasty_legacy.gui`** so its fully dynamic,
 > mod-inclusive legacy tree can be used as the editor itself.
