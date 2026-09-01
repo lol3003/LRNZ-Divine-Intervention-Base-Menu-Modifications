@@ -510,15 +510,21 @@ generate editor support for them. UX flow and features, in user's words + struct
 
 #### Open questions — RESOLVED (v8 research, 2026-09-01)
 
-- [x] **Playset formats (verified on this machine):**
-  - Paradox launcher playsets exist as **plain JSON** in `<CK3 user folder>/playsets_backup/`:
-    `{"game":"ck3","name":"...","mods":[{"displayName","enabled","position","steamId"}]}`.
-    Trivially parseable with `ConvertFrom-Json`. (The modern launcher's own storage is
-    elsewhere/SQLITE, but the user folder JSONs are current — one was written 2 days ago —
-    and are the same format Irony exports. Support the JSON dir as the primary source.)
-  - Irony Mod Manager was not found under standard `%APPDATA%` paths on this machine —
-    the JSON playsets above cover the same need. Irony support = accept its JSON exports
-    via `-PlaysetFile <path>` if a user has them.
+- [x] **Playset formats (v8 CORRECTED — verified against the live launcher DB):**
+  - `playsets_backup/*.json` is **stale/incomplete** (all empty except one; bulk-copied
+    2026-08-30) — NOT the live data. User confirmed.
+  - **Live source: `launcher-v2.sqlite` in the CK3 user folder** (SQLite format 3). Schema:
+    - `playsets(id, name, isActive, isRemoved, ...)`
+    - `mods(id, steamId, displayName, dirPath, status, source, ...)`
+    - `playsets_mods(playsetId, modId, enabled, position)` — join table, FK to both
+  - **Read path proven on this machine** via Python 3.14 `sqlite3` (stdlib — no extra
+    installs): 14 live playsets enumerated, per-playset mod lists joined with names and
+    enabled flags. Example: `IronyModManager` playset → 1 mod (the DI test mod, enabled).
+  - Generator read strategy: copy the DB to temp (avoids locking the live DB), open with
+    Python `sqlite3` (or a bundled reader if Python is absent), join the three tables,
+    filter `isRemoved = 0`.
+  - Irony Mod Manager: not installed on this machine; if present elsewhere, its JSON
+    exports are accepted via `-PlaysetFile <path>` (same shape as the backup JSONs).
 - [x] **Window inclusion mechanism — DECIDED (extension-slot pattern):**
   - CK3 types/templates are **global across load order, name-keyed, last-loads-wins**.
   - The base window keeps instantiating `di_generated_perk_grid` (vanilla rows, from the
