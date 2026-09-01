@@ -244,6 +244,12 @@ window = {
 				# GENERATED per-perk toggle grid (tools/generate_perk_editor.ps1)
 				# left click adds (greyed out if owned), right click removes
 				di_generated_perk_grid = {}
+
+				# Phase 3 extension slot: empty by default (renders nothing). Standalone
+				# sub-mods / combined-playset mods redefine the di_perk_grid_extension
+				# type (last-loads-wins) so their modded-track rows render here, right
+				# below the vanilla grid. No base-mod edit is needed per sub-mod.
+				di_perk_grid_extension = {}
 			}
 		}
 	}

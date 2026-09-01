@@ -197,7 +197,7 @@
 > | 0 — baseline cleanup | ✅ done | commit `e01f44d` |
 > | 1 — generated toggle editor | ✅ done, in-game verified (tests 1–4) | commits `a6c543f`, `bc18b87`, `ba80240`; `tools/generate_perk_editor.ps1` (388 lines) → `DI_generated_perk_toggles_sgui.txt` / `DI_generated_perk_grid.gui` / `DI_generated_perk_values.txt` |
 > | 2 — polish | ✅ essentially done | free-mode lifecycle (`_show`/`_hide` `on_start`), splendor +1/−1/reset row, copy-setters silenced, explanation paragraph replaced, loc keys in `gui/DI_l_english.yml`. Remaining: other-language loc (low prio — game falls back to english); "Dynasty to Copy" parked by design |
-> | 3 — Mod Support Generator | ❌ **not started** | `tools/generate_mod_perks.ps1` does not exist — **and implementation-order step 1 (the `di_perk_grid_extension` slot) is unimplemented too**: `DI_dynasty_perk_editor.gui` instantiates only `di_generated_perk_grid`, and the vanilla generator emits no extension type. Step 1 is the hard prerequisite for every Phase 3 output mode |
+> | 3 — Mod Support Generator | ⏳ **step 1 done** (v10) | `tools/generate_mod_perks.ps1` does not exist. Implementation-order **step 1 is now implemented**: `DI_dynasty_perk_editor.gui` instantiates `di_generated_perk_grid` **and** the new `di_perk_grid_extension` slot, and the vanilla generator emits the extension type. Steps 2–6 (scanner/standalone/playset/menu/guide) remain not started. Step 1 was the hard prerequisite for every Phase 3 output mode |
 >
 > The v7 regression items above remain the first field action (restart still pending):
 > 1400×90% layout, `remove_dynasty_perk` refund behavior, out-of-order grant, trait-perk.
@@ -612,30 +612,85 @@ generate editor support for them. UX flow and features, in user's words + struct
 > **Status (v9): spec reviewed and hardened — ready for implementation.** User additions
 > still welcome; implement incrementally in the order below.
 
+### Coexistence — DECISION: one compatch per modlist (v12, 2026-09-01)
+
+**Problem:** two standalone sub-mods both redefine `di_perk_grid_extension` (types global,
+name-keyed, **last-loads-wins**) → the later one silently replaces the earlier one's rows.
+Confirmed on generated code (Hiraeth + AGOT): perks, tracks, type-names, effect-sgui are all
+unique — the only collision is the one shared slot name. Cannot merge at runtime (no
+script-side GUI include).
+
+**Decision (v12): the N-slot / Option-A scheme is SCRAPPED.** The editor GUI holds exactly
+**one** compatch slot. Therefore:
+
+- **Only one DI Perks compatch may be active in a modlist at once.** Enabling two → the later
+  one wins the slot, the earlier one's rows vanish (last-loads-wins).
+- **This is by design, not a bug.** Perk *data* and cheat *effects* still work for any number
+  of perk mods simultaneously (the engine merges them); it is only the *editor window grid*
+  that is single-slot.
+- **If you need several perk mods shown together → generate once for that list** using **F4
+  combined mode**. The tool's whole purpose is that regeneration. Collect the mods you want,
+  run the generator, enable the single combined compatch.
+
+**So the model is:**
+```
+modlist ──► pick the perk mods you want ──► F4 combined compatch (one mod) ──► enable it
+```
+Changing the modlist = run the tool again. There is deliberately no N-slot mechanism and no
+way to stack independent compatches in one list.
+
+**Duplicate buttons (was v11):** since only one compatch can be active, the "A+B double-include"
+duplicate case cannot arise. A combined compatch dedups its NEW keys across the selected set in
+one pass, so no duplicates are generated either. No guard needed.
+
+**Manifest (kept, v11→v12):** the combined (F4) compatch ships a manifest listing each
+included perk mod (display names + per-mod perk/track counts + prefix) so players know exactly
+what's inside before enabling.
+  lists (see Step 4).
+
 ### Implementation order (v9; supersedes the v8 wording)
 
-> **[v9] Status: nothing here is implemented yet.** Step 1 is the hard prerequisite for
-> testing any later step end-to-end (without the slot, generated rows have nowhere to render).
+> **Status (v10): step 1 implemented (2026-09-01).** The `di_perk_grid_extension`
+> slot now exists: the vanilla generator (`generate_perk_editor.ps1`) emits it in
+> `gui/DI_generated_perk_grid.gui`, and `gui/DI_dynasty_perk_editor.gui` instantiates
+> it below the vanilla grid. **Step 2 (F1 scanner) also implemented (same day):**
+> `tools/generate_mod_perks.ps1 -Scan` enumerates perk mods from `mods_registry.json`
+> (primary) + dir-scan fallback via the shared parser `tools/_perk_parser.ps1`
+> (extracted from the vanilla generator — both dot-source it). Steps 3–6 remain
+> not started. Step 1 was the hard prerequisite for any generated rows to render.
 
-1. **Extension slot in base mod** — add empty `di_perk_grid_extension` type + instantiation
-   below the vanilla grid in `DI_dynasty_perk_editor.gui`; vanilla generator
+1. **Extension slot in base mod** — ✅ **done**. add empty `di_perk_grid_extension` type +
+   instantiation below the vanilla grid in `DI_dynasty_perk_editor.gui`; vanilla generator
    (`generate_perk_editor.ps1`) emits it. Verify: restart with no sub-mod → nothing renders,
-   error.log clean.
-2. **F1 scanner** — `tools/generate_mod_perks.ps1 -Scan`: enumerate mods via
-   `mods_registry.json` / `launcher-v2.sqlite` first, directory scan fallback second
-   (multi-library aware via `libraryfolders.vdf`), report perk/track counts (parser already
-   validated against AGOT: 158 perks / 38 tracks).
-3. **F3 standalone mode** — `-Mod <name>`: generate one sub-mod (sgui + grid extension +
-   loc + per-prefix cost value + descriptor with dependencies on the perk mod AND the base
-   DI mod), auto-register `.mod` in `mod/`.
-4. **F4 playset mode** — `-Playset <name|path>`: read the playset from
-   **`launcher-v2.sqlite`** (proven read path, see resolved questions above) or a JSON
-   export for Irony imports, scan its enabled mods, emit ONE combined mod with the full
-   extension grid.
-5. **F2 interactive menu** — default no-args run: scan → list → pick → choose output mode.
-6. **Community guide** — `docs/ADDING_PERK_MOD_SUPPORT.md`.
+   error.log clean. *(Files regenerated: `DI_generated_perk_grid.gui` balanced, 927/927.)*
+2. **F1 scanner** — ✅ **done** (`generate_mod_perks.ps1 -Scan`). Reads `mods_registry.json`
+   first, dir-scan fallback; reports per-mod perk/track/DLC-gate counts via the shared parser.
+   Tested: 16 perk mods found incl. Hiraeth (130/17), AGOT (128/32), PoD, Elder Kings 2, LotR.
+   Duplicate-key finding: **Hiraeth = 85 vanilla-overlap + 45 new (`hth_*`)** — exclusion is
+   mandatory for its compatch (65% of keys would otherwise duplicate the base grid).
+3. **F3 standalone mode** — ✅ **done** (`-SubMod <name>`). Generates a full compatch
+   (scripted guis + `di_perk_grid_extension` grid + per-prefix cost value + descriptor
+   with `dependencies = { "<Perk Mod>" "<Base DI Mod>" }`), auto-registers
+   `mod/DI Perks - <Name>.mod`. Duplicate-key exclusion: only non-vanilla keys emitted.
+   **No loc emitted** — the perk mod provides real names (e.g. Hiraeth's `hth_l_english.yml`);
+   emitting stubs would override them. Verified end-to-end: **Hiraeth compatch generated**
+   (45 new perks / 16 tracks; 85 vanilla-overlap dropped; grid braces 461/461 balanced).
+   *Note: default target = `<UserFolder>/mod/DI Perks - <Name>`*.
+4. **F4 playset/combined mode** — ✅ **done** (v12): `-Playset <name>` reads the playset from
+   `launcher-v2.sqlite` (via Python on a temp copy) and emits ONE combined compatch (dedup by
+   perk-key across the set, one cross-mod cost value, manifest `README_DI_perks.txt`,
+   descriptor deps on all source mods + base DI). Also `-PlaysetMods "A;B"` for an explicit
+   list. Verified: Hiraeth+AGOT → 98 new perks / 33 tracks, grid 985/985 balanced, manifest
+   lists both mods.
+5. **F2 interactive menu** — ✅ **done**: no-args runs scan→3 actions→prompts; verified launches
+   and quits cleanly.
+6. **Community guide** — ✅ **done**: `docs/ADDING_PERK_MOD_SUPPORT.md` (tools, all CLI modes,
+   the menu, in-game steps, troubleshooting, file-collision note).
 
-**[v9] Phase 3 test checklist (run per generated output):**
+**[v12] Model change note:** the N-slot/Option-A scheme was **scrapped** — only one compatch
+per modlist; use F4 combined for multiple perk mods; regenerating is the tool's purpose.
+
+**[v9→v12] Phase 3 test checklist (run per generated output):**
 - [ ] No sub-mod enabled → extension slot renders nothing, error.log clean.
 - [ ] AGOT sub-mod enabled → its 53 perks / 17 extra tracks render after the vanilla rows
       (38 tracks total incl. vanilla).

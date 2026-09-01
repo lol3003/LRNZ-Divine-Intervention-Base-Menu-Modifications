@@ -3447,4 +3447,7 @@ types DI_DynastyGeneratedPerks {
         }
 
     }
+    type di_perk_grid_extension = vbox {
+        layoutpolicy_horizontal = expanding
+    }
 }

@@ -49,70 +49,10 @@ $outValues  = Join-Path $ModDir "common\script_values\DI_generated_perk_values.t
 # are ignored - worst case a gated track shows for players who disabled the
 # "unrestricted legacies" game rule, which is acceptable for a cheat menu).
 
-# --- Parse --------------------------------------------------------------------
-function Get-Perks {
-    param([string[]]$Directories)
-    $perks = [ordered]@{}   # key -> track
-    foreach ($dir in $Directories) {
-        if (-not (Test-Path $dir)) { Write-Warning "perk dir not found: $dir"; continue }
-        foreach ($file in Get-ChildItem $dir -Filter '*.txt' | Sort-Object Name) {
-            $lines = Get-Content $file.FullName
-            $currentKey = $null
-            $depth = 0
-            foreach ($line in $lines) {
-                $trimmed = ($line -replace '#.*$', '').TrimEnd()
-                if ($trimmed -match '^(\w+)\s*=\s*\{\s*$' -and $depth -eq 0) {
-                    $currentKey = $Matches[1]
-                    $depth = 1
-                    continue
-                }
-                if ($null -ne $currentKey) {
-                    $chars = $trimmed.ToCharArray() | Where-Object { $_ -eq '{' -or $_ -eq '}' }
-                    foreach ($c in $chars) { if ($c -eq '{') { $depth++ } else { $depth-- } }
-                    if ($depth -le 0) { $currentKey = $null; $depth = 0; continue }
-                    if ($trimmed -match '^\s*legacy\s*=\s*(\w+)') {
-                        $perks[$currentKey] = $Matches[1]
-                    }
-                }
-            }
-        }
-    }
-    return $perks
-}
-
-# Parse legacy track files: track key -> DLC feature (or $null if ungated)
-function Get-TrackDlcGates {
-    param([string[]]$Directories)
-    $gates = @{}
-    foreach ($dir in $Directories) {
-        if (-not (Test-Path $dir)) { continue }
-        foreach ($file in Get-ChildItem $dir -Filter '*.txt' | Sort-Object Name) {
-            $lines = Get-Content $file.FullName
-            $currentKey = $null
-            $depth = 0
-            $inIsShown = $false
-            foreach ($line in $lines) {
-                $trimmed = ($line -replace '#.*$', '').TrimEnd()
-                if ($trimmed -match '^(\w+)\s*=\s*\{\s*$' -and $depth -eq 0) {
-                    $currentKey = $Matches[1]
-                    $depth = 1
-                    $inIsShown = $false
-                    continue
-                }
-                if ($null -ne $currentKey) {
-                    if ($trimmed -match '^\s*is_shown\s*=\s*\{') { $inIsShown = $true }
-                    $chars = $trimmed.ToCharArray() | Where-Object { $_ -eq '{' -or $_ -eq '}' }
-                    foreach ($c in $chars) { if ($c -eq '{') { $depth++ } else { $depth-- } }
-                    if ($depth -le 0) { $currentKey = $null; $depth = 0; $inIsShown = $false; continue }
-                    if ($inIsShown -and $trimmed -match 'has_dlc_feature\s*=\s*(\w+)') {
-                        if (-not $gates.ContainsKey($currentKey)) { $gates[$currentKey] = $Matches[1] }
-                    }
-                }
-            }
-        }
-    }
-    return $gates
-}
+# --- Shared parser (dot-sourced) -------------------------------------------------
+# Both generators use the same parser so a fix/feature lands in both. Extraction
+# moved verbatim here into _perk_parser.ps1 (plan v9 F5).
+. (Join-Path $PSScriptRoot "_perk_parser.ps1")
 
 Write-Host "Parsing perk files..."
 $perks = Get-Perks -Directories $perkDirs
@@ -125,12 +65,7 @@ $gatedCount = ($trackGates.Values | Where-Object { $_ }).Count
 Write-Host "Parsed $($perks.Count) perks ($gatedCount DLC-gated tracks)"
 
 # group by track, preserving first-seen order
-$tracks = [ordered]@{}
-foreach ($k in $perks.Keys) {
-    $t = $perks[$k]
-    if (-not $tracks.Contains($t)) { $tracks[$t] = [System.Collections.Generic.List[string]]::new() }
-    $tracks[$t].Add($k)
-}
+$tracks = Group-PerksByTrack $perks
 Write-Host "Parsed $($perks.Count) perks across $($tracks.Count) tracks"
 
 # --- Output encoding -----------------------------------------------------------
@@ -379,7 +314,16 @@ foreach ($t in $tracks.Keys) {
     [void]$gui.AppendLine("")
 }
 [void]$gui.AppendLine("    }")
-[void]$gui.AppendLine("}")
+    # Empty extension slot (Phase 3, implementation-order step 1). Sub-mods and
+    # combined-playset mods REDEFINE this type with their extra track rows - types
+    # are global across load order and last-loads-wins, so the sub-mod's rows
+    # replace this empty placeholder and render right below the vanilla grid. When
+    # no sub-mod is enabled, this renders nothing. One shared name is intentional:
+    # only the LAST mod to win can own it, which is exactly the combined-mod model.
+    [void]$gui.AppendLine("    type di_perk_grid_extension = vbox {")
+    [void]$gui.AppendLine("        layoutpolicy_horizontal = expanding")
+    [void]$gui.AppendLine("    }")
+    [void]$gui.AppendLine("}")
 if (-not $WhatIf) {
     [System.IO.File]::WriteAllText($outGui, $gui.ToString(), $utf8Bom)
     Write-Host "Wrote $outGui"
