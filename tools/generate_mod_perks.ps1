@@ -64,6 +64,9 @@ function Get-ModCandidates {
             foreach ($p in $reg.PSObject.Properties) {
                 $v = $p.Value
                 if (-not $v.dirPath) { continue }
+                # Skip already-generated DI Perks compatch entries - they are not source
+                # perk mods (they redefine di_perk_grid_extension, not real perks).
+                if ($v.displayName -like 'DI Perks*' -or $v.dirPath -like '*DI Perks - *') { continue }
                 $cands.Add([pscustomobject]@{
                     Name    = $v.displayName
                     Path    = $v.dirPath
@@ -296,7 +299,6 @@ function New-DiSubMod {
         [void]$gui.AppendLine("                button_standard = {")
         [void]$gui.AppendLine("                    size = { 130 26 }")
         [void]$gui.AppendLine("                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON")
-        [void]$gui.AppendLine("                    enabled = ""[GetScriptedGui('DI_track_add_all_$t').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
         [void]$gui.AppendLine("                    onclick = ""[GetScriptedGui('DI_track_add_all_$t').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
         [void]$gui.AppendLine("                    onrightclick = ""[GetScriptedGui('DI_track_remove_all_$t').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
         [void]$gui.AppendLine("                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT")
@@ -309,7 +311,6 @@ function New-DiSubMod {
             [void]$gui.AppendLine("                button_standard = {")
             [void]$gui.AppendLine("                    size = { 260 44 }")
             [void]$gui.AppendLine("                    button_ignore = none")
-            [void]$gui.AppendLine("                    enabled = ""[GetScriptedGui('DI_perk_add_$k').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
             [void]$gui.AppendLine("                    onclick = ""[GetScriptedGui('DI_perk_add_$k').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
             [void]$gui.AppendLine("                    onrightclick = ""[GetScriptedGui('DI_perk_remove_$k').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
             [void]$gui.AppendLine('                    tooltip = "[Localize('''+ $k + '_name'')]"')
@@ -485,7 +486,6 @@ function New-DiCombinedMod {
         [void]$gui.AppendLine("                button_standard = {")
         [void]$gui.AppendLine("                    size = { 130 26 }")
         [void]$gui.AppendLine("                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON")
-        [void]$gui.AppendLine("                    enabled = ""[GetScriptedGui('DI_track_add_all_$t').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
         [void]$gui.AppendLine("                    onclick = ""[GetScriptedGui('DI_track_add_all_$t').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
         [void]$gui.AppendLine("                    onrightclick = ""[GetScriptedGui('DI_track_remove_all_$t').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
         [void]$gui.AppendLine("                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT")
@@ -498,7 +498,6 @@ function New-DiCombinedMod {
             [void]$gui.AppendLine("                button_standard = {")
             [void]$gui.AppendLine("                    size = { 260 44 }")
             [void]$gui.AppendLine("                    button_ignore = none")
-            [void]$gui.AppendLine("                    enabled = ""[GetScriptedGui('DI_perk_add_$k').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
             [void]$gui.AppendLine("                    onclick = ""[GetScriptedGui('DI_perk_add_$k').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
             [void]$gui.AppendLine("                    onrightclick = ""[GetScriptedGui('DI_perk_remove_$k').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
             [void]$gui.AppendLine('                    tooltip = "[Localize('''+ $k + '_name'')]"')

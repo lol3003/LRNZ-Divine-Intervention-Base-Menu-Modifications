@@ -12,11 +12,12 @@ window = {
 
 	# Responsive sizing, vanilla pattern (window_activity_guest_list.gui: 1200 90%,
 	# window_ledger.gui: 745 89%): STATIC pixel width + percentage height.
-	# Static width = layout never reflows between aspect ratios (grid content is
-	# ~1330px: 5 x 260px perk buttons + margins); % height adapts to any screen.
-	# 1400px fits 1080p (1920w) with margins and 21:9 ultrawide alike.
-	size = { 1400 90% }
+	# Static width 1680px fits exactly 4 × 296px perk buttons per row at 1080p and up,
+	# so the grid wraps cleanly at any aspect ratio and never clips. % height adapts
+	# to any screen. % parentanchor + margin_left follows the vanilla legacy window.
+	size = { 1680 90% }
 	parentanchor = center|hcenter
+	margin_left = 40
 	movable = yes
 	filter_mouse = all
 	layer = windows_layer
@@ -242,13 +243,18 @@ window = {
 
 			blockoverride "scrollbox_content" {
 				# GENERATED per-perk toggle grid (tools/generate_perk_editor.ps1)
-				# left click adds (greyed out if owned), right click removes
+				# left click adds, right click removes; buttons are never disabled
+				# (an `enabled` bound to the add direction blocks right-click removal)
 				di_generated_perk_grid = {}
 
-				# Phase 3 extension slot: empty by default (renders nothing). Standalone
-				# sub-mods / combined-playset mods redefine the di_perk_grid_extension
-				# type (last-loads-wins) so their modded-track rows render here, right
-				# below the vanilla grid. No base-mod edit is needed per sub-mod.
+				# Phase 3 extension slot. The base mod defines this type as an empty vbox
+				# (see the generated gui/DI_generated_perk_grid.gui) so this instantiation
+				# always resolves - with no compatch enabled it simply renders nothing.
+				# Standalone sub-mods / combined-playset mods redefine the same type with
+				# their modded-track rows, which then render right below the vanilla grid.
+				# Exactly ONE DI Perks compatch per modlist, because the type name is
+				# shared. UNVERIFIED which definition wins across load order; see
+				# docs/DYNASTY_PERK_EDITOR_AUDIT.md, "Open experiment".
 				di_perk_grid_extension = {}
 			}
 		}

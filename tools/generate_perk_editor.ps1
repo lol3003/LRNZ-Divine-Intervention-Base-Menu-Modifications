@@ -19,10 +19,12 @@ param(
     [string]$GameDir = "H:\SteamLibrary\steamapps\common\Crusader Kings III\game",
     [string]$ModDir  = "$PSScriptRoot\..",
     [string[]]$ExtraPerkDirs = @(),   # e.g. AGOT mod's common/dynasty_perks
-    [switch]$WhatIf
+    [switch]$WhatIf,
+    [switch]$Check   # dry-run summary only (no writes); used by validate_perk_editor.ps1
 )
 
 $ErrorActionPreference = "Stop"
+$WhatIf = $WhatIf -or $Check
 
 $perkDirs   = @("$GameDir\common\dynasty_perks") + $ExtraPerkDirs
 $outSgui    = Join-Path $ModDir "common\scripted_guis\DI_generated_perk_toggles_sgui.txt"
@@ -51,12 +53,16 @@ $outValues  = Join-Path $ModDir "common\script_values\DI_generated_perk_values.t
 
 # --- Shared parser (dot-sourced) -------------------------------------------------
 # Both generators use the same parser so a fix/feature lands in both. Extraction
-# moved verbatim here into _perk_parser.ps1 (plan v9 F5).
+# moved verbatim here into _perk_parser.ps1 (plan v9 F5). The vanilla-look grid
+# writers live in _grid_templates.ps1 and are dot-sourced further down - AFTER the
+# parse and the encoding setup, because that module is definitions-only and the
+# emit below needs $perks / $tracks / $trackGates / $utf8Bom in scope.
 . (Join-Path $PSScriptRoot "_perk_parser.ps1")
 
 Write-Host "Parsing perk files..."
 $perks = Get-Perks -Directories $perkDirs
 if ($perks.Count -eq 0) { throw "No perks parsed - check -GameDir" }
+if (-not (Test-PerksModel $perks)) { throw "Parsed perk model is inconsistent - aborting before writing generated files" }
 
 # parse DLC gates from the same dirs' sibling dynasty_legacies folders
 $legacyDirs = $perkDirs | ForEach-Object { $_ -replace 'dynasty_perks$', 'dynasty_legacies' }
@@ -73,6 +79,117 @@ Write-Host "Parsed $($perks.Count) perks across $($tracks.Count) tracks"
 # warning per generated file on every load.
 $utf8Bom = [System.Text.UTF8Encoding]::new($true)
 
+# --- Shared grid writers (dot-sourced after parse + encoding) --------------------
+# Definitions only: Write-VanillaTrackSection / Write-VanillaPerkButton. The actual
+# grid emit is the "Generate GUI grid" section at the bottom of this file, which is
+# the only place that owns $gui / $outGui / the file write.
+. (Join-Path $PSScriptRoot "_grid_templates.ps1")
+
+# --- Shared SGUI/track emission helpers -----------------------------------------
+# Extracted (plan step 1) so the add/remove and add-all/remove-all rules live in
+# exactly one place; output must remain byte-identical to the pre-refactor build.
+function Write-PerPerkBlocks {
+    param($Sb, [string]$Key)
+    [void]$Sb.AppendLine("DI_perk_add_$Key = {")
+    [void]$Sb.AppendLine("    scope = character")
+    [void]$Sb.AppendLine("")
+    [void]$Sb.AppendLine("    is_shown = {")
+    [void]$Sb.AppendLine("        var:DI_dynasty_selected_dynasty = {")
+    [void]$Sb.AppendLine("            NOT = { has_dynasty_perk = $Key }")
+    [void]$Sb.AppendLine("        }")
+    [void]$Sb.AppendLine("    }")
+    [void]$Sb.AppendLine("")
+    [void]$Sb.AppendLine("    effect = {")
+    [void]$Sb.AppendLine("        var:DI_dynasty_selected_dynasty = {")
+    [void]$Sb.AppendLine("            if = {")
+    [void]$Sb.AppendLine("                limit = { NOT = { has_dynasty_perk = $Key } }")
+    [void]$Sb.AppendLine("                # free-edit mode: top up the EXACT vanilla cost before the grant")
+    [void]$Sb.AppendLine("                # (inside dynasty scope; gate checks root = player character)")
+    [void]$Sb.AppendLine("                if = {")
+    [void]$Sb.AppendLine("                    limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
+    [void]$Sb.AppendLine("                    add_dynasty_prestige = DI_dynasty_perk_cost_next")
+    [void]$Sb.AppendLine("                }")
+    [void]$Sb.AppendLine("                add_dynasty_perk = $Key")
+    [void]$Sb.AppendLine("            }")
+    [void]$Sb.AppendLine("        }")
+    [void]$Sb.AppendLine("    }")
+    [void]$Sb.AppendLine("}")
+    [void]$Sb.AppendLine("")
+    [void]$Sb.AppendLine("DI_perk_remove_$Key = {")
+    [void]$Sb.AppendLine("    scope = character")
+    [void]$Sb.AppendLine("")
+    [void]$Sb.AppendLine("    is_shown = {")
+    [void]$Sb.AppendLine("        var:DI_dynasty_selected_dynasty = {")
+    [void]$Sb.AppendLine("            has_dynasty_perk = $Key")
+    [void]$Sb.AppendLine("        }")
+    [void]$Sb.AppendLine("    }")
+    [void]$Sb.AppendLine("")
+    [void]$Sb.AppendLine("    effect = {")
+    [void]$Sb.AppendLine("        var:DI_dynasty_selected_dynasty = {")
+    [void]$Sb.AppendLine("            if = {")
+    [void]$Sb.AppendLine("                limit = { has_dynasty_perk = $Key }")
+    [void]$Sb.AppendLine("                remove_dynasty_perk = $Key")
+    [void]$Sb.AppendLine("            }")
+    [void]$Sb.AppendLine("        }")
+    [void]$Sb.AppendLine("    }")
+    [void]$Sb.AppendLine("}")
+    [void]$Sb.AppendLine("")
+}
+
+function Write-TrackAddAllBlock {
+    param($Sb, [string]$Track, $PerkList)
+    [void]$Sb.AppendLine("DI_track_add_all_$Track = {")
+    [void]$Sb.AppendLine("    scope = character")
+    [void]$Sb.AppendLine("")
+    [void]$Sb.AppendLine("    is_shown = {")
+    [void]$Sb.AppendLine("        var:DI_dynasty_selected_dynasty = {")
+    [void]$Sb.AppendLine("            NOT = { $($Track)_perks >= $($PerkList.Count) }")
+    [void]$Sb.AppendLine("        }")
+    [void]$Sb.AppendLine("    }")
+    [void]$Sb.AppendLine("")
+    [void]$Sb.AppendLine("    effect = {")
+    [void]$Sb.AppendLine("        var:DI_dynasty_selected_dynasty = {")
+    foreach ($k in $PerkList) {
+        [void]$Sb.AppendLine("            if = {")
+        [void]$Sb.AppendLine("                limit = { NOT = { has_dynasty_perk = $k } }")
+        [void]$Sb.AppendLine("                if = {")
+        [void]$Sb.AppendLine("                    limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
+        [void]$Sb.AppendLine("                    add_dynasty_prestige = DI_dynasty_perk_cost_next")
+        [void]$Sb.AppendLine("                }")
+        [void]$Sb.AppendLine("                add_dynasty_perk = $k")
+        [void]$Sb.AppendLine("            }")
+    }
+    [void]$Sb.AppendLine("        }")
+    [void]$Sb.AppendLine("    }")
+    [void]$Sb.AppendLine("}")
+    [void]$Sb.AppendLine("")
+}
+
+function Write-TrackRemoveAllBlock {
+    param($Sb, [string]$Track, $PerkList)
+    [void]$Sb.AppendLine("DI_track_remove_all_$Track = {")
+    [void]$Sb.AppendLine("    scope = character")
+    [void]$Sb.AppendLine("")
+    [void]$Sb.AppendLine("    is_shown = {")
+    [void]$Sb.AppendLine("        var:DI_dynasty_selected_dynasty = {")
+    [void]$Sb.AppendLine("            $($Track)_perks > 0")
+    [void]$Sb.AppendLine("        }")
+    [void]$Sb.AppendLine("    }")
+    [void]$Sb.AppendLine("")
+    [void]$Sb.AppendLine("    effect = {")
+    [void]$Sb.AppendLine("        var:DI_dynasty_selected_dynasty = {")
+    foreach ($k in $PerkList) {
+        [void]$Sb.AppendLine("            if = {")
+        [void]$Sb.AppendLine("                limit = { has_dynasty_perk = $k }")
+        [void]$Sb.AppendLine("                remove_dynasty_perk = $k")
+        [void]$Sb.AppendLine("            }")
+    }
+    [void]$Sb.AppendLine("        }")
+    [void]$Sb.AppendLine("    }")
+    [void]$Sb.AppendLine("}")
+    [void]$Sb.AppendLine("")
+}
+
 # --- Generate scripted guis ----------------------------------------------------
 # Per perk: separate add (left click) and remove (right click) effects, each with
 # is_shown gating so the GUI can grey out the inapplicable direction via
@@ -88,103 +205,17 @@ $sgui = [System.Text.StringBuilder]::new()
 [void]$sgui.AppendLine("# =============================================================================")
 [void]$sgui.AppendLine("")
 foreach ($k in $perks.Keys) {
-    [void]$sgui.AppendLine("DI_perk_add_$k = {")
-    [void]$sgui.AppendLine("    scope = character")
-    [void]$sgui.AppendLine("")
-    [void]$sgui.AppendLine("    is_shown = {")
-    [void]$sgui.AppendLine("        var:DI_dynasty_selected_dynasty = {")
-    [void]$sgui.AppendLine("            NOT = { has_dynasty_perk = $k }")
-    [void]$sgui.AppendLine("        }")
-    [void]$sgui.AppendLine("    }")
-    [void]$sgui.AppendLine("")
-    [void]$sgui.AppendLine("    effect = {")
-    [void]$sgui.AppendLine("        var:DI_dynasty_selected_dynasty = {")
-    [void]$sgui.AppendLine("            if = {")
-    [void]$sgui.AppendLine("                limit = { NOT = { has_dynasty_perk = $k } }")
-    [void]$sgui.AppendLine("                # free-edit mode: top up the EXACT vanilla cost before the grant")
-    [void]$sgui.AppendLine("                # (inside dynasty scope; gate checks root = player character)")
-    [void]$sgui.AppendLine("                if = {")
-    [void]$sgui.AppendLine("                    limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
-    [void]$sgui.AppendLine("                    add_dynasty_prestige = DI_dynasty_perk_cost_next")
-    [void]$sgui.AppendLine("                }")
-    [void]$sgui.AppendLine("                add_dynasty_perk = $k")
-    [void]$sgui.AppendLine("            }")
-    [void]$sgui.AppendLine("        }")
-    [void]$sgui.AppendLine("    }")
-    [void]$sgui.AppendLine("}")
-    [void]$sgui.AppendLine("")
-    [void]$sgui.AppendLine("DI_perk_remove_$k = {")
-    [void]$sgui.AppendLine("    scope = character")
-    [void]$sgui.AppendLine("")
-    [void]$sgui.AppendLine("    is_shown = {")
-    [void]$sgui.AppendLine("        var:DI_dynasty_selected_dynasty = {")
-    [void]$sgui.AppendLine("            has_dynasty_perk = $k")
-    [void]$sgui.AppendLine("        }")
-    [void]$sgui.AppendLine("    }")
-    [void]$sgui.AppendLine("")
-    [void]$sgui.AppendLine("    effect = {")
-    [void]$sgui.AppendLine("        var:DI_dynasty_selected_dynasty = {")
-    [void]$sgui.AppendLine("            if = {")
-    [void]$sgui.AppendLine("                limit = { has_dynasty_perk = $k }")
-    [void]$sgui.AppendLine("                remove_dynasty_perk = $k")
-    [void]$sgui.AppendLine("            }")
-    [void]$sgui.AppendLine("        }")
-    [void]$sgui.AppendLine("    }")
-    [void]$sgui.AppendLine("}")
-    [void]$sgui.AppendLine("")
+    Write-PerPerkBlocks $sgui $k
 }
 
 # per-track add-all / remove-all (skip already-in-target-state perks so renown is
 # only touched for perks actually granted)
 foreach ($t in $tracks.Keys) {
-    [void]$sgui.AppendLine("DI_track_add_all_$t = {")
-    [void]$sgui.AppendLine("    scope = character")
-    [void]$sgui.AppendLine("")
-    [void]$sgui.AppendLine("    is_shown = {")
-    [void]$sgui.AppendLine("        var:DI_dynasty_selected_dynasty = {")
-    [void]$sgui.AppendLine("            NOT = { $($t)_perks >= $($tracks[$t].Count) }")
-    [void]$sgui.AppendLine("        }")
-    [void]$sgui.AppendLine("    }")
-    [void]$sgui.AppendLine("")
-    [void]$sgui.AppendLine("    effect = {")
-    [void]$sgui.AppendLine("        var:DI_dynasty_selected_dynasty = {")
-    foreach ($k in $tracks[$t]) {
-        [void]$sgui.AppendLine("            if = {")
-        [void]$sgui.AppendLine("                limit = { NOT = { has_dynasty_perk = $k } }")
-        [void]$sgui.AppendLine("                if = {")
-        [void]$sgui.AppendLine("                    limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
-        [void]$sgui.AppendLine("                    add_dynasty_prestige = DI_dynasty_perk_cost_next")
-        [void]$sgui.AppendLine("                }")
-        [void]$sgui.AppendLine("                add_dynasty_perk = $k")
-        [void]$sgui.AppendLine("            }")
-    }
-    [void]$sgui.AppendLine("        }")
-    [void]$sgui.AppendLine("    }")
-    [void]$sgui.AppendLine("}")
-    [void]$sgui.AppendLine("")
-    [void]$sgui.AppendLine("DI_track_remove_all_$t = {")
-    [void]$sgui.AppendLine("    scope = character")
-    [void]$sgui.AppendLine("")
-    [void]$sgui.AppendLine("    is_shown = {")
-    [void]$sgui.AppendLine("        var:DI_dynasty_selected_dynasty = {")
-    [void]$sgui.AppendLine("            $($t)_perks > 0")
-    [void]$sgui.AppendLine("        }")
-    [void]$sgui.AppendLine("    }")
-    [void]$sgui.AppendLine("")
-    [void]$sgui.AppendLine("    effect = {")
-    [void]$sgui.AppendLine("        var:DI_dynasty_selected_dynasty = {")
-    foreach ($k in $tracks[$t]) {
-        [void]$sgui.AppendLine("            if = {")
-        [void]$sgui.AppendLine("                limit = { has_dynasty_perk = $k }")
-        [void]$sgui.AppendLine("                remove_dynasty_perk = $k")
-        [void]$sgui.AppendLine("            }")
-    }
-    [void]$sgui.AppendLine("        }")
-    [void]$sgui.AppendLine("    }")
-    [void]$sgui.AppendLine("}")
-    [void]$sgui.AppendLine("")
+    Write-TrackAddAllBlock $sgui $t $tracks[$t]
+    Write-TrackRemoveAllBlock $sgui $t $tracks[$t]
 }
 if (-not $WhatIf) {
+    New-Item -ItemType Directory -Force -Path (Split-Path $outSgui) | Out-Null
     [System.IO.File]::WriteAllText($outSgui, $sgui.ToString(), $utf8Bom)
     Write-Host "Wrote $outSgui"
 }
@@ -216,15 +247,21 @@ if (-not $WhatIf) {
     Write-Host "Wrote $outValues"
 }
 
-# --- Generate GUI grid ---------------------------------------------------------
+# --- Generate GUI grid -----------------------------------------------------------
+# Vanilla-look grid: one section per track (80x80 track icon + localized <track>_name
+# / <track>_desc header + add-all/remove-all button) followed by a flowcontainer of
+# PER-KEY perk buttons, so each perk keeps its own add/remove scripted gui (no runtime
+# perk enumeration exists in CK3). Perks are never disabled: left click adds, right
+# click removes, out-of-order is intended.
 # Vanilla loc: perk names = <perk_key>_name; track name/desc = <track>_name / <track>_desc.
 # Track icons: gfx/interface/icons/dynasty/<track>.dds (verified in vanilla files).
 $gui = [System.Text.StringBuilder]::new()
 [void]$gui.AppendLine("### GENERATED FILE - do not hand-edit. Regenerate with: tools/generate_perk_editor.ps1")
 [void]$gui.AppendLine("### Per-perk toggle grid for the DI dynasty perk editor.")
-[void]$gui.AppendLine("### NOTE: has_dynasty_perk is a script trigger, not a GUI datafunction, so")
-[void]$gui.AppendLine("### owned state cannot be shown in the UI - buttons are always clickable and")
-[void]$gui.AppendLine("### toggle (left click adds, clicking again removes).")
+[void]$gui.AppendLine("### NOTE: has_dynasty_perk is a script trigger, not a GUI datafunction, so owned")
+[void]$gui.AppendLine("### state cannot be rendered in the UI. Buttons are therefore always enabled:")
+[void]$gui.AppendLine("### left click = add (no-op if already owned via the add SGUI's is_shown guard),")
+[void]$gui.AppendLine("### right click = remove (no-op if not owned). Out-of-order add/remove is intended.")
 [void]$gui.AppendLine("")
 [void]$gui.AppendLine("types DI_DynastyGeneratedPerks {")
 [void]$gui.AppendLine("    type di_generated_perk_grid = vbox {")
@@ -235,98 +272,25 @@ foreach ($t in $tracks.Keys) {
     $perkList = $tracks[$t]
     $gate = $null
     if ($trackGates.ContainsKey($t)) { $gate = $trackGates[$t] }
-    [void]$gui.AppendLine("        # ---- $t ($($perkList.Count) perks)$(if ($gate) { " [DLC: $gate]" }) ----")
-    [void]$gui.AppendLine("        vbox = {")
-    if ($gate) {
-        # hide the whole track row when the DLC feature is missing
-        [void]$gui.AppendLine("            visible = ""[HasDlcFeature( '$gate' )]""")
-    }
-    [void]$gui.AppendLine("            layoutpolicy_horizontal = expanding")
-    [void]$gui.AppendLine("            margin = { 5 5 }")
-    [void]$gui.AppendLine("")
-    # track header: track icon + localized track name, desc as tooltip
-    [void]$gui.AppendLine("            hbox = {")
-    [void]$gui.AppendLine("                layoutpolicy_horizontal = expanding")
-    [void]$gui.AppendLine("                spacing = 8")
-    [void]$gui.AppendLine("")
-    [void]$gui.AppendLine("                icon = {")
-    [void]$gui.AppendLine("                    texture = ""gfx/interface/icons/dynasty/$t.dds""")
-    [void]$gui.AppendLine("                    size = { 24 24 }")
-    [void]$gui.AppendLine("                }")
-    [void]$gui.AppendLine("")
-    [void]$gui.AppendLine("                text_single = {")
-    [void]$gui.AppendLine("                    layoutpolicy_horizontal = expanding")
-    # bare keys don't resolve from modded GUI text= properties (only vanilla C++
-    # tooltips / $link$ loc chains do) - Localize() is the explicit GUI path
-    [void]$gui.AppendLine('                    text = "[Localize(''' + $t + '_name'')]"')
-    [void]$gui.AppendLine('                    tooltip = "[Localize(''' + $t + '_desc'')]"')
-    [void]$gui.AppendLine('                    default_format = ""#high""')
-    [void]$gui.AppendLine("                }")
-    [void]$gui.AppendLine("")
-    # track button: left click adds all missing perks, right click removes all owned;
-    # greyed out when the left-click direction is inapplicable (IsValid = is_shown)
-    [void]$gui.AppendLine("                button_standard = {")
-    [void]$gui.AppendLine("                    size = { 130 26 }")
-    [void]$gui.AppendLine("                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON")
-    [void]$gui.AppendLine("                    enabled = ""[GetScriptedGui('DI_track_add_all_$t').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
-    [void]$gui.AppendLine("                    onclick = ""[GetScriptedGui('DI_track_add_all_$t').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
-    [void]$gui.AppendLine("                    onrightclick = ""[GetScriptedGui('DI_track_remove_all_$t').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
-    [void]$gui.AppendLine("                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT")
-    [void]$gui.AppendLine("                }")
-    [void]$gui.AppendLine("            }")
-    [void]$gui.AppendLine("")
-    [void]$gui.AppendLine("            flowcontainer = {")
-    [void]$gui.AppendLine("                layoutpolicy_horizontal = expanding")
-    [void]$gui.AppendLine("                spacing = 5")
-    [void]$gui.AppendLine("")
-    foreach ($k in $perkList) {
-        # plain button_standard with inline content (the mod's proven skills-tab /
-        # title-manager pattern - the template+blockoverride version lost right-click)
-        # left click adds (greyed out if owned), right click removes (no-op if not owned)
-        [void]$gui.AppendLine("                button_standard = {")
-        [void]$gui.AppendLine("                    size = { 260 44 }")
-        [void]$gui.AppendLine("                    button_ignore = none")
-        [void]$gui.AppendLine("                    enabled = ""[GetScriptedGui('DI_perk_add_$k').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
-        [void]$gui.AppendLine("                    onclick = ""[GetScriptedGui('DI_perk_add_$k').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
-        [void]$gui.AppendLine("                    onrightclick = ""[GetScriptedGui('DI_perk_remove_$k').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
-        [void]$gui.AppendLine('                    tooltip = "[Localize(''' + $k + '_name'')]"')
-        [void]$gui.AppendLine("")
-        [void]$gui.AppendLine("                    hbox = {")
-        [void]$gui.AppendLine("                        margin = { 5 0 }")
-        [void]$gui.AppendLine("                        spacing = 8")
-        [void]$gui.AppendLine("")
-        [void]$gui.AppendLine("                        icon = {")
-        [void]$gui.AppendLine("                            size = { 34 34 }")
-        [void]$gui.AppendLine("                            texture = ""gfx/interface/icons/dynasty/$t.dds""")
-        [void]$gui.AppendLine("                        }")
-        [void]$gui.AppendLine("")
-        [void]$gui.AppendLine("                        text_single = {")
-        [void]$gui.AppendLine("                            layoutpolicy_horizontal = expanding")
-        [void]$gui.AppendLine('                            text = "[Localize(''' + $k + '_name'')]"')
-        [void]$gui.AppendLine('                            default_format = ""#clickable""')
-        [void]$gui.AppendLine("                        }")
-        [void]$gui.AppendLine("                    }")
-        [void]$gui.AppendLine("                }")
-        [void]$gui.AppendLine("")
-    }
-    [void]$gui.AppendLine("            }")
-    [void]$gui.AppendLine("        }")
-    [void]$gui.AppendLine("")
+    Write-VanillaTrackSection $gui $t $perkList $gate
 }
 [void]$gui.AppendLine("    }")
-    # Empty extension slot (Phase 3, implementation-order step 1). Sub-mods and
-    # combined-playset mods REDEFINE this type with their extra track rows - types
-    # are global across load order and last-loads-wins, so the sub-mod's rows
-    # replace this empty placeholder and render right below the vanilla grid. When
-    # no sub-mod is enabled, this renders nothing. One shared name is intentional:
-    # only the LAST mod to win can own it, which is exactly the combined-mod model.
-    [void]$gui.AppendLine("    type di_perk_grid_extension = vbox {")
-    [void]$gui.AppendLine("        layoutpolicy_horizontal = expanding")
-    [void]$gui.AppendLine("    }")
-    [void]$gui.AppendLine("}")
+    # Empty extension slot (Phase 3). Sub-mods and combined-playset mods REDEFINE this
+    # type with their extra track rows, which is why the base keeps defining it: the
+    # instantiation in gui/DI_dynasty_perk_editor.gui (blockoverride "scrollbox_content")
+    # must always resolve to a defined type, with or without a compatch enabled. With no
+    # compatch it renders nothing. One shared name is intentional: exactly ONE DI Perks
+    # compatch per modlist (see docs/DYNASTY_PERK_EDITOR_PLAN.md, "Coexistence").
+[void]$gui.AppendLine("    type di_perk_grid_extension = vbox {")
+[void]$gui.AppendLine("        layoutpolicy_horizontal = expanding")
+[void]$gui.AppendLine("    }")
+[void]$gui.AppendLine("}")
+
 if (-not $WhatIf) {
+    New-Item -ItemType Directory -Force -Path (Split-Path $outGui) | Out-Null
     [System.IO.File]::WriteAllText($outGui, $gui.ToString(), $utf8Bom)
     Write-Host "Wrote $outGui"
 }
 
 Write-Host "Done. $($perks.Count) toggles, $($tracks.Count) track rows generated."
+

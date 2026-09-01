@@ -128,3 +128,30 @@ function Group-PerksByTrack {
     }
     return $tracks
 }
+
+# Sanity-check the parsed model: every perk maps to a non-empty track and no track
+# ends up empty. Returns $true if OK; writes warnings naming the offender otherwise.
+# Called by generate_perk_editor.ps1 before it writes any generated file.
+function Test-PerksModel {
+    param($PerkMap)
+    if ($null -eq $PerkMap -or $PerkMap.Count -eq 0) {
+        Write-Warning "Test-PerksModel: no perks parsed (empty map)"
+        return $false
+    }
+    $ok = $true
+    foreach ($k in $PerkMap.Keys) {
+        $t = $PerkMap[$k]
+        if ([string]::IsNullOrWhiteSpace($t)) {
+            Write-Warning "Test-PerksModel: perk '$k' has empty/blank track"
+            $ok = $false
+        }
+    }
+    $tracks = Group-PerksByTrack $PerkMap
+    foreach ($t in $tracks.Keys) {
+        if ($tracks[$t].Count -eq 0) {
+            Write-Warning "Test-PerksModel: track '$t' has zero perks"
+            $ok = $false
+        }
+    }
+    return $ok
+}
