@@ -209,6 +209,26 @@
 > zero-perk warnings), literal shared parser, corrected playset-JSON wording in the
 > implementation order, and a Phase 3 test checklist.
 
+> **v13 (2026-09-02, uncommitted-restyle salvage — CURRENT STATE).** The vanilla-look grid
+> restyle and the always-enabled button fix are kept, but the tooling that produced them had
+> been dismantled by one-shot line-index splice scripts: `tools/_grid_templates.ps1` ran
+> top-level emit code at dot-source time (before `$perks`/`$tracks`/`$utf8Bom` existed) and
+> called `Write-VanillaPerkButton`, which existed only in a stray scratch file — so
+> `generate_perk_editor.ps1` crashed and could not reproduce the shipped grid.
+> - Generator rebuilt: `_grid_templates.ps1` is definitions-only, the grid emit lives in
+>   `generate_perk_editor.ps1` after the parse, `Test-PerksModel` guards the model, and all
+>   three writes create their output dir. Verified: `toggles` + `values` regenerate
+>   **byte-identical**, grid regenerates **line-for-line**, validator passes.
+> - **The empty `type di_perk_grid_extension` placeholder in the base grid is restored.**
+>   The restyle had deleted it on a "first-wins" claim that contradicts this plan's own
+>   "last-loads-wins" note and left `DI_dynasty_perk_editor.gui` instantiating an undefined
+>   type with no compatch active. The override semantics stay an open experiment — see
+>   `docs/DYNASTY_PERK_EDITOR_AUDIT.md` ("Open experiment") before restyling the compatch
+>   generator onto these shared templates.
+> - Scratch tooling deleted; `.ck3modding/` (1.25 MB machine-bound tiger baseline) is now
+>   ignored; `tools/validate_perk_editor.ps1` is the release gate. Per-file
+>   keep/discard/repair reasoning: `docs/implementation_plan.md`.
+
 ---
 
 ## 🎉 Key research findings (new — verified in vanilla files)
