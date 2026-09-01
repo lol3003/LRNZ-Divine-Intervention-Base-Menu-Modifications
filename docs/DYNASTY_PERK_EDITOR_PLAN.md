@@ -132,7 +132,7 @@
 >     the full window width.
 >   - Reminder: GUI changes need a game restart; testing without one shows stale UI.
 
-> **v7 (2026-09-01, end-of-day status — CURRENT STATE)**
+> **v7 (2026-09-01, end-of-day status)**
 >
 > **✅ Working (user-confirmed in-game):**
 > - Per-perk buttons: left click adds, right click removes, owned perks grey out
@@ -160,7 +160,8 @@
 > - Owned state = greyed button only; no per-perk tooltip count/checkmark.
 >
 > **❓ Not yet re-tested after latest changes (restart pending at time of writing):**
-> - Window at 50% width (was 80%, ~40% dead space)
+> - Window sizing: static `size = { 1400 90% }` (v6.2 rework, commit `83ce133` — an earlier
+>   draft of this list said "50% width"; superseded before any restart test)
 > - Controls consolidated top-left; header shows selected dynasty's name via loc key
 >   `DI_dynasty_perks_editor_heading` = `"[Dynasty.GetNameNoTooltip|U] Dynasty — Legacy
 >   Perk Editor"`
@@ -168,8 +169,9 @@
 >   overlap bugs)
 >
 > **📋 Next steps, in priority order:**
-> 1. **Restart + regression pass:** verify the v7 layout (50% width, control bar, dynasty
->    name in header) and re-confirm clicks/track buttons still work after the layout rework.
+> 1. **Restart + regression pass:** verify the v7 layout (1400×90% static-width window,
+>    control bar, dynasty name in header) and re-confirm clicks/track buttons still work
+>    after the layout rework.
 >    Also answer the last open test-matrix item: does `remove_dynasty_perk` refund renown?
 >    (If yes, toggling off gains renown → add a compensating deduction.)
 > 2. **Out-of-order grant check** (plan test matrix item #1): click a tier-3 perk with 0
@@ -181,10 +183,31 @@
 >    out setters in `DI_dynasty_selected_char_copy` until the copy feature is built); the
 >    explanation text loc (`DYNASTY_VIEW_SHOW_LEGACY_EXPLANATION_*`) hardcodes the *player's*
 >    dynasty — consider a DI-owned loc with the selected dynasty's name.
-> 5. **Phase 3:** the Mod Support Generator (`tools/generate_mod_perks.ps1`) — DRAFT spec
->    below, user to add more specifications before implementation.
+> 5. **Phase 3:** the Mod Support Generator (`tools/generate_mod_perks.ps1`) — spec below
+>    reviewed and hardened in v9; nothing implemented yet, extension-slot step 1 first.
 > 6. **Workshop readiness:** the `is_shown`-driven greying means the editor needs no
 >    compat patches for vanilla; sub-mods only needed for modded tracks (Phase 3).
+
+> **v9 (2026-09-01, plan review — status audit + Phase 3 spec hardening — CURRENT STATE)**
+>
+> Full audit of the codebase vs. this plan (git log, generator, window GUI, sgui, loc):
+>
+> | Phase | State | Evidence |
+> |---|---|---|
+> | 0 — baseline cleanup | ✅ done | commit `e01f44d` |
+> | 1 — generated toggle editor | ✅ done, in-game verified (tests 1–4) | commits `a6c543f`, `bc18b87`, `ba80240`; `tools/generate_perk_editor.ps1` (388 lines) → `DI_generated_perk_toggles_sgui.txt` / `DI_generated_perk_grid.gui` / `DI_generated_perk_values.txt` |
+> | 2 — polish | ✅ essentially done | free-mode lifecycle (`_show`/`_hide` `on_start`), splendor +1/−1/reset row, copy-setters silenced, explanation paragraph replaced, loc keys in `gui/DI_l_english.yml`. Remaining: other-language loc (low prio — game falls back to english); "Dynasty to Copy" parked by design |
+> | 3 — Mod Support Generator | ❌ **not started** | `tools/generate_mod_perks.ps1` does not exist — **and implementation-order step 1 (the `di_perk_grid_extension` slot) is unimplemented too**: `DI_dynasty_perk_editor.gui` instantiates only `di_generated_perk_grid`, and the vanilla generator emits no extension type. Step 1 is the hard prerequisite for every Phase 3 output mode |
+>
+> The v7 regression items above remain the first field action (restart still pending):
+> 1400×90% layout, `remove_dynasty_perk` refund behavior, out-of-order grant, trait-perk.
+>
+> Phase 3 spec hardened per this review — all additions marked **[v9]** inline below:
+> base-DI descriptor dependency, per-sub-mod cost script value, duplicate-key exclusion,
+> standalone-mode multi-select guard, `mods_registry.json`/launcher DB as primary mod
+> source, multi-library Steam fallback, parser hardening (single-line perk blocks,
+> zero-perk warnings), literal shared parser, corrected playset-JSON wording in the
+> implementation order, and a Phase 3 test checklist.
 
 ---
 
@@ -466,12 +489,29 @@ generate editor support for them. UX flow and features, in user's words + struct
   perks and tracks found, DLC-gate status of its tracks.
 - Handle name resolution: workshop IDs → names via `mod/ugc_*.mod` descriptor files in the
   user folder (the launcher writes these).
+- **[v9] Primary mod source: the launcher's own registry.** `mods_registry.json` in the CK3
+  user folder (launcher-maintained: name, dirPath, steamId, status) and the `mods` table of
+  `launcher-v2.sqlite` already map workshop IDs → names/paths — read them first instead of
+  raw directory globbing; keep the `mod/` + Workshop directory scan (with `ugc_*.mod`
+  parsing) as the fallback.
+- **[v9] Steam multi-library awareness:** Workshop content may live under any Steam library
+  (this machine: `H:\SteamLibrary\...`). Resolve library roots via
+  `<SteamRoot>/steamapps/libraryfolders.vdf` instead of assuming the default install path.
+- **[v9] Parser hardening for arbitrary mods:** the vanilla generator's perk regex only
+  matches `key = {` with the opening brace at end of line — single-line perk blocks
+  (`my_perk = { legacy = x }`), which mod authors do write, would be silently dropped.
+  Support single-line blocks, and warn when a `dynasty_perks/*.txt` file parses to 0 perks
+  (probably a parse miss, not an empty file).
 
 #### F2 — User selection: generate for all or a subset
 
 - Interactive menu (or CLI flags for power users): generate for **all detected perk mods**,
   or pick **one/some** via multi-select.
 - Show what will be generated before writing (dry-run summary: mods → tracks → perk counts).
+- **[v9] Standalone-mode multi-select guard:** every standalone sub-mod defines
+  `di_perk_grid_extension` — two of them enabled together = last-loads-wins, one silently
+  vanishes. If the user selects more than one perk mod for standalone output, warn and
+  recommend the combined playset mode (F4) instead.
 
 #### F3 — Output modes (user chooses per run)
 
@@ -485,6 +525,11 @@ generate editor support for them. UX flow and features, in user's words + struct
    - Each can be independently enabled/disabled in the launcher/playset.
    - Auto-register each generated mod in `mod/` with a `.mod` descriptor so the launcher
      sees it (name pattern: `DI Perks - <Mod Name>`).
+   - **[v9] Descriptors must ALSO depend on the base DI mod** (`"<Base DI Mod Name>"`):
+     the sub-mod's rows render into the base window's `di_perk_grid_extension` slot, and
+     its effects rely on the base's free-mode variable/loc conventions. A dependency on the
+     perk mod alone would allow loading without the base mod → grid rows with no slot to
+     render into.
 3. **Write to a target folder** — emit the generated files into an arbitrary directory so
    they can be dropped into an existing compatch mod by hand.
 
@@ -507,6 +552,22 @@ generate editor support for them. UX flow and features, in user's words + struct
 - Unique type/file naming per generated mod (`-Prefix` derived from the perk mod name) to
   avoid `di_generated_perk_grid`-style collisions when several generated mods are active.
 - Idempotent regeneration; "GENERATED FILE" headers; re-run after perk-mod updates.
+- **[v9] Duplicate-perk-key exclusion:** exclude every perk key already present in the
+  vanilla scan from the generated toggles. A mod that *replaces* vanilla perk files (same
+  filename in `common/dynasty_perks/`) or redefines existing keys would otherwise yield
+  duplicate buttons next to the base grid's vanilla rows. Mods that only *append* new keys
+  (the normal case) are unaffected.
+- **[v9] Cost value must cover modded tracks:** the base's `DI_dynasty_perk_cost_next`
+  counts only the 21 vanilla tracks, so free-mode refunds under-count once modded perks are
+  owned (cost = 250 + 500 × TOTAL owned perks). Each generated mod emits its own
+  uniquely-named script value `DI_dynasty_perk_cost_next_<prefix>` computed over
+  **vanilla + its modded** tracks, and its toggle effects reference that name — no name
+  collision with the base value. The sub-mod generator therefore needs two scan scopes:
+  *emit toggles for* = the perk mod's new keys only; *compute cost over* = vanilla + modded
+  (the auto-generated `<track>_legacy_track_perks` triggers exist for vanilla tracks no
+  matter which tool emits the value).
+- **[v9] Make "same parser" literal:** extract the perk/track-gate parser functions into
+  `tools/_perk_parser.ps1`, dot-sourced by both generators — one parser fix fixes both.
 
 #### Open questions — RESOLVED (v8 research, 2026-09-01)
 
@@ -540,28 +601,51 @@ generate editor support for them. UX flow and features, in user's words + struct
 - [x] **Naming:** standalone sub-mods get prefix from the source mod
   (`DI_perk_add_agot_*`, type `di_perk_grid_extension` — shared name is intentional and
   IS the inclusion mechanism). Combined playset mods emit the full extension grid in one file.
-- [x] **Descriptor dependencies:** standalone sub-mods declare
-  `dependencies = { "<Perk Mod Name>" }` (launcher orders after the perk mod). Combined
-  playset mods declare dependencies on all source perk mods present in the playset.
+- [x] **Descriptor dependencies (v9-amended):** standalone sub-mods declare
+  `dependencies = { "<Perk Mod Name>" "<Base DI Mod Name>" }` (launcher orders after both —
+  the perk mod for its content, the base DI mod for the extension slot + conventions).
+  Combined playset mods declare dependencies on all source perk mods present in the playset
+  **plus the base DI mod**.
 - [x] **UI:** interactive terminal menu (numbered lists, y/n prompts) with CLI flags as
   escape hatch — no WinForms; keeps the tool dependency-free PowerShell.
 
-> **Status: spec ready for implementation. Remaining user additions still welcome —
-> implement incrementally.**
+> **Status (v9): spec reviewed and hardened — ready for implementation.** User additions
+> still welcome; implement incrementally in the order below.
 
-### Implementation order (v8)
+### Implementation order (v9; supersedes the v8 wording)
+
+> **[v9] Status: nothing here is implemented yet.** Step 1 is the hard prerequisite for
+> testing any later step end-to-end (without the slot, generated rows have nowhere to render).
 
 1. **Extension slot in base mod** — add empty `di_perk_grid_extension` type + instantiation
-   below the vanilla grid in `DI_dynasty_perk_editor.gui`; vanilla generator emits it.
-2. **F1 scanner** — `tools/generate_mod_perks.ps1 -Scan`: enumerate local `mod/` +
-   Workshop dirs, resolve names via `ugc_*.mod`, report perk/track counts (parser already
-   validated against AGOT).
+   below the vanilla grid in `DI_dynasty_perk_editor.gui`; vanilla generator
+   (`generate_perk_editor.ps1`) emits it. Verify: restart with no sub-mod → nothing renders,
+   error.log clean.
+2. **F1 scanner** — `tools/generate_mod_perks.ps1 -Scan`: enumerate mods via
+   `mods_registry.json` / `launcher-v2.sqlite` first, directory scan fallback second
+   (multi-library aware via `libraryfolders.vdf`), report perk/track counts (parser already
+   validated against AGOT: 158 perks / 38 tracks).
 3. **F3 standalone mode** — `-Mod <name>`: generate one sub-mod (sgui + grid extension +
-   loc + descriptor with dependencies), auto-register `.mod` in `mod/`.
-4. **F4 playset mode** — `-Playset <name|path>`: read playset JSON, scan its enabled mods,
-   emit ONE combined mod with the full extension grid.
+   loc + per-prefix cost value + descriptor with dependencies on the perk mod AND the base
+   DI mod), auto-register `.mod` in `mod/`.
+4. **F4 playset mode** — `-Playset <name|path>`: read the playset from
+   **`launcher-v2.sqlite`** (proven read path, see resolved questions above) or a JSON
+   export for Irony imports, scan its enabled mods, emit ONE combined mod with the full
+   extension grid.
 5. **F2 interactive menu** — default no-args run: scan → list → pick → choose output mode.
 6. **Community guide** — `docs/ADDING_PERK_MOD_SUPPORT.md`.
+
+**[v9] Phase 3 test checklist (run per generated output):**
+- [ ] No sub-mod enabled → extension slot renders nothing, error.log clean.
+- [ ] AGOT sub-mod enabled → its 53 perks / 17 extra tracks render after the vanilla rows
+      (38 tracks total incl. vanilla).
+- [ ] Free-mode grant with modded perks owned → renown net-zero (per-prefix cost value
+      counts modded perks).
+- [ ] Mod that replaces vanilla perk files → no duplicate buttons (duplicate-key exclusion).
+- [ ] Two standalone sub-mods enabled together → tool warned at generation time;
+      last-loads-wins behavior documented.
+- [ ] Sub-mod enabled without the base DI mod → launcher orders base first (dependency
+      declaration) or fails loudly, never silently.
 
 ---
 
