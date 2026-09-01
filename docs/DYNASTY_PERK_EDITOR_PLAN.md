@@ -508,34 +508,54 @@ generate editor support for them. UX flow and features, in user's words + struct
   avoid `di_generated_perk_grid`-style collisions when several generated mods are active.
 - Idempotent regeneration; "GENERATED FILE" headers; re-run after perk-mod updates.
 
-#### Open questions (to resolve before implementation)
+#### Open questions — RESOLVED (v8 research, 2026-09-01)
 
-- [ ] Exact playset storage formats (Paradox launcher SQLite schema; Irony export format).
-- [ ] Should combined-playset mods get one shared prefix or per-source prefixes?
-- [ ] Descriptor `dependencies` for combined mods: depend on all source perk mods?
-- [ ] Does the user want a GUI (WinForms/terminal menu) or CLI-flags-only interface?
-- [ ] **Window inclusion mechanism:** the base editor window must render each sub-mod's
-      grid. Options: (a) base window lists one line per known generated type
-      (`di_hiraeth_perk_grid = {}` etc. — requires base mod update per new sub-mod), or
-      (b) sub-mods append rows into a shared named container the base window declares.
-      Decide when finalizing the spec.
-- [ ] **User: more specifications to be added — spec incomplete by design.**
+- [x] **Playset formats (verified on this machine):**
+  - Paradox launcher playsets exist as **plain JSON** in `<CK3 user folder>/playsets_backup/`:
+    `{"game":"ck3","name":"...","mods":[{"displayName","enabled","position","steamId"}]}`.
+    Trivially parseable with `ConvertFrom-Json`. (The modern launcher's own storage is
+    elsewhere/SQLITE, but the user folder JSONs are current — one was written 2 days ago —
+    and are the same format Irony exports. Support the JSON dir as the primary source.)
+  - Irony Mod Manager was not found under standard `%APPDATA%` paths on this machine —
+    the JSON playsets above cover the same need. Irony support = accept its JSON exports
+    via `-PlaysetFile <path>` if a user has them.
+- [x] **Window inclusion mechanism — DECIDED (extension-slot pattern):**
+  - CK3 types/templates are **global across load order, name-keyed, last-loads-wins**.
+  - The base window keeps instantiating `di_generated_perk_grid` (vanilla rows, from the
+    vanilla generator). The base ALSO defines `di_perk_grid_extension` — an **empty vbox
+    type** — and instantiates it right below the vanilla grid.
+  - Standalone sub-mods / combined playset mods **redefine `di_perk_grid_extension`** with
+    their rows. Base behavior unchanged when absent (empty slot renders nothing); with a
+    sub-mod enabled, its rows appear after the vanilla ones. No base-mod edit needed per
+    sub-mod; N slots not needed — one extension type suffices (only one mod can win the
+    name anyway, which is exactly the combined-mod model).
+  - Verified: types need no `scripted_widgets` registration; any loaded gui file's types
+    are global. AGOT parser test passed: **158 perks / 38 tracks** (105 vanilla + 53 AGOT).
+- [x] **Naming:** standalone sub-mods get prefix from the source mod
+  (`DI_perk_add_agot_*`, type `di_perk_grid_extension` — shared name is intentional and
+  IS the inclusion mechanism). Combined playset mods emit the full extension grid in one file.
+- [x] **Descriptor dependencies:** standalone sub-mods declare
+  `dependencies = { "<Perk Mod Name>" }` (launcher orders after the perk mod). Combined
+  playset mods declare dependencies on all source perk mods present in the playset.
+- [x] **UI:** interactive terminal menu (numbered lists, y/n prompts) with CLI flags as
+  escape hatch — no WinForms; keeps the tool dependency-free PowerShell.
 
-### Why NOT one mod with everything bundled
+> **Status: spec ready for implementation. Remaining user additions still welcome —
+> implement incrementally.**
 
-CK3 tolerates effects referencing undefined keys — **nothing crashes** — but bundling every
-perk mod's tracks into the base mod degrades the experience for users without those mods:
+### Implementation order (v8)
 
-| What | Behavior when the perk mod is absent |
-|---|---|
-| `add_dynasty_perk = <undefined key>` | Error logged, effect does nothing |
-| `has_dynasty_perk = <undefined key>` in button `is_shown`/tooltips | Trigger errors → spams `error.log`, potentially every frame for visible buttons |
-| GUI `texture = gfx/.../mod_icon.dds` for missing art | Missing-texture warnings in `gui_warnings.log`, placeholder art |
-| Buttons for nonexistent tracks | Dead UI clutter |
-
-There is **no script-side way to test "does this database key exist?"**, and files can't be
-conditionally included based on the loaded mod list — so a bundle-everything main mod always
-produces error spam and dead buttons for someone. Unfixable from within CK3 script.
+1. **Extension slot in base mod** — add empty `di_perk_grid_extension` type + instantiation
+   below the vanilla grid in `DI_dynasty_perk_editor.gui`; vanilla generator emits it.
+2. **F1 scanner** — `tools/generate_mod_perks.ps1 -Scan`: enumerate local `mod/` +
+   Workshop dirs, resolve names via `ugc_*.mod`, report perk/track counts (parser already
+   validated against AGOT).
+3. **F3 standalone mode** — `-Mod <name>`: generate one sub-mod (sgui + grid extension +
+   loc + descriptor with dependencies), auto-register `.mod` in `mod/`.
+4. **F4 playset mode** — `-Playset <name|path>`: read playset JSON, scan its enabled mods,
+   emit ONE combined mod with the full extension grid.
+5. **F2 interactive menu** — default no-args run: scan → list → pick → choose output mode.
+6. **Community guide** — `docs/ADDING_PERK_MOD_SUPPORT.md`.
 
 ---
 
