@@ -111,7 +111,10 @@ DI_dynasty_splendor_reset = {
 
 	effect = {
 		var:DI_dynasty_selected_dynasty = {
-			add_dynasty_prestige_level = -10   # enough to reach level 0 from any level
+			while = {
+				limit = { dynasty_prestige_level > 0 }
+				add_dynasty_prestige_level = -1
+			}
 		}
 		debug_log = "DI legacy editor: splendor reset to 0"
 	}

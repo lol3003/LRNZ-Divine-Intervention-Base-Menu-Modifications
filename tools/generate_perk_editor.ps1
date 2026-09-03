@@ -6,6 +6,11 @@
 #      - one per-perk toggle scripted gui: add if missing, remove if owned
 #   2. gui/DI_generated_perk_grid.gui
 #      - a `di_generated_perk_grid` type (vbox: one row per track, N perk buttons)
+#   3. common/script_values/DI_generated_perk_values.txt
+#      - exact renown cost of the next perk (free-mode top-up)
+#   4. localization/english/DI_generated_perk_tooltips_l_english.yml
+#      - one DI_perk_tt_<perk> loc entry per perk: name + effect description,
+#        used as the grid button tooltip (game-like, mirrors vanilla highlight)
 #
 # Usage:
 #   pwsh -File tools/generate_perk_editor.ps1
@@ -30,6 +35,7 @@ $perkDirs   = @("$GameDir\common\dynasty_perks") + $ExtraPerkDirs
 $outSgui    = Join-Path $ModDir "common\scripted_guis\DI_generated_perk_toggles_sgui.txt"
 $outGui     = Join-Path $ModDir "gui\DI_generated_perk_grid.gui"
 $outValues  = Join-Path $ModDir "common\script_values\DI_generated_perk_values.txt"
+$outTtLoc   = Join-Path $ModDir "localization\english\DI_generated_perk_tooltips_l_english.yml"
 
 # --- Free-edit renown handling ------------------------------------------------
 # add_dynasty_perk DEDUCTS renown at the vanilla cost (user-confirmed in-game):
@@ -63,6 +69,10 @@ Write-Host "Parsing perk files..."
 $perks = Get-Perks -Directories $perkDirs
 if ($perks.Count -eq 0) { throw "No perks parsed - check -GameDir" }
 if (-not (Test-PerksModel $perks)) { throw "Parsed perk model is inconsistent - aborting before writing generated files" }
+
+# effect-text loc keys per perk (for the generated tooltip loc file). Missing key
+# = perk has no effect = { ... } text; the tooltip falls back to name-only.
+$effectTexts = Get-PerkEffectTextKeys -Directories $perkDirs
 
 # parse DLC gates from the same dirs' sibling dynasty_legacies folders
 $legacyDirs = $perkDirs | ForEach-Object { $_ -replace 'dynasty_perks$', 'dynasty_legacies' }
@@ -108,8 +118,12 @@ function Write-PerPerkBlocks {
     [void]$Sb.AppendLine("                if = {")
     [void]$Sb.AppendLine("                    limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
     [void]$Sb.AppendLine("                    add_dynasty_prestige = DI_dynasty_perk_cost_next")
+    [void]$Sb.AppendLine("                    add_dynasty_perk = $Key")
     [void]$Sb.AppendLine("                }")
-    [void]$Sb.AppendLine("                add_dynasty_perk = $Key")
+    [void]$Sb.AppendLine("                else_if = {")
+    [void]$Sb.AppendLine("                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }")
+    [void]$Sb.AppendLine("                    add_dynasty_perk = $Key")
+    [void]$Sb.AppendLine("                }")
     [void]$Sb.AppendLine("            }")
     [void]$Sb.AppendLine("        }")
     [void]$Sb.AppendLine("    }")
@@ -155,8 +169,12 @@ function Write-TrackAddAllBlock {
         [void]$Sb.AppendLine("                if = {")
         [void]$Sb.AppendLine("                    limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
         [void]$Sb.AppendLine("                    add_dynasty_prestige = DI_dynasty_perk_cost_next")
+        [void]$Sb.AppendLine("                    add_dynasty_perk = $k")
         [void]$Sb.AppendLine("                }")
-        [void]$Sb.AppendLine("                add_dynasty_perk = $k")
+        [void]$Sb.AppendLine("                else_if = {")
+        [void]$Sb.AppendLine("                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }")
+        [void]$Sb.AppendLine("                    add_dynasty_perk = $k")
+        [void]$Sb.AppendLine("                }")
         [void]$Sb.AppendLine("            }")
     }
     [void]$Sb.AppendLine("        }")
@@ -262,6 +280,7 @@ $gui = [System.Text.StringBuilder]::new()
 [void]$gui.AppendLine("### state cannot be rendered in the UI. Buttons are therefore always enabled:")
 [void]$gui.AppendLine("### left click = add (no-op if already owned via the add SGUI's is_shown guard),")
 [void]$gui.AppendLine("### right click = remove (no-op if not owned). Out-of-order add/remove is intended.")
+[void]$gui.AppendLine("### Owned state is intentionally not rendered: has_dynasty_perk is a script trigger, not a GUI datafunction (see docs/DYNASTY_PERK_EDITOR_PLAN.md v14).")
 [void]$gui.AppendLine("")
 [void]$gui.AppendLine("types DI_DynastyGeneratedPerks {")
 [void]$gui.AppendLine("    type di_generated_perk_grid = vbox {")
@@ -290,6 +309,36 @@ if (-not $WhatIf) {
     New-Item -ItemType Directory -Force -Path (Split-Path $outGui) | Out-Null
     [System.IO.File]::WriteAllText($outGui, $gui.ToString(), $utf8Bom)
     Write-Host "Wrote $outGui"
+}
+
+# --- Generate tooltip loc ---------------------------------------------------------
+# One loc entry per perk, referenced by the grid button tooltip:
+#   DI_perk_tt_<perk>:0 "#bold [Localize('<perk>_name')]#!\n[Localize('<effect_key>')]..."
+# Effect keys come from the perk's effect = { ... } block (_ai_effect/_req_effect
+# excluded by the parser). Perks without effect text get name-only tooltips.
+# [Localize(...)] datafunctions inside loc values are vanilla-verified
+# (game/localization/english/ledger/ledger_filtersorts_l_english.yml).
+$ttLoc = [System.Text.StringBuilder]::new()
+[void]$ttLoc.AppendLine("# =============================================================================")
+[void]$ttLoc.AppendLine("# GENERATED FILE - do not hand-edit.")
+[void]$ttLoc.AppendLine("# Regenerate with: tools/generate_perk_editor.ps1")
+[void]$ttLoc.AppendLine("# Grid button tooltips: perk name (bold) + effect description lines.")
+[void]$ttLoc.AppendLine("# =============================================================================")
+[void]$ttLoc.AppendLine("")
+[void]$ttLoc.AppendLine("l_english:")
+foreach ($k in $perks.Keys) {
+    $parts = "#bold [Localize('${k}_name')]#!"
+    if ($effectTexts.ContainsKey($k)) {
+        foreach ($e in $effectTexts[$k]) {
+            $parts += "\n[Localize('${e}')]"
+        }
+    }
+    [void]$ttLoc.AppendLine(" DI_perk_tt_${k}:0 `"$parts`"")
+}
+if (-not $WhatIf) {
+    New-Item -ItemType Directory -Force -Path (Split-Path $outTtLoc) | Out-Null
+    [System.IO.File]::WriteAllText($outTtLoc, $ttLoc.ToString(), $utf8Bom)
+    Write-Host "Wrote $outTtLoc"
 }
 
 Write-Host "Done. $($perks.Count) toggles, $($tracks.Count) track rows generated."

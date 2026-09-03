@@ -30,7 +30,7 @@ function Write-VanillaPerkButton {
     [void]$Sb.AppendLine("                    button_ignore = none")
     [void]$Sb.AppendLine("                    onclick = ""[GetScriptedGui('DI_perk_add_$Key').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
     [void]$Sb.AppendLine("                    onrightclick = ""[GetScriptedGui('DI_perk_remove_$Key').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
-    [void]$Sb.AppendLine('                    tooltip = "[Localize(''' + $Key + '_name'')]"')
+    [void]$Sb.AppendLine('                    tooltip = "DI_perk_tt_' + $Key + '"')
     [void]$Sb.AppendLine("")
     [void]$Sb.AppendLine("                    background = {")
     [void]$Sb.AppendLine("                        size = { 100% 100% }")

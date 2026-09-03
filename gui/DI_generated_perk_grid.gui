@@ -4,6 +4,7 @@
 ### state cannot be rendered in the UI. Buttons are therefore always enabled:
 ### left click = add (no-op if already owned via the add SGUI's is_shown guard),
 ### right click = remove (no-op if not owned). Out-of-order add/remove is intended.
+### Owned state is intentionally not rendered: has_dynasty_perk is a script trigger, not a GUI datafunction (see docs/DYNASTY_PERK_EDITOR_PLAN.md v14).
 
 types DI_DynastyGeneratedPerks {
     type di_generated_perk_grid = vbox {
@@ -63,7 +64,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_blood_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_blood_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('blood_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_blood_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -106,7 +107,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_blood_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_blood_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('blood_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_blood_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -149,7 +150,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_blood_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_blood_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('blood_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_blood_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -192,7 +193,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_blood_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_blood_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('blood_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_blood_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -235,7 +236,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_blood_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_blood_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('blood_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_blood_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -329,7 +330,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_warfare_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_warfare_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('warfare_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_warfare_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -372,7 +373,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_warfare_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_warfare_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('warfare_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_warfare_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -415,7 +416,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_warfare_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_warfare_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('warfare_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_warfare_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -458,7 +459,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_warfare_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_warfare_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('warfare_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_warfare_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -501,7 +502,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_warfare_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_warfare_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('warfare_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_warfare_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -595,7 +596,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_law_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_law_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('law_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_law_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -638,7 +639,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_law_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_law_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('law_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_law_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -681,7 +682,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_law_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_law_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('law_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_law_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -724,7 +725,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_law_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_law_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('law_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_law_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -767,7 +768,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_law_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_law_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('law_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_law_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -861,7 +862,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_guile_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_guile_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('guile_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_guile_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -904,7 +905,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_guile_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_guile_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('guile_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_guile_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -947,7 +948,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_guile_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_guile_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('guile_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_guile_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -990,7 +991,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_guile_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_guile_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('guile_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_guile_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -1033,7 +1034,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_guile_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_guile_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('guile_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_guile_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -1127,7 +1128,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_erudition_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_erudition_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('erudition_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_erudition_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -1170,7 +1171,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_erudition_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_erudition_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('erudition_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_erudition_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -1213,7 +1214,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_erudition_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_erudition_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('erudition_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_erudition_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -1256,7 +1257,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_erudition_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_erudition_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('erudition_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_erudition_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -1299,7 +1300,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_erudition_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_erudition_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('erudition_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_erudition_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -1393,7 +1394,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_glory_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_glory_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('glory_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_glory_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -1436,7 +1437,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_glory_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_glory_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('glory_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_glory_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -1479,7 +1480,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_glory_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_glory_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('glory_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_glory_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -1522,7 +1523,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_glory_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_glory_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('glory_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_glory_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -1565,7 +1566,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_glory_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_glory_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('glory_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_glory_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -1659,7 +1660,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_kin_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_kin_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('kin_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_kin_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -1702,7 +1703,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_kin_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_kin_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('kin_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_kin_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -1745,7 +1746,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_kin_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_kin_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('kin_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_kin_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -1788,7 +1789,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_kin_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_kin_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('kin_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_kin_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -1831,7 +1832,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_kin_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_kin_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('kin_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_kin_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -1926,7 +1927,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ep1_culture_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ep1_culture_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ep1_culture_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_ep1_culture_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -1969,7 +1970,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ep1_culture_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ep1_culture_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ep1_culture_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_ep1_culture_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -2012,7 +2013,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ep1_culture_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ep1_culture_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ep1_culture_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_ep1_culture_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -2055,7 +2056,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ep1_culture_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ep1_culture_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ep1_culture_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_ep1_culture_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -2098,7 +2099,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ep1_culture_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ep1_culture_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ep1_culture_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_ep1_culture_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -2193,7 +2194,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ep2_activities_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ep2_activities_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ep2_activities_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_ep2_activities_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -2236,7 +2237,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ep2_activities_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ep2_activities_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ep2_activities_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_ep2_activities_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -2279,7 +2280,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ep2_activities_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ep2_activities_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ep2_activities_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_ep2_activities_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -2322,7 +2323,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ep2_activities_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ep2_activities_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ep2_activities_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_ep2_activities_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -2365,7 +2366,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ep2_activities_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ep2_activities_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ep2_activities_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_ep2_activities_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -2460,7 +2461,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp1_adventure_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_adventure_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp1_adventure_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_fp1_adventure_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -2503,7 +2504,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp1_adventure_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_adventure_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp1_adventure_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_fp1_adventure_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -2546,7 +2547,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp1_adventure_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_adventure_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp1_adventure_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_fp1_adventure_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -2589,7 +2590,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp1_adventure_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_adventure_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp1_adventure_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_fp1_adventure_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -2632,7 +2633,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp1_adventure_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_adventure_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp1_adventure_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_fp1_adventure_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -2727,7 +2728,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp1_pillage_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_pillage_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp1_pillage_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_fp1_pillage_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -2770,7 +2771,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp1_pillage_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_pillage_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp1_pillage_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_fp1_pillage_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -2813,7 +2814,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp1_pillage_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_pillage_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp1_pillage_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_fp1_pillage_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -2856,7 +2857,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp1_pillage_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_pillage_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp1_pillage_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_fp1_pillage_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -2899,7 +2900,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp1_pillage_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp1_pillage_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp1_pillage_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_fp1_pillage_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -2994,7 +2995,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp2_urbanism_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_urbanism_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp2_urbanism_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_fp2_urbanism_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -3037,7 +3038,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp2_urbanism_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_urbanism_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp2_urbanism_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_fp2_urbanism_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -3080,7 +3081,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp2_urbanism_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_urbanism_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp2_urbanism_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_fp2_urbanism_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -3123,7 +3124,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp2_urbanism_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_urbanism_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp2_urbanism_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_fp2_urbanism_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -3166,7 +3167,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp2_urbanism_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_urbanism_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp2_urbanism_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_fp2_urbanism_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -3261,7 +3262,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp2_coterie_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_coterie_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp2_coterie_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_fp2_coterie_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -3304,7 +3305,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp2_coterie_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_coterie_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp2_coterie_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_fp2_coterie_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -3347,7 +3348,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp2_coterie_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_coterie_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp2_coterie_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_fp2_coterie_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -3390,7 +3391,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp2_coterie_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_coterie_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp2_coterie_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_fp2_coterie_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -3433,7 +3434,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp2_coterie_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp2_coterie_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp2_coterie_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_fp2_coterie_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -3528,7 +3529,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp3_khvarenah_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp3_khvarenah_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp3_khvarenah_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_fp3_khvarenah_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -3571,7 +3572,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp3_khvarenah_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp3_khvarenah_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp3_khvarenah_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_fp3_khvarenah_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -3614,7 +3615,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp3_khvarenah_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp3_khvarenah_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp3_khvarenah_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_fp3_khvarenah_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -3657,7 +3658,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp3_khvarenah_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp3_khvarenah_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp3_khvarenah_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_fp3_khvarenah_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -3700,7 +3701,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_fp3_khvarenah_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_fp3_khvarenah_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('fp3_khvarenah_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_fp3_khvarenah_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -3795,7 +3796,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ce1_heroic_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_heroic_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ce1_heroic_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_ce1_heroic_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -3838,7 +3839,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ce1_heroic_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_heroic_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ce1_heroic_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_ce1_heroic_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -3881,7 +3882,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ce1_heroic_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_heroic_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ce1_heroic_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_ce1_heroic_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -3924,7 +3925,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ce1_heroic_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_heroic_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ce1_heroic_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_ce1_heroic_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -3967,7 +3968,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ce1_heroic_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_heroic_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ce1_heroic_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_ce1_heroic_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -4062,7 +4063,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ce1_legitimacy_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_legitimacy_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ce1_legitimacy_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_ce1_legitimacy_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -4105,7 +4106,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ce1_legitimacy_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_legitimacy_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ce1_legitimacy_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_ce1_legitimacy_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -4148,7 +4149,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ce1_legitimacy_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_legitimacy_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ce1_legitimacy_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_ce1_legitimacy_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -4191,7 +4192,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ce1_legitimacy_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_legitimacy_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ce1_legitimacy_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_ce1_legitimacy_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -4234,7 +4235,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ce1_legitimacy_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ce1_legitimacy_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ce1_legitimacy_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_ce1_legitimacy_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -4329,7 +4330,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ep3_administrative_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ep3_administrative_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ep3_administrative_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_ep3_administrative_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -4372,7 +4373,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ep3_administrative_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ep3_administrative_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ep3_administrative_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_ep3_administrative_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -4415,7 +4416,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ep3_administrative_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ep3_administrative_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ep3_administrative_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_ep3_administrative_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -4458,7 +4459,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ep3_administrative_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ep3_administrative_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ep3_administrative_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_ep3_administrative_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -4501,7 +4502,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_ep3_administrative_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_ep3_administrative_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('ep3_administrative_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_ep3_administrative_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -4596,7 +4597,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_mpo_nomad_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_mpo_nomad_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('mpo_nomad_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_mpo_nomad_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -4639,7 +4640,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_mpo_nomad_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_mpo_nomad_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('mpo_nomad_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_mpo_nomad_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -4682,7 +4683,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_mpo_nomad_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_mpo_nomad_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('mpo_nomad_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_mpo_nomad_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -4725,7 +4726,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_mpo_nomad_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_mpo_nomad_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('mpo_nomad_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_mpo_nomad_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -4768,7 +4769,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_mpo_nomad_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_mpo_nomad_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('mpo_nomad_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_mpo_nomad_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -4863,7 +4864,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_tgp_chinese_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_chinese_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('tgp_chinese_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_tgp_chinese_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -4906,7 +4907,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_tgp_chinese_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_chinese_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('tgp_chinese_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_tgp_chinese_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -4949,7 +4950,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_tgp_chinese_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_chinese_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('tgp_chinese_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_tgp_chinese_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -4992,7 +4993,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_tgp_chinese_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_chinese_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('tgp_chinese_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_tgp_chinese_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -5035,7 +5036,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_tgp_chinese_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_chinese_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('tgp_chinese_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_tgp_chinese_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -5130,7 +5131,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_tgp_japan_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_japan_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('tgp_japan_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_tgp_japan_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -5173,7 +5174,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_tgp_japan_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_japan_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('tgp_japan_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_tgp_japan_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -5216,7 +5217,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_tgp_japan_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_japan_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('tgp_japan_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_tgp_japan_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -5259,7 +5260,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_tgp_japan_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_japan_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('tgp_japan_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_tgp_japan_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -5302,7 +5303,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_tgp_japan_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_japan_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('tgp_japan_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_tgp_japan_legacy_5"
 
                     background = {
                         size = { 100% 100% }
@@ -5397,7 +5398,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_tgp_sea_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_sea_legacy_1').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('tgp_sea_legacy_1_name')]"
+                    tooltip = "DI_perk_tt_tgp_sea_legacy_1"
 
                     background = {
                         size = { 100% 100% }
@@ -5440,7 +5441,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_tgp_sea_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_sea_legacy_2').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('tgp_sea_legacy_2_name')]"
+                    tooltip = "DI_perk_tt_tgp_sea_legacy_2"
 
                     background = {
                         size = { 100% 100% }
@@ -5483,7 +5484,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_tgp_sea_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_sea_legacy_3').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('tgp_sea_legacy_3_name')]"
+                    tooltip = "DI_perk_tt_tgp_sea_legacy_3"
 
                     background = {
                         size = { 100% 100% }
@@ -5526,7 +5527,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_tgp_sea_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_sea_legacy_4').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('tgp_sea_legacy_4_name')]"
+                    tooltip = "DI_perk_tt_tgp_sea_legacy_4"
 
                     background = {
                         size = { 100% 100% }
@@ -5569,7 +5570,7 @@ types DI_DynastyGeneratedPerks {
                     button_ignore = none
                     onclick = "[GetScriptedGui('DI_perk_add_tgp_sea_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
                     onrightclick = "[GetScriptedGui('DI_perk_remove_tgp_sea_legacy_5').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
-                    tooltip = "[Localize('tgp_sea_legacy_5_name')]"
+                    tooltip = "DI_perk_tt_tgp_sea_legacy_5"
 
                     background = {
                         size = { 100% 100% }

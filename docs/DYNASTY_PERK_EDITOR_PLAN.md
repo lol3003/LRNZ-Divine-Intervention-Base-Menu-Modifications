@@ -1,7 +1,8 @@
 # Dynasty Perk Editor — Action Plan
 
-> Companion to `DYNASTY_PERK_EDITOR_OPTIONS.md`. This is the concrete "what to do next" plan,
-> based on research into the installed game files (patch 1.19, `H:\SteamLibrary\...`).
+> The concrete "what to do next" plan, based on research into the installed game files
+> (patch 1.19, `H:\SteamLibrary\...`). `DYNASTY_PERK_EDITOR_OPTIONS.md` is the superseded
+> research doc (Option B rejected); `DYNASTY_PERK_EDITOR_AUDIT.md` tracks per-file state.
 
 > **v2 (audit-refined).** Changes vs v1:
 > - **Generator-first:** the PowerShell generator (old Phase 3a) is now *Phase 1 step 0* — do
@@ -197,7 +198,7 @@
 > | 0 — baseline cleanup | ✅ done | commit `e01f44d` |
 > | 1 — generated toggle editor | ✅ done, in-game verified (tests 1–4) | commits `a6c543f`, `bc18b87`, `ba80240`; `tools/generate_perk_editor.ps1` (388 lines) → `DI_generated_perk_toggles_sgui.txt` / `DI_generated_perk_grid.gui` / `DI_generated_perk_values.txt` |
 > | 2 — polish | ✅ essentially done | free-mode lifecycle (`_show`/`_hide` `on_start`), splendor +1/−1/reset row, copy-setters silenced, explanation paragraph replaced, loc keys in `gui/DI_l_english.yml`. Remaining: other-language loc (low prio — game falls back to english); "Dynasty to Copy" parked by design |
-> | 3 — Mod Support Generator | ⏳ **step 1 done** (v10) | `tools/generate_mod_perks.ps1` does not exist. Implementation-order **step 1 is now implemented**: `DI_dynasty_perk_editor.gui` instantiates `di_generated_perk_grid` **and** the new `di_perk_grid_extension` slot, and the vanilla generator emits the extension type. Steps 2–6 (scanner/standalone/playset/menu/guide) remain not started. Step 1 was the hard prerequisite for every Phase 3 output mode |
+> | 3 — Mod Support Generator | ✅ done (v12+) | `tools/generate_mod_perks.ps1` (F1 scanner, F3 standalone, F4 playset/combined compatches, F2 menu), auto-launcher registration, and `docs/ADDING_PERK_MOD_SUPPORT.md` guide are implemented; the editor window instantiates `di_generated_perk_grid` **and** the `di_perk_grid_extension` compatch slot |
 >
 > The v7 regression items above remain the first field action (restart still pending):
 > 1400×90% layout, `remove_dynasty_perk` refund behavior, out-of-order grant, trait-perk.
@@ -228,6 +229,112 @@
 > - Scratch tooling deleted; `.ck3modding/` (1.25 MB machine-bound tiger baseline) is now
 >   ignored; `tools/validate_perk_editor.ps1` is the release gate. Per-file
 >   keep/discard/repair reasoning: `docs/implementation_plan.md`.
+
+> **v14 (2026-09-03, three-track implementation review — CURRENT STATE).** Independent
+> review of GUI, effects/tooling, and docs (subagent-assisted; drift validator re-run,
+> PASSED — 105 perks / 21 tracks, deterministic byte-identical output). Findings consolidated:
+>
+> **Blockers:**
+> - `gui/DI_dynasty_perk_editor.gui:271-488` — dead ~220-line `types DI_DynastyLegacies`
+>   block (vanilla `hbox_legacy_item` copy, zero instantiations, missing datacontext).
+>   (done, this changeset).
+> - Non-free mode grants renown-free perks: the generated toggles only top up renown when
+>   free mode is ON, but never verify the dynasty can afford the perk when OFF. Fix in the
+>   generator (`Write-PerPerkBlocks` / `Write-TrackAddAllBlock` in
+>   `tools/generate_perk_editor.ps1`), then regenerate. Do NOT add a
+>   "selected dynasty = root's dynasty" guard — editing foreign dynasties is the editor's
+>   purpose. (done, this changeset.)
+>
+> **Should fix:**
+> - `DI_dynasty_splendor_reset` (`DI_dynasty_perk_editor_sgui.txt` ~line 121) hardcodes
+>   `-10`; one click fails to reach splendor level 0 when the level is 10 or higher.
+>   (done, this changeset — reset now loops until splendor level 0.)
+> - The v9 Phase 3 status row above is stale ("⏳ step 1 done", "generate_mod_perks does
+>   not exist") — the full implementation order (F1 scanner, F3 standalone, F4 combined,
+>   F2 menu, guide) is complete per v12/v13. This v14 entry supersedes that row.
+> - The companion reference to the rejected `OPTIONS.md` was removed from the header
+>   (see top of this file).
+> - `tools/validate_perk_editor.ps1:69` — brace-balance check runs on grid + toggles only;
+>   change `@($files[0], $files[1])` to `$files` so the values file is covered too.
+>   (done, this changeset — plus a structural check that the editor window still
+>   instantiates both `di_generated_perk_grid` and `di_perk_grid_extension`.)
+> - `pinned_for_edit` flag persistence across save/load is unverified
+>   (`common/scripted_guis/DI_perk_point_sgui.txt`); if non-persistent, pinned edits
+>   silently fall back to root-only after reload.
+> - Dead scaffolding: commented "Copy dynasty char" placeholders in
+>   `gui/DI_dynasty_perk_editor.gui` (~lines 202-208) and the stub
+>   `DI_dynasty_selected_char_copy` sgui; `gui/DI_dynasty_perk_editor_templates/DI_dynasty_perk_editor_templates.gui`
+>   is fully commented out; duplicate `name = "perk_point_value"` across 5 widgets in
+>   `gui/DI_perk_point.gui`. (done, this changeset.)
+>
+> **Nice to have:**
+> - In-game check of `margin_left = 40` window centering (never eyeballed).
+> - `di_perk_grid_extension` compatch load-order experiment still untested (carry-over
+>   from v13 / `DYNASTY_PERK_EDITOR_AUDIT.md` "Open experiment").
+> - Owned/locked visual state in the grid = accepted engine limitation (`has_dynasty_perk`
+>   is script-only); add a header note to the generated grid file.
+> - README and `FEATURE_INVENTORY.md` omit the perk editor entirely; typos:
+>   "Bad choce" (`tools/generate_mod_perks.ps1:591`), missing space
+>   (`docs/ADDING_PERK_MOD_SUPPORT.md:28`). (done, this changeset — both inventories
+>   now mention the perk editor; typos fixed; mod-update regeneration note added to
+>   the guide.)
+>
+> **Confirmed healthy (no action):** generator parses 105 perks / 21 tracks dynamically
+> from game files (no hardcoded lists); exact global renown formula
+> (`250 + 500 × total owned perks`) incl. the TGP alias; per-perk add/remove with
+> `is_shown` guards; track add-all/remove-all buttons; clean free-mode lifecycle
+> (`_show`/`_hide`); `di_confirmation_popup` defect resolved; no vanilla
+> `window_dynasty_legacy.gui` override; historical docs properly banner-marked; drift
+> validator passes.
+
+> **v15 (2026-09-04, Hiraeth compatch in-game failure — same-path override rework — CURRENT STATE).**
+> In-game test of the Hiraeth compatch failed (heroism row ended in vanilla "Down in History"
+> instead of Hiraeth's "Once More Unto the Breach"; compatch grid never rendered). Root causes
+> verified from `gui_warnings.log` / `error.log` (session 2026-09-03 22:55) and file inspection:
+>
+> **1. First-loaded-wins confirmed (closes the v13/v14 "open experiment"):**
+> `gui_warnings.log` — `Type 'di_perk_grid_extension' already registered at
+> 'gui/DI_generated_perk_grid.gui'(5615)`. CK3 silently rejects re-registered GUI types;
+> the base mod's empty slot definition always won, so the compatch's 1393-line extension grid
+> was never instantiated. The extension-slot mechanism is dead; the base mod's slot definition
+> and window instantiation stay (harmless back-compat), but compatches must not define the type.
+>
+> **2. Same-path full-file override (implemented in `tools/generate_mod_perks.ps1`, -SubMod):**
+> the compatch now emits its grid at exactly `gui/DI_generated_perk_grid.gui` (base mod's path),
+> as a COMPLETE grid computed from [mod dynasty_perks dir, surviving vanilla files] merged by
+> perk key (first-seen-wins per key; mod same-name files replace whole vanilla files per CK3's
+> file-override rule). Hiraeth regenerated: 150 perks / 21 tracks (45 new keys); stale
+> extension-slot grid deleted from the compatch folder. Load order: compatch AFTER base mod
+> (descriptor dependency ensures this).
+>
+> **3. Hiraeth reassignment root cause (the "Down in History" mismatch):** Hiraeth REPLACES
+> vanilla `common/dynasty_perks/05_ce1_dynasty_perks.txt` and reassigns vanilla key
+> `ce1_heroic_legacy_5` to `ce1_legitimacy_legacy_track` (as an `always = no` stub, loc left
+> vanilla = "Down in History"); the real new 5th heroism perk is `hth_ce1_heroic_legacy_5`
+> ("Once More Unto the Breach"). The merged grid now shows `hth_ce1_heroic_legacy_5` in the
+> heroism row and `ce1_heroic_legacy_5` in the legitimacy row — verified by `rg` in the
+> regenerated grid.
+>
+> **4. `margin_left` confirmed invalid (error.log):** `Property 'margin_left'(814) not handled`
+> on `DI_dynasty_perk_editor_window` — the v14 "verify in game" item is resolved: removed from
+> `gui/DI_dynasty_perk_editor.gui` (parallel changeset, recorded here for completeness).
+>
+> **5. Tooltip loc files added (both generators, in-game verification pending):** grid buttons
+> now reference `DI_perk_tt_<perk>` loc entries (bold name + effect `text =` keys, excluding
+> `*_ai_effect`/`*_req_effect`) emitted to `localization/english/DI_generated_perk_tt_*.yml`.
+> Mirrors vanilla's highlight tooltip structure.
+>
+> **6. Affordability guard mirrored in the mod generator:** `-SubMod` and combined toggles now
+> grant inside the free-mode branch, else `else_if = { dynasty_prestige >= <per-submod cost
+> value> }` — matching the base generator's v14 fix (independent template code).
+>
+> **Verification:** ck3-tiger 1.19.0 on the regenerated Hiraeth compatch — fatal 0; 593
+> errors are all `missing-item` for `hth_*` perks / `hth_legacy_track` (expected: compatch
+> checked alone, Hiraeth's files not in scope); zero reports about the grid types; the
+> doubled-quote `default_format = ""#high""` bug is gone (no such output emitted). Static
+> checks: 150 grid buttons / 150 toggle pairs / 21 track rows / 150 tooltip entries / braces
+> balanced in grid + toggles / cost value covers all 21 merged tracks. In-game verification
+> pending (grid render, tooltips, renown deduction, splendor).
 
 ---
 

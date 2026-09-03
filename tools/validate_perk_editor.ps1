@@ -28,7 +28,8 @@ $ErrorActionPreference = "Stop"
 $files = @(
     @{ Rel = "gui\DI_generated_perk_grid.gui";                        Label = "grid" },
     @{ Rel = "common\scripted_guis\DI_generated_perk_toggles_sgui.txt"; Label = "toggles" },
-    @{ Rel = "common\script_values\DI_generated_perk_values.txt";     Label = "values" }
+    @{ Rel = "common\script_values\DI_generated_perk_values.txt";     Label = "values" },
+    @{ Rel = "localization\english\DI_generated_perk_tooltips_l_english.yml"; Label = "tooltips-loc" }
 )
 
 if (-not (Test-Path (Join-Path $GameDir "common\dynasty_perks"))) {
@@ -38,7 +39,7 @@ if (-not (Test-Path (Join-Path $GameDir "common\dynasty_perks"))) {
 
 $tmp = Join-Path $env:TEMP ("di_validate_{0}" -f ([guid]::NewGuid().ToString('N')))
 try {
-    New-Item -ItemType Directory -Force -Path (Join-Path $tmp "common\scripted_guis"), (Join-Path $tmp "gui") | Out-Null
+    New-Item -ItemType Directory -Force -Path (Join-Path $tmp "common\scripted_guis"), (Join-Path $tmp "gui"), (Join-Path $tmp "localization\english") | Out-Null
 
     Write-Host "Regenerating from $GameDir ..."
     & (Join-Path $PSScriptRoot "generate_perk_editor.ps1") -GameDir $GameDir -ModDir $tmp
@@ -66,7 +67,7 @@ try {
     }
 
     # --- brace-balance check (recommended sanity, not a full parse) -------------
-    foreach ($f in @($files[0], $files[1])) {
+    foreach ($f in $files) {
         $path = Join-Path $tmp $f.Rel
         if (-not (Test-Path $path)) { continue }
         $raw  = Get-Content $path -Raw
@@ -78,6 +79,24 @@ try {
             $fail = $true
         } else {
             Write-Host "[ OK ] $($f.Label) braces balanced ($opens pairs)"
+        }
+    }
+
+    # --- structural sanity: the hand-written editor window must still wire up ---
+    $editorGui = Join-Path $ModDir "gui\DI_dynasty_perk_editor.gui"
+    if (-not (Test-Path $editorGui)) {
+        Write-Host "[FAIL] missing editor window gui\DI_dynasty_perk_editor.gui"
+        $fail = $true
+    } else {
+        $editorRaw = Get-Content $editorGui -Raw
+        $missing = @()
+        if ($editorRaw -notmatch 'di_generated_perk_grid') { $missing += 'di_generated_perk_grid' }
+        if ($editorRaw -notmatch 'di_perk_grid_extension')   { $missing += 'di_perk_grid_extension' }
+        if ($missing.Count -gt 0) {
+            Write-Host "[FAIL] editor window missing instantiation of: $($missing -join ', ')"
+            $fail = $true
+        } else {
+            Write-Host "[ OK ] editor window instantiates di_generated_perk_grid + di_perk_grid_extension"
         }
     }
 }

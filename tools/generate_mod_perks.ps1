@@ -4,7 +4,10 @@
 # Discovers installed CK3 mods that add dynasty perks/tracks and generates
 # editor support ("DI Perks" compatch) for them.
 #
-# Model (v12): the editor window has ONE compatch slot. So:
+# Model (v15): CK3 GUI type registration is first-loaded-wins, so a compatch
+# "extension" type can never replace the base mod's grid. -SubMod therefore
+# emits a COMPLETE same-path override of gui/DI_generated_perk_grid.gui
+# (compatch must load AFTER the base mod in the playset).
 #   - Use -SubMod to generate a compatch for a single perk mod.
 #   - Use -Playset (F4) to merge several perk mods from a playset into ONE
 #     combined compatch. This is the recommended way to show several perk mods
@@ -51,6 +54,9 @@ $ErrorActionPreference = "Stop"
 
 # --- Shared parser (dot-sourced) ------------------------------------------------
 . (Join-Path $PSScriptRoot "_perk_parser.ps1")
+
+# --- Shared vanilla-look grid writers (definitions only; used by -SubMod) --------
+. (Join-Path $PSScriptRoot "_grid_templates.ps1")
 
 # --- Candidate resolution --------------------------------------------------------
 # Returns @{ Name; Path; Source; SteamId } for every folder that could hold a CK3 mod.
@@ -181,7 +187,32 @@ path="$($OutDir -replace '[\\/]','/')"
     }
 }
 
+# --- Helper: snapshot of vanilla files NOT shadowed by same-name mod files --------
+# CK3 file override rule: a mod file with the same relative name replaces the
+# vanilla file entirely. Returns a temp dir holding the surviving vanilla files
+# (caller removes it). Parsing order [modDir, snapshot] then gives first-seen-wins
+# key precedence to the mod on top of the correct file-level replacement.
+function Get-VanillaSurvivorSnapshot {
+    param([string]$ModDir, [string]$VanillaDir, [string]$Tag)
+    $tmp = Join-Path ([System.IO.Path]::GetTempPath()) ("di_merge_" + $Tag + "_" + [guid]::NewGuid().ToString('N'))
+    New-Item -ItemType Directory -Force -Path $tmp | Out-Null
+    if (Test-Path $VanillaDir) {
+        $modNames = @{}
+        Get-ChildItem $ModDir -Filter '*.txt' | ForEach-Object { $modNames[$_.Name] = $true }
+        foreach ($vf in (Get-ChildItem $VanillaDir -Filter '*.txt')) {
+            if (-not $modNames.ContainsKey($vf.Name)) {
+                Copy-Item -LiteralPath $vf.FullName -Destination (Join-Path $tmp $vf.Name)
+            }
+        }
+    }
+    return $tmp
+}
+
 # --- F3: standalone compatch for ONE perk mod --------------------------------------
+# v15: the grid is a COMPLETE same-path override of the base mod's
+# gui/DI_generated_perk_grid.gui, computed from mod files + vanilla game files
+# (mod same-name files replace vanilla files; new hth_*-style keys are added).
+# Non-free mode requires dynasty_prestige >= <cost value> before granting.
 function New-DiSubMod {
     param(
         [string]$PerkModPath,
@@ -200,19 +231,29 @@ function New-DiSubMod {
     $prefix  = ($dirName -replace '[^A-Za-z0-9_]', '_').ToLowerInvariant()
     if ($prefix -match '^[0-9]') { $prefix = "_$prefix" }
 
-    $perks = Get-Perks -Directories $perkDir
-    if ($perks.Count -eq 0) { Write-Warning "No perks parsed from $perkDir"; return }
-    $legacyDir = Join-Path $PerkModPath "common\dynasty_legacies"
-    $trackGates = @{}
-    if (Test-Path $legacyDir) { $trackGates = Get-TrackDlcGates -Directories $legacyDir }
+    # --- merged perk model: mod files first (overrides), then surviving vanilla ---
+    $vanillaPerkDir = Join-Path $GameDir "common\dynasty_perks"
+    $tmpVanillaPerks = Get-VanillaSurvivorSnapshot -ModDir $perkDir -VanillaDir $vanillaPerkDir -Tag "perks_$prefix"
+    try {
+        $perks = Get-Perks -Directories @($perkDir, $tmpVanillaPerks)
+        $effectTexts = Get-PerkEffectTextKeys -Directories @($perkDir, $tmpVanillaPerks)
+    } finally { Remove-Item -LiteralPath $tmpVanillaPerks -Recurse -Force -ErrorAction SilentlyContinue }
+    if ($perks.Count -eq 0) { Write-Warning "No perks parsed from $perkDir or $vanillaPerkDir"; return }
+    if (-not (Test-PerksModel $perks)) { throw "Parsed perk model is inconsistent - aborting before writing" }
+    $tracks = Group-PerksByTrack $perks
+
+    # --- DLC gates from the same merged sources' dynasty_legacies folders ---------
+    $vanillaLegacyDir = Join-Path $GameDir "common\dynasty_legacies"
+    $modLegacyDir = Join-Path $PerkModPath "common\dynasty_legacies"
+    $legacyDirs = @()
+    if (Test-Path $modLegacyDir) { $legacyDirs += $modLegacyDir }
+    if (Test-Path $vanillaLegacyDir) { $legacyDirs += $vanillaLegacyDir }
+    $trackGates = if ($legacyDirs.Count -gt 0) { Get-TrackDlcGates -Directories $legacyDirs } else { @{} }
 
     $vanilla = Get-VanillaPerkSet $GameDir
-    $newPerks = [ordered]@{}
-    foreach ($k in $perks.Keys) { if (-not $vanilla.Contains($k)) { $newPerks[$k] = $perks[$k] } }
-    $newTracks = Group-PerksByTrack $newPerks
-    if ($newTracks.Count -eq 0) { Write-Warning "All $($perks.Count) keys are vanilla - nothing new."; return }
-
-    Write-Host "Perk mod: $($perks.Count) total; $($newPerks.Count) new / $($newTracks.Count) tracks (vanilla overlap dropped: $($perks.Count - $newPerks.Count))."
+    $newCount = 0
+    foreach ($k in $perks.Keys) { if (-not $vanilla.Contains($k)) { $newCount++ } }
+    Write-Host "Merged grid: $($perks.Count) perks / $($tracks.Count) tracks (mod adds $newCount new keys; same-name mod files replace vanilla files)."
 
     $costRef = "DI_dynasty_perk_cost_next_$prefix"
 
@@ -221,14 +262,23 @@ function New-DiSubMod {
     [void]$sgui.AppendLine("# GENERATED FILE - do not hand-edit. generate_mod_perks.ps1 -SubMod")
     [void]$sgui.AppendLine("# Cost refunds use $costRef (vanilla + this sub-mod's tracks).")
     [void]$sgui.AppendLine("")
-    foreach ($k in $newPerks.Keys) {
+    foreach ($k in $perks.Keys) {
         [void]$sgui.AppendLine("DI_perk_add_$k = {")
         [void]$sgui.AppendLine("    scope = character")
         [void]$sgui.AppendLine("    is_shown = { var:DI_dynasty_selected_dynasty = { NOT = { has_dynasty_perk = $k } } }")
         [void]$sgui.AppendLine("    effect = { var:DI_dynasty_selected_dynasty = {")
-        [void]$sgui.AppendLine("        if = { limit = { NOT = { has_dynasty_perk = $k } }")
-        [void]$sgui.AppendLine("                if = { limit = { root = { has_variable = DI_legacy_editor_free_mode } } add_dynasty_prestige = $costRef }")
-        [void]$sgui.AppendLine("                add_dynasty_perk = $k }")
+        [void]$sgui.AppendLine("        if = {")
+        [void]$sgui.AppendLine("            limit = { NOT = { has_dynasty_perk = $k } }")
+        [void]$sgui.AppendLine("            if = {")
+        [void]$sgui.AppendLine("                limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
+        [void]$sgui.AppendLine("                add_dynasty_prestige = $costRef")
+        [void]$sgui.AppendLine("                add_dynasty_perk = $k")
+        [void]$sgui.AppendLine("            }")
+        [void]$sgui.AppendLine("            else_if = {")
+        [void]$sgui.AppendLine("                limit = { dynasty_prestige >= $costRef }")
+        [void]$sgui.AppendLine("                add_dynasty_perk = $k")
+        [void]$sgui.AppendLine("            }")
+        [void]$sgui.AppendLine("        }")
         [void]$sgui.AppendLine("    } }")
         [void]$sgui.AppendLine("}")
         [void]$sgui.AppendLine("")
@@ -241,16 +291,25 @@ function New-DiSubMod {
         [void]$sgui.AppendLine("}")
         [void]$sgui.AppendLine("")
     }
-    foreach ($t in $newTracks.Keys) {
-        $trk = $newTracks[$t]
+    foreach ($t in $tracks.Keys) {
+        $trk = $tracks[$t]
         [void]$sgui.AppendLine("DI_track_add_all_$t = {")
         [void]$sgui.AppendLine("    scope = character")
         [void]$sgui.AppendLine("    is_shown = { var:DI_dynasty_selected_dynasty = { NOT = { $($t)_perks >= $($trk.Count) } } }")
         [void]$sgui.AppendLine("    effect = { var:DI_dynasty_selected_dynasty = {")
         foreach ($k in $trk) {
-            [void]$sgui.AppendLine("        if = { limit = { NOT = { has_dynasty_perk = $k } }")
-            [void]$sgui.AppendLine("                if = { limit = { root = { has_variable = DI_legacy_editor_free_mode } } add_dynasty_prestige = $costRef }")
-            [void]$sgui.AppendLine("                add_dynasty_perk = $k }")
+            [void]$sgui.AppendLine("        if = {")
+            [void]$sgui.AppendLine("            limit = { NOT = { has_dynasty_perk = $k } }")
+            [void]$sgui.AppendLine("            if = {")
+            [void]$sgui.AppendLine("                limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
+            [void]$sgui.AppendLine("                add_dynasty_prestige = $costRef")
+            [void]$sgui.AppendLine("                add_dynasty_perk = $k")
+            [void]$sgui.AppendLine("            }")
+            [void]$sgui.AppendLine("            else_if = {")
+            [void]$sgui.AppendLine("                limit = { dynasty_prestige >= $costRef }")
+            [void]$sgui.AppendLine("                add_dynasty_perk = $k")
+            [void]$sgui.AppendLine("            }")
+            [void]$sgui.AppendLine("        }")
         }
         [void]$sgui.AppendLine("    } }")
         [void]$sgui.AppendLine("}")
@@ -267,93 +326,75 @@ function New-DiSubMod {
         [void]$sgui.AppendLine("")
     }
 
-    # -- grid: single di_perk_grid_extension --
+    # -- grid: COMPLETE same-path override of the base mod's generated grid --
+    # CK3 GUI type registration is first-loaded-wins; a second di_perk_grid_extension
+    # definition is silently rejected, so the extension-slot approach can never render.
+    # This compatch therefore ships the ENTIRE grid (vanilla + mod perks) at the base
+    # mod's exact path and must load AFTER the base mod in the playset.
     $gui = [System.Text.StringBuilder]::new()
     [void]$gui.AppendLine("### GENERATED FILE - do not hand-edit. generate_mod_perks.ps1 -SubMod")
-    [void]$gui.AppendLine("types DI_DynastyGeneratedSubmod$prefix {")
-    [void]$gui.AppendLine("    type di_perk_grid_extension = vbox {")
+    [void]$gui.AppendLine("### Same-path full-file override of the base mod's gui/DI_generated_perk_grid.gui.")
+    [void]$gui.AppendLine("### This compatch must be loaded AFTER the base mod in the playset.")
+    [void]$gui.AppendLine("### NOTE: has_dynasty_perk is a script trigger, not a GUI datafunction, so owned")
+    [void]$gui.AppendLine("### state cannot be rendered in the UI. Buttons are always enabled; the add/remove")
+    [void]$gui.AppendLine("### SGUI is_shown guards make wrong-direction clicks no-ops.")
+    [void]$gui.AppendLine("")
+    [void]$gui.AppendLine("types DI_DynastyGeneratedPerks {")
+    [void]$gui.AppendLine("    type di_generated_perk_grid = vbox {")
     [void]$gui.AppendLine("        layoutpolicy_horizontal = expanding")
     [void]$gui.AppendLine("        spacing = 5")
-    foreach ($t in $newTracks.Keys) {
-        $perkList = $newTracks[$t]
+    [void]$gui.AppendLine("")
+    foreach ($t in $tracks.Keys) {
         $gate = $null
         if ($trackGates.ContainsKey($t)) { $gate = $trackGates[$t] }
-        [void]$gui.AppendLine("        # ---- $t ($($perkList.Count) perks)$(if ($gate) { " [DLC: $gate]" }) ----")
-        [void]$gui.AppendLine("        vbox = {")
-        if ($gate) { [void]$gui.AppendLine("            visible = ""[HasDlcFeature( '$gate' )]""") }
-        [void]$gui.AppendLine("            layoutpolicy_horizontal = expanding")
-        [void]$gui.AppendLine("            margin = { 5 5 }")
-        [void]$gui.AppendLine("            hbox = {")
-        [void]$gui.AppendLine("                layoutpolicy_horizontal = expanding")
-        [void]$gui.AppendLine("                spacing = 8")
-        [void]$gui.AppendLine("                icon = {")
-        [void]$gui.AppendLine("                    texture = ""gfx/interface/icons/dynasty/$t.dds""")
-        [void]$gui.AppendLine("                    size = { 24 24 }")
-        [void]$gui.AppendLine("                }")
-        [void]$gui.AppendLine("                text_single = {")
-        [void]$gui.AppendLine("                    layoutpolicy_horizontal = expanding")
-        [void]$gui.AppendLine('                    text = "[Localize('''+ $t + '_name'')]"')
-        [void]$gui.AppendLine('                    tooltip = "[Localize('''+ $t + '_desc'')]"')
-        [void]$gui.AppendLine('                    default_format = ""#high""')
-        [void]$gui.AppendLine("                }")
-        [void]$gui.AppendLine("                button_standard = {")
-        [void]$gui.AppendLine("                    size = { 130 26 }")
-        [void]$gui.AppendLine("                    text = DI_DYNASTY_EDITOR_TRACK_BUTTON")
-        [void]$gui.AppendLine("                    onclick = ""[GetScriptedGui('DI_track_add_all_$t').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
-        [void]$gui.AppendLine("                    onrightclick = ""[GetScriptedGui('DI_track_remove_all_$t').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
-        [void]$gui.AppendLine("                    tooltip = DI_DYNASTY_EDITOR_TRACK_BUTTON_TT")
-        [void]$gui.AppendLine("                }")
-        [void]$gui.AppendLine("            }")
-        [void]$gui.AppendLine("            flowcontainer = {")
-        [void]$gui.AppendLine("                layoutpolicy_horizontal = expanding")
-        [void]$gui.AppendLine("                spacing = 5")
-        foreach ($k in $perkList) {
-            [void]$gui.AppendLine("                button_standard = {")
-            [void]$gui.AppendLine("                    size = { 260 44 }")
-            [void]$gui.AppendLine("                    button_ignore = none")
-            [void]$gui.AppendLine("                    onclick = ""[GetScriptedGui('DI_perk_add_$k').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
-            [void]$gui.AppendLine("                    onrightclick = ""[GetScriptedGui('DI_perk_remove_$k').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]""")
-            [void]$gui.AppendLine('                    tooltip = "[Localize('''+ $k + '_name'')]"')
-            [void]$gui.AppendLine("                    hbox = {")
-            [void]$gui.AppendLine("                        margin = { 5 0 }")
-            [void]$gui.AppendLine("                        spacing = 8")
-            [void]$gui.AppendLine("                        icon = {")
-            [void]$gui.AppendLine("                            size = { 34 34 }")
-            [void]$gui.AppendLine("                            texture = ""gfx/interface/icons/dynasty/$t.dds""")
-            [void]$gui.AppendLine("                        }")
-            [void]$gui.AppendLine("                        text_single = {")
-            [void]$gui.AppendLine("                            layoutpolicy_horizontal = expanding")
-            [void]$gui.AppendLine('                            text = "[Localize('''+ $k + '_name'')]"')
-            [void]$gui.AppendLine('                            default_format = ""#clickable""')
-            [void]$gui.AppendLine("                        }")
-            [void]$gui.AppendLine("                    }")
-            [void]$gui.AppendLine("                }")
-        }
-        [void]$gui.AppendLine("            }")
-        [void]$gui.AppendLine("        }")
+        Write-VanillaTrackSection $gui $t $tracks[$t] $gate
     }
+    [void]$gui.AppendLine("    }")
+    [void]$gui.AppendLine("    type di_perk_grid_extension = vbox {")
+    [void]$gui.AppendLine("        layoutpolicy_horizontal = expanding")
     [void]$gui.AppendLine("    }")
     [void]$gui.AppendLine("}")
 
-    # -- script value: per-prefix cost (vanilla + new tracks) --
+    # -- tooltip loc: game-like name + effect description per perk --
+    $ttLoc = [System.Text.StringBuilder]::new()
+    [void]$ttLoc.AppendLine("# =============================================================================")
+    [void]$ttLoc.AppendLine("# GENERATED FILE - do not hand-edit. generate_mod_perks.ps1 -SubMod")
+    [void]$ttLoc.AppendLine("# Grid button tooltips: perk name (bold) + effect description lines.")
+    [void]$ttLoc.AppendLine("# =============================================================================")
+    [void]$ttLoc.AppendLine("")
+    [void]$ttLoc.AppendLine("l_english:")
+    foreach ($k in $perks.Keys) {
+        $parts = "#bold [Localize('${k}_name')]#!"
+        if ($effectTexts.ContainsKey($k)) {
+            foreach ($e in $effectTexts[$k]) {
+                $parts += "\n[Localize('${e}')]"
+            }
+        }
+        [void]$ttLoc.AppendLine(" DI_perk_tt_${k}:0 `"$parts`"")
+    }
+
+    # -- script value: per-prefix cost over ALL merged tracks --
     $values = [System.Text.StringBuilder]::new()
     [void]$values.AppendLine("$costRef = {")
     [void]$values.AppendLine("    value = 250   # PERK_COST_BASE")
-    $vanTracks = Group-PerksByTrack $vanilla
-    foreach ($t in $vanTracks.Keys) { for ($i=1;$i -le $vanTracks[$t].Count;$i++){ [void]$values.AppendLine("    if = { limit = { $($t)_perks >= $i } add = 500 }") } }
-    foreach ($t in $newTracks.Keys) { for ($i=1;$i -le $newTracks[$t].Count;$i++){ [void]$values.AppendLine("    if = { limit = { $($t)_perks >= $i } add = 500 }") } }
+    foreach ($t in $tracks.Keys) { for ($i=1;$i -le $tracks[$t].Count;$i++){ [void]$values.AppendLine("    if = { limit = { $($t)_perks >= $i } add = 500 }") } }
     [void]$values.AppendLine("}")
 
     # -- output --
     $outDir = $TargetFolder
     if (-not $outDir) { $outDir = Join-Path $UserFolder "mod\DI Perks - $dirName" }
-    if ($WhatIf) { Write-Host "[WhatIf] Would generate sub-mod (prefix=$prefix, $($newPerks.Count) perks / $($newTracks.Count) tracks) -> $outDir"; return }
+    if ($WhatIf) { Write-Host "[WhatIf] Would generate sub-mod override grid (prefix=$prefix, $($perks.Count) perks / $($tracks.Count) tracks) -> $outDir"; return }
     New-Item -ItemType Directory -Force -Path (Join-Path $outDir "common\scripted_guis") | Out-Null
     New-Item -ItemType Directory -Force -Path (Join-Path $outDir "common\script_values") | Out-Null
     New-Item -ItemType Directory -Force -Path (Join-Path $outDir "gui") | Out-Null
+    New-Item -ItemType Directory -Force -Path (Join-Path $outDir "localization\english") | Out-Null
     [System.IO.File]::WriteAllText((Join-Path $outDir "common\scripted_guis\DI_generated_submod_${prefix}_toggles_sgui.txt"), $sgui.ToString(), $utf8Bom)
     [System.IO.File]::WriteAllText((Join-Path $outDir "common\script_values\DI_generated_submod_${prefix}_values.txt"), $values.ToString(), $utf8Bom)
-    [System.IO.File]::WriteAllText((Join-Path $outDir "gui\DI_generated_submod_${prefix}_grid.gui"), $gui.ToString(), $utf8Bom)
+    [System.IO.File]::WriteAllText((Join-Path $outDir "gui\DI_generated_perk_grid.gui"), $gui.ToString(), $utf8Bom)
+    [System.IO.File]::WriteAllText((Join-Path $outDir "localization\english\DI_generated_perk_tt_l_english.yml"), $ttLoc.ToString(), $utf8Bom)
+    # remove the pre-v15 extension-slot grid if a previous run created it
+    $staleGrid = Join-Path $outDir "gui\DI_generated_submod_${prefix}_grid.gui"
+    if (Test-Path $staleGrid) { Remove-Item -LiteralPath $staleGrid -Force; Write-Host "Removed stale extension-slot grid: $staleGrid" }
     Write-Descriptor -OutDir $outDir -ModName "DI Perks - $dirName" -Depends @($dirName, $BaseDIName) -UserFolder $UserFolder -WriteLauncher $true
     Write-Host "Wrote sub-mod to $outDir"
 }
@@ -588,7 +629,7 @@ function Invoke-DiMenu {
             if ($idx -ge 0 -and $idx -lt $results.Count) {
                 $s = $results[$idx]
                 New-DiSubMod -PerkModPath $s.Path -PerkModName $s.Name -BaseDIName $baseName -GameDir $GameDir -UserFolder $UserFolder -WhatIf:$WhatIf
-            } else { Write-Host "Bad choce." }
+            } else { Write-Host "Bad choice." }
         }
         "3" {
             $name = Read-Host "Playset name (use -Playset <name> at CLI too): "

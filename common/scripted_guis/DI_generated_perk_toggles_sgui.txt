@@ -25,8 +25,12 @@ DI_perk_add_blood_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = blood_legacy_1
                 }
-                add_dynasty_perk = blood_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = blood_legacy_1
+                }
             }
         }
     }
@@ -69,8 +73,12 @@ DI_perk_add_blood_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = blood_legacy_2
                 }
-                add_dynasty_perk = blood_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = blood_legacy_2
+                }
             }
         }
     }
@@ -113,8 +121,12 @@ DI_perk_add_blood_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = blood_legacy_3
                 }
-                add_dynasty_perk = blood_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = blood_legacy_3
+                }
             }
         }
     }
@@ -157,8 +169,12 @@ DI_perk_add_blood_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = blood_legacy_4
                 }
-                add_dynasty_perk = blood_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = blood_legacy_4
+                }
             }
         }
     }
@@ -201,8 +217,12 @@ DI_perk_add_blood_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = blood_legacy_5
                 }
-                add_dynasty_perk = blood_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = blood_legacy_5
+                }
             }
         }
     }
@@ -245,8 +265,12 @@ DI_perk_add_warfare_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = warfare_legacy_1
                 }
-                add_dynasty_perk = warfare_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = warfare_legacy_1
+                }
             }
         }
     }
@@ -289,8 +313,12 @@ DI_perk_add_warfare_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = warfare_legacy_2
                 }
-                add_dynasty_perk = warfare_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = warfare_legacy_2
+                }
             }
         }
     }
@@ -333,8 +361,12 @@ DI_perk_add_warfare_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = warfare_legacy_3
                 }
-                add_dynasty_perk = warfare_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = warfare_legacy_3
+                }
             }
         }
     }
@@ -377,8 +409,12 @@ DI_perk_add_warfare_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = warfare_legacy_4
                 }
-                add_dynasty_perk = warfare_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = warfare_legacy_4
+                }
             }
         }
     }
@@ -421,8 +457,12 @@ DI_perk_add_warfare_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = warfare_legacy_5
                 }
-                add_dynasty_perk = warfare_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = warfare_legacy_5
+                }
             }
         }
     }
@@ -465,8 +505,12 @@ DI_perk_add_law_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = law_legacy_1
                 }
-                add_dynasty_perk = law_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = law_legacy_1
+                }
             }
         }
     }
@@ -509,8 +553,12 @@ DI_perk_add_law_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = law_legacy_2
                 }
-                add_dynasty_perk = law_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = law_legacy_2
+                }
             }
         }
     }
@@ -553,8 +601,12 @@ DI_perk_add_law_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = law_legacy_3
                 }
-                add_dynasty_perk = law_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = law_legacy_3
+                }
             }
         }
     }
@@ -597,8 +649,12 @@ DI_perk_add_law_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = law_legacy_4
                 }
-                add_dynasty_perk = law_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = law_legacy_4
+                }
             }
         }
     }
@@ -641,8 +697,12 @@ DI_perk_add_law_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = law_legacy_5
                 }
-                add_dynasty_perk = law_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = law_legacy_5
+                }
             }
         }
     }
@@ -685,8 +745,12 @@ DI_perk_add_guile_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = guile_legacy_1
                 }
-                add_dynasty_perk = guile_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = guile_legacy_1
+                }
             }
         }
     }
@@ -729,8 +793,12 @@ DI_perk_add_guile_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = guile_legacy_2
                 }
-                add_dynasty_perk = guile_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = guile_legacy_2
+                }
             }
         }
     }
@@ -773,8 +841,12 @@ DI_perk_add_guile_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = guile_legacy_3
                 }
-                add_dynasty_perk = guile_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = guile_legacy_3
+                }
             }
         }
     }
@@ -817,8 +889,12 @@ DI_perk_add_guile_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = guile_legacy_4
                 }
-                add_dynasty_perk = guile_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = guile_legacy_4
+                }
             }
         }
     }
@@ -861,8 +937,12 @@ DI_perk_add_guile_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = guile_legacy_5
                 }
-                add_dynasty_perk = guile_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = guile_legacy_5
+                }
             }
         }
     }
@@ -905,8 +985,12 @@ DI_perk_add_erudition_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = erudition_legacy_1
                 }
-                add_dynasty_perk = erudition_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = erudition_legacy_1
+                }
             }
         }
     }
@@ -949,8 +1033,12 @@ DI_perk_add_erudition_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = erudition_legacy_2
                 }
-                add_dynasty_perk = erudition_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = erudition_legacy_2
+                }
             }
         }
     }
@@ -993,8 +1081,12 @@ DI_perk_add_erudition_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = erudition_legacy_3
                 }
-                add_dynasty_perk = erudition_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = erudition_legacy_3
+                }
             }
         }
     }
@@ -1037,8 +1129,12 @@ DI_perk_add_erudition_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = erudition_legacy_4
                 }
-                add_dynasty_perk = erudition_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = erudition_legacy_4
+                }
             }
         }
     }
@@ -1081,8 +1177,12 @@ DI_perk_add_erudition_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = erudition_legacy_5
                 }
-                add_dynasty_perk = erudition_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = erudition_legacy_5
+                }
             }
         }
     }
@@ -1125,8 +1225,12 @@ DI_perk_add_glory_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = glory_legacy_1
                 }
-                add_dynasty_perk = glory_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = glory_legacy_1
+                }
             }
         }
     }
@@ -1169,8 +1273,12 @@ DI_perk_add_glory_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = glory_legacy_2
                 }
-                add_dynasty_perk = glory_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = glory_legacy_2
+                }
             }
         }
     }
@@ -1213,8 +1321,12 @@ DI_perk_add_glory_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = glory_legacy_3
                 }
-                add_dynasty_perk = glory_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = glory_legacy_3
+                }
             }
         }
     }
@@ -1257,8 +1369,12 @@ DI_perk_add_glory_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = glory_legacy_4
                 }
-                add_dynasty_perk = glory_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = glory_legacy_4
+                }
             }
         }
     }
@@ -1301,8 +1417,12 @@ DI_perk_add_glory_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = glory_legacy_5
                 }
-                add_dynasty_perk = glory_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = glory_legacy_5
+                }
             }
         }
     }
@@ -1345,8 +1465,12 @@ DI_perk_add_kin_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = kin_legacy_1
                 }
-                add_dynasty_perk = kin_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = kin_legacy_1
+                }
             }
         }
     }
@@ -1389,8 +1513,12 @@ DI_perk_add_kin_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = kin_legacy_2
                 }
-                add_dynasty_perk = kin_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = kin_legacy_2
+                }
             }
         }
     }
@@ -1433,8 +1561,12 @@ DI_perk_add_kin_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = kin_legacy_3
                 }
-                add_dynasty_perk = kin_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = kin_legacy_3
+                }
             }
         }
     }
@@ -1477,8 +1609,12 @@ DI_perk_add_kin_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = kin_legacy_4
                 }
-                add_dynasty_perk = kin_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = kin_legacy_4
+                }
             }
         }
     }
@@ -1521,8 +1657,12 @@ DI_perk_add_kin_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = kin_legacy_5
                 }
-                add_dynasty_perk = kin_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = kin_legacy_5
+                }
             }
         }
     }
@@ -1565,8 +1705,12 @@ DI_perk_add_ep1_culture_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep1_culture_legacy_1
                 }
-                add_dynasty_perk = ep1_culture_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep1_culture_legacy_1
+                }
             }
         }
     }
@@ -1609,8 +1753,12 @@ DI_perk_add_ep1_culture_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep1_culture_legacy_2
                 }
-                add_dynasty_perk = ep1_culture_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep1_culture_legacy_2
+                }
             }
         }
     }
@@ -1653,8 +1801,12 @@ DI_perk_add_ep1_culture_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep1_culture_legacy_3
                 }
-                add_dynasty_perk = ep1_culture_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep1_culture_legacy_3
+                }
             }
         }
     }
@@ -1697,8 +1849,12 @@ DI_perk_add_ep1_culture_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep1_culture_legacy_4
                 }
-                add_dynasty_perk = ep1_culture_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep1_culture_legacy_4
+                }
             }
         }
     }
@@ -1741,8 +1897,12 @@ DI_perk_add_ep1_culture_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep1_culture_legacy_5
                 }
-                add_dynasty_perk = ep1_culture_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep1_culture_legacy_5
+                }
             }
         }
     }
@@ -1785,8 +1945,12 @@ DI_perk_add_ep2_activities_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep2_activities_legacy_2
                 }
-                add_dynasty_perk = ep2_activities_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep2_activities_legacy_2
+                }
             }
         }
     }
@@ -1829,8 +1993,12 @@ DI_perk_add_ep2_activities_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep2_activities_legacy_1
                 }
-                add_dynasty_perk = ep2_activities_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep2_activities_legacy_1
+                }
             }
         }
     }
@@ -1873,8 +2041,12 @@ DI_perk_add_ep2_activities_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep2_activities_legacy_3
                 }
-                add_dynasty_perk = ep2_activities_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep2_activities_legacy_3
+                }
             }
         }
     }
@@ -1917,8 +2089,12 @@ DI_perk_add_ep2_activities_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep2_activities_legacy_4
                 }
-                add_dynasty_perk = ep2_activities_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep2_activities_legacy_4
+                }
             }
         }
     }
@@ -1961,8 +2137,12 @@ DI_perk_add_ep2_activities_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep2_activities_legacy_5
                 }
-                add_dynasty_perk = ep2_activities_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep2_activities_legacy_5
+                }
             }
         }
     }
@@ -2005,8 +2185,12 @@ DI_perk_add_fp1_adventure_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_adventure_legacy_1
                 }
-                add_dynasty_perk = fp1_adventure_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_adventure_legacy_1
+                }
             }
         }
     }
@@ -2049,8 +2233,12 @@ DI_perk_add_fp1_adventure_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_adventure_legacy_2
                 }
-                add_dynasty_perk = fp1_adventure_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_adventure_legacy_2
+                }
             }
         }
     }
@@ -2093,8 +2281,12 @@ DI_perk_add_fp1_adventure_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_adventure_legacy_3
                 }
-                add_dynasty_perk = fp1_adventure_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_adventure_legacy_3
+                }
             }
         }
     }
@@ -2137,8 +2329,12 @@ DI_perk_add_fp1_adventure_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_adventure_legacy_4
                 }
-                add_dynasty_perk = fp1_adventure_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_adventure_legacy_4
+                }
             }
         }
     }
@@ -2181,8 +2377,12 @@ DI_perk_add_fp1_adventure_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_adventure_legacy_5
                 }
-                add_dynasty_perk = fp1_adventure_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_adventure_legacy_5
+                }
             }
         }
     }
@@ -2225,8 +2425,12 @@ DI_perk_add_fp1_pillage_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_pillage_legacy_1
                 }
-                add_dynasty_perk = fp1_pillage_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_pillage_legacy_1
+                }
             }
         }
     }
@@ -2269,8 +2473,12 @@ DI_perk_add_fp1_pillage_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_pillage_legacy_2
                 }
-                add_dynasty_perk = fp1_pillage_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_pillage_legacy_2
+                }
             }
         }
     }
@@ -2313,8 +2521,12 @@ DI_perk_add_fp1_pillage_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_pillage_legacy_3
                 }
-                add_dynasty_perk = fp1_pillage_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_pillage_legacy_3
+                }
             }
         }
     }
@@ -2357,8 +2569,12 @@ DI_perk_add_fp1_pillage_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_pillage_legacy_4
                 }
-                add_dynasty_perk = fp1_pillage_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_pillage_legacy_4
+                }
             }
         }
     }
@@ -2401,8 +2617,12 @@ DI_perk_add_fp1_pillage_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_pillage_legacy_5
                 }
-                add_dynasty_perk = fp1_pillage_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_pillage_legacy_5
+                }
             }
         }
     }
@@ -2445,8 +2665,12 @@ DI_perk_add_fp2_urbanism_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_urbanism_legacy_1
                 }
-                add_dynasty_perk = fp2_urbanism_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_urbanism_legacy_1
+                }
             }
         }
     }
@@ -2489,8 +2713,12 @@ DI_perk_add_fp2_urbanism_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_urbanism_legacy_2
                 }
-                add_dynasty_perk = fp2_urbanism_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_urbanism_legacy_2
+                }
             }
         }
     }
@@ -2533,8 +2761,12 @@ DI_perk_add_fp2_urbanism_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_urbanism_legacy_3
                 }
-                add_dynasty_perk = fp2_urbanism_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_urbanism_legacy_3
+                }
             }
         }
     }
@@ -2577,8 +2809,12 @@ DI_perk_add_fp2_urbanism_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_urbanism_legacy_4
                 }
-                add_dynasty_perk = fp2_urbanism_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_urbanism_legacy_4
+                }
             }
         }
     }
@@ -2621,8 +2857,12 @@ DI_perk_add_fp2_urbanism_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_urbanism_legacy_5
                 }
-                add_dynasty_perk = fp2_urbanism_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_urbanism_legacy_5
+                }
             }
         }
     }
@@ -2665,8 +2905,12 @@ DI_perk_add_fp2_coterie_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_coterie_legacy_1
                 }
-                add_dynasty_perk = fp2_coterie_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_coterie_legacy_1
+                }
             }
         }
     }
@@ -2709,8 +2953,12 @@ DI_perk_add_fp2_coterie_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_coterie_legacy_2
                 }
-                add_dynasty_perk = fp2_coterie_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_coterie_legacy_2
+                }
             }
         }
     }
@@ -2753,8 +3001,12 @@ DI_perk_add_fp2_coterie_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_coterie_legacy_3
                 }
-                add_dynasty_perk = fp2_coterie_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_coterie_legacy_3
+                }
             }
         }
     }
@@ -2797,8 +3049,12 @@ DI_perk_add_fp2_coterie_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_coterie_legacy_4
                 }
-                add_dynasty_perk = fp2_coterie_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_coterie_legacy_4
+                }
             }
         }
     }
@@ -2841,8 +3097,12 @@ DI_perk_add_fp2_coterie_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_coterie_legacy_5
                 }
-                add_dynasty_perk = fp2_coterie_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_coterie_legacy_5
+                }
             }
         }
     }
@@ -2885,8 +3145,12 @@ DI_perk_add_fp3_khvarenah_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp3_khvarenah_legacy_1
                 }
-                add_dynasty_perk = fp3_khvarenah_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp3_khvarenah_legacy_1
+                }
             }
         }
     }
@@ -2929,8 +3193,12 @@ DI_perk_add_fp3_khvarenah_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp3_khvarenah_legacy_2
                 }
-                add_dynasty_perk = fp3_khvarenah_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp3_khvarenah_legacy_2
+                }
             }
         }
     }
@@ -2973,8 +3241,12 @@ DI_perk_add_fp3_khvarenah_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp3_khvarenah_legacy_3
                 }
-                add_dynasty_perk = fp3_khvarenah_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp3_khvarenah_legacy_3
+                }
             }
         }
     }
@@ -3017,8 +3289,12 @@ DI_perk_add_fp3_khvarenah_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp3_khvarenah_legacy_4
                 }
-                add_dynasty_perk = fp3_khvarenah_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp3_khvarenah_legacy_4
+                }
             }
         }
     }
@@ -3061,8 +3337,12 @@ DI_perk_add_fp3_khvarenah_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp3_khvarenah_legacy_5
                 }
-                add_dynasty_perk = fp3_khvarenah_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp3_khvarenah_legacy_5
+                }
             }
         }
     }
@@ -3105,8 +3385,12 @@ DI_perk_add_ce1_heroic_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_heroic_legacy_1
                 }
-                add_dynasty_perk = ce1_heroic_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_heroic_legacy_1
+                }
             }
         }
     }
@@ -3149,8 +3433,12 @@ DI_perk_add_ce1_heroic_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_heroic_legacy_2
                 }
-                add_dynasty_perk = ce1_heroic_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_heroic_legacy_2
+                }
             }
         }
     }
@@ -3193,8 +3481,12 @@ DI_perk_add_ce1_heroic_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_heroic_legacy_3
                 }
-                add_dynasty_perk = ce1_heroic_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_heroic_legacy_3
+                }
             }
         }
     }
@@ -3237,8 +3529,12 @@ DI_perk_add_ce1_heroic_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_heroic_legacy_4
                 }
-                add_dynasty_perk = ce1_heroic_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_heroic_legacy_4
+                }
             }
         }
     }
@@ -3281,8 +3577,12 @@ DI_perk_add_ce1_heroic_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_heroic_legacy_5
                 }
-                add_dynasty_perk = ce1_heroic_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_heroic_legacy_5
+                }
             }
         }
     }
@@ -3325,8 +3625,12 @@ DI_perk_add_ce1_legitimacy_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_legitimacy_legacy_1
                 }
-                add_dynasty_perk = ce1_legitimacy_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_legitimacy_legacy_1
+                }
             }
         }
     }
@@ -3369,8 +3673,12 @@ DI_perk_add_ce1_legitimacy_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_legitimacy_legacy_2
                 }
-                add_dynasty_perk = ce1_legitimacy_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_legitimacy_legacy_2
+                }
             }
         }
     }
@@ -3413,8 +3721,12 @@ DI_perk_add_ce1_legitimacy_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_legitimacy_legacy_3
                 }
-                add_dynasty_perk = ce1_legitimacy_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_legitimacy_legacy_3
+                }
             }
         }
     }
@@ -3457,8 +3769,12 @@ DI_perk_add_ce1_legitimacy_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_legitimacy_legacy_4
                 }
-                add_dynasty_perk = ce1_legitimacy_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_legitimacy_legacy_4
+                }
             }
         }
     }
@@ -3501,8 +3817,12 @@ DI_perk_add_ce1_legitimacy_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_legitimacy_legacy_5
                 }
-                add_dynasty_perk = ce1_legitimacy_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_legitimacy_legacy_5
+                }
             }
         }
     }
@@ -3545,8 +3865,12 @@ DI_perk_add_ep3_administrative_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep3_administrative_legacy_1
                 }
-                add_dynasty_perk = ep3_administrative_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep3_administrative_legacy_1
+                }
             }
         }
     }
@@ -3589,8 +3913,12 @@ DI_perk_add_ep3_administrative_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep3_administrative_legacy_2
                 }
-                add_dynasty_perk = ep3_administrative_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep3_administrative_legacy_2
+                }
             }
         }
     }
@@ -3633,8 +3961,12 @@ DI_perk_add_ep3_administrative_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep3_administrative_legacy_3
                 }
-                add_dynasty_perk = ep3_administrative_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep3_administrative_legacy_3
+                }
             }
         }
     }
@@ -3677,8 +4009,12 @@ DI_perk_add_ep3_administrative_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep3_administrative_legacy_4
                 }
-                add_dynasty_perk = ep3_administrative_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep3_administrative_legacy_4
+                }
             }
         }
     }
@@ -3721,8 +4057,12 @@ DI_perk_add_ep3_administrative_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep3_administrative_legacy_5
                 }
-                add_dynasty_perk = ep3_administrative_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep3_administrative_legacy_5
+                }
             }
         }
     }
@@ -3765,8 +4105,12 @@ DI_perk_add_mpo_nomad_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = mpo_nomad_legacy_1
                 }
-                add_dynasty_perk = mpo_nomad_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = mpo_nomad_legacy_1
+                }
             }
         }
     }
@@ -3809,8 +4153,12 @@ DI_perk_add_mpo_nomad_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = mpo_nomad_legacy_2
                 }
-                add_dynasty_perk = mpo_nomad_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = mpo_nomad_legacy_2
+                }
             }
         }
     }
@@ -3853,8 +4201,12 @@ DI_perk_add_mpo_nomad_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = mpo_nomad_legacy_3
                 }
-                add_dynasty_perk = mpo_nomad_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = mpo_nomad_legacy_3
+                }
             }
         }
     }
@@ -3897,8 +4249,12 @@ DI_perk_add_mpo_nomad_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = mpo_nomad_legacy_4
                 }
-                add_dynasty_perk = mpo_nomad_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = mpo_nomad_legacy_4
+                }
             }
         }
     }
@@ -3941,8 +4297,12 @@ DI_perk_add_mpo_nomad_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = mpo_nomad_legacy_5
                 }
-                add_dynasty_perk = mpo_nomad_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = mpo_nomad_legacy_5
+                }
             }
         }
     }
@@ -3985,8 +4345,12 @@ DI_perk_add_tgp_chinese_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_chinese_legacy_1
                 }
-                add_dynasty_perk = tgp_chinese_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_chinese_legacy_1
+                }
             }
         }
     }
@@ -4029,8 +4393,12 @@ DI_perk_add_tgp_chinese_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_chinese_legacy_2
                 }
-                add_dynasty_perk = tgp_chinese_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_chinese_legacy_2
+                }
             }
         }
     }
@@ -4073,8 +4441,12 @@ DI_perk_add_tgp_chinese_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_chinese_legacy_3
                 }
-                add_dynasty_perk = tgp_chinese_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_chinese_legacy_3
+                }
             }
         }
     }
@@ -4117,8 +4489,12 @@ DI_perk_add_tgp_chinese_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_chinese_legacy_4
                 }
-                add_dynasty_perk = tgp_chinese_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_chinese_legacy_4
+                }
             }
         }
     }
@@ -4161,8 +4537,12 @@ DI_perk_add_tgp_chinese_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_chinese_legacy_5
                 }
-                add_dynasty_perk = tgp_chinese_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_chinese_legacy_5
+                }
             }
         }
     }
@@ -4205,8 +4585,12 @@ DI_perk_add_tgp_japan_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_japan_legacy_1
                 }
-                add_dynasty_perk = tgp_japan_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_japan_legacy_1
+                }
             }
         }
     }
@@ -4249,8 +4633,12 @@ DI_perk_add_tgp_japan_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_japan_legacy_2
                 }
-                add_dynasty_perk = tgp_japan_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_japan_legacy_2
+                }
             }
         }
     }
@@ -4293,8 +4681,12 @@ DI_perk_add_tgp_japan_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_japan_legacy_3
                 }
-                add_dynasty_perk = tgp_japan_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_japan_legacy_3
+                }
             }
         }
     }
@@ -4337,8 +4729,12 @@ DI_perk_add_tgp_japan_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_japan_legacy_4
                 }
-                add_dynasty_perk = tgp_japan_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_japan_legacy_4
+                }
             }
         }
     }
@@ -4381,8 +4777,12 @@ DI_perk_add_tgp_japan_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_japan_legacy_5
                 }
-                add_dynasty_perk = tgp_japan_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_japan_legacy_5
+                }
             }
         }
     }
@@ -4425,8 +4825,12 @@ DI_perk_add_tgp_sea_legacy_1 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_sea_legacy_1
                 }
-                add_dynasty_perk = tgp_sea_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_sea_legacy_1
+                }
             }
         }
     }
@@ -4469,8 +4873,12 @@ DI_perk_add_tgp_sea_legacy_2 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_sea_legacy_2
                 }
-                add_dynasty_perk = tgp_sea_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_sea_legacy_2
+                }
             }
         }
     }
@@ -4513,8 +4921,12 @@ DI_perk_add_tgp_sea_legacy_3 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_sea_legacy_3
                 }
-                add_dynasty_perk = tgp_sea_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_sea_legacy_3
+                }
             }
         }
     }
@@ -4557,8 +4969,12 @@ DI_perk_add_tgp_sea_legacy_4 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_sea_legacy_4
                 }
-                add_dynasty_perk = tgp_sea_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_sea_legacy_4
+                }
             }
         }
     }
@@ -4601,8 +5017,12 @@ DI_perk_add_tgp_sea_legacy_5 = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_sea_legacy_5
                 }
-                add_dynasty_perk = tgp_sea_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_sea_legacy_5
+                }
             }
         }
     }
@@ -4643,40 +5063,60 @@ DI_track_add_all_blood_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = blood_legacy_1
                 }
-                add_dynasty_perk = blood_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = blood_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = blood_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = blood_legacy_2
                 }
-                add_dynasty_perk = blood_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = blood_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = blood_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = blood_legacy_3
                 }
-                add_dynasty_perk = blood_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = blood_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = blood_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = blood_legacy_4
                 }
-                add_dynasty_perk = blood_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = blood_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = blood_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = blood_legacy_5
                 }
-                add_dynasty_perk = blood_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = blood_legacy_5
+                }
             }
         }
     }
@@ -4733,40 +5173,60 @@ DI_track_add_all_warfare_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = warfare_legacy_1
                 }
-                add_dynasty_perk = warfare_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = warfare_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = warfare_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = warfare_legacy_2
                 }
-                add_dynasty_perk = warfare_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = warfare_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = warfare_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = warfare_legacy_3
                 }
-                add_dynasty_perk = warfare_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = warfare_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = warfare_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = warfare_legacy_4
                 }
-                add_dynasty_perk = warfare_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = warfare_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = warfare_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = warfare_legacy_5
                 }
-                add_dynasty_perk = warfare_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = warfare_legacy_5
+                }
             }
         }
     }
@@ -4823,40 +5283,60 @@ DI_track_add_all_law_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = law_legacy_1
                 }
-                add_dynasty_perk = law_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = law_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = law_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = law_legacy_2
                 }
-                add_dynasty_perk = law_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = law_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = law_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = law_legacy_3
                 }
-                add_dynasty_perk = law_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = law_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = law_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = law_legacy_4
                 }
-                add_dynasty_perk = law_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = law_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = law_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = law_legacy_5
                 }
-                add_dynasty_perk = law_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = law_legacy_5
+                }
             }
         }
     }
@@ -4913,40 +5393,60 @@ DI_track_add_all_guile_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = guile_legacy_1
                 }
-                add_dynasty_perk = guile_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = guile_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = guile_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = guile_legacy_2
                 }
-                add_dynasty_perk = guile_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = guile_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = guile_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = guile_legacy_3
                 }
-                add_dynasty_perk = guile_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = guile_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = guile_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = guile_legacy_4
                 }
-                add_dynasty_perk = guile_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = guile_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = guile_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = guile_legacy_5
                 }
-                add_dynasty_perk = guile_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = guile_legacy_5
+                }
             }
         }
     }
@@ -5003,40 +5503,60 @@ DI_track_add_all_erudition_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = erudition_legacy_1
                 }
-                add_dynasty_perk = erudition_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = erudition_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = erudition_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = erudition_legacy_2
                 }
-                add_dynasty_perk = erudition_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = erudition_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = erudition_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = erudition_legacy_3
                 }
-                add_dynasty_perk = erudition_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = erudition_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = erudition_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = erudition_legacy_4
                 }
-                add_dynasty_perk = erudition_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = erudition_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = erudition_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = erudition_legacy_5
                 }
-                add_dynasty_perk = erudition_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = erudition_legacy_5
+                }
             }
         }
     }
@@ -5093,40 +5613,60 @@ DI_track_add_all_glory_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = glory_legacy_1
                 }
-                add_dynasty_perk = glory_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = glory_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = glory_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = glory_legacy_2
                 }
-                add_dynasty_perk = glory_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = glory_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = glory_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = glory_legacy_3
                 }
-                add_dynasty_perk = glory_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = glory_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = glory_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = glory_legacy_4
                 }
-                add_dynasty_perk = glory_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = glory_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = glory_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = glory_legacy_5
                 }
-                add_dynasty_perk = glory_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = glory_legacy_5
+                }
             }
         }
     }
@@ -5183,40 +5723,60 @@ DI_track_add_all_kin_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = kin_legacy_1
                 }
-                add_dynasty_perk = kin_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = kin_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = kin_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = kin_legacy_2
                 }
-                add_dynasty_perk = kin_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = kin_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = kin_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = kin_legacy_3
                 }
-                add_dynasty_perk = kin_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = kin_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = kin_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = kin_legacy_4
                 }
-                add_dynasty_perk = kin_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = kin_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = kin_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = kin_legacy_5
                 }
-                add_dynasty_perk = kin_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = kin_legacy_5
+                }
             }
         }
     }
@@ -5273,40 +5833,60 @@ DI_track_add_all_ep1_culture_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep1_culture_legacy_1
                 }
-                add_dynasty_perk = ep1_culture_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep1_culture_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ep1_culture_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep1_culture_legacy_2
                 }
-                add_dynasty_perk = ep1_culture_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep1_culture_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ep1_culture_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep1_culture_legacy_3
                 }
-                add_dynasty_perk = ep1_culture_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep1_culture_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ep1_culture_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep1_culture_legacy_4
                 }
-                add_dynasty_perk = ep1_culture_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep1_culture_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ep1_culture_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep1_culture_legacy_5
                 }
-                add_dynasty_perk = ep1_culture_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep1_culture_legacy_5
+                }
             }
         }
     }
@@ -5363,40 +5943,60 @@ DI_track_add_all_ep2_activities_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep2_activities_legacy_2
                 }
-                add_dynasty_perk = ep2_activities_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep2_activities_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ep2_activities_legacy_1 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep2_activities_legacy_1
                 }
-                add_dynasty_perk = ep2_activities_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep2_activities_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ep2_activities_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep2_activities_legacy_3
                 }
-                add_dynasty_perk = ep2_activities_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep2_activities_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ep2_activities_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep2_activities_legacy_4
                 }
-                add_dynasty_perk = ep2_activities_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep2_activities_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ep2_activities_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep2_activities_legacy_5
                 }
-                add_dynasty_perk = ep2_activities_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep2_activities_legacy_5
+                }
             }
         }
     }
@@ -5453,40 +6053,60 @@ DI_track_add_all_fp1_adventure_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_adventure_legacy_1
                 }
-                add_dynasty_perk = fp1_adventure_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_adventure_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp1_adventure_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_adventure_legacy_2
                 }
-                add_dynasty_perk = fp1_adventure_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_adventure_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp1_adventure_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_adventure_legacy_3
                 }
-                add_dynasty_perk = fp1_adventure_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_adventure_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp1_adventure_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_adventure_legacy_4
                 }
-                add_dynasty_perk = fp1_adventure_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_adventure_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp1_adventure_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_adventure_legacy_5
                 }
-                add_dynasty_perk = fp1_adventure_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_adventure_legacy_5
+                }
             }
         }
     }
@@ -5543,40 +6163,60 @@ DI_track_add_all_fp1_pillage_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_pillage_legacy_1
                 }
-                add_dynasty_perk = fp1_pillage_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_pillage_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp1_pillage_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_pillage_legacy_2
                 }
-                add_dynasty_perk = fp1_pillage_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_pillage_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp1_pillage_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_pillage_legacy_3
                 }
-                add_dynasty_perk = fp1_pillage_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_pillage_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp1_pillage_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_pillage_legacy_4
                 }
-                add_dynasty_perk = fp1_pillage_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_pillage_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp1_pillage_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp1_pillage_legacy_5
                 }
-                add_dynasty_perk = fp1_pillage_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp1_pillage_legacy_5
+                }
             }
         }
     }
@@ -5633,40 +6273,60 @@ DI_track_add_all_fp2_urbanism_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_urbanism_legacy_1
                 }
-                add_dynasty_perk = fp2_urbanism_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_urbanism_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp2_urbanism_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_urbanism_legacy_2
                 }
-                add_dynasty_perk = fp2_urbanism_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_urbanism_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp2_urbanism_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_urbanism_legacy_3
                 }
-                add_dynasty_perk = fp2_urbanism_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_urbanism_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp2_urbanism_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_urbanism_legacy_4
                 }
-                add_dynasty_perk = fp2_urbanism_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_urbanism_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp2_urbanism_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_urbanism_legacy_5
                 }
-                add_dynasty_perk = fp2_urbanism_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_urbanism_legacy_5
+                }
             }
         }
     }
@@ -5723,40 +6383,60 @@ DI_track_add_all_fp2_coterie_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_coterie_legacy_1
                 }
-                add_dynasty_perk = fp2_coterie_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_coterie_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp2_coterie_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_coterie_legacy_2
                 }
-                add_dynasty_perk = fp2_coterie_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_coterie_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp2_coterie_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_coterie_legacy_3
                 }
-                add_dynasty_perk = fp2_coterie_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_coterie_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp2_coterie_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_coterie_legacy_4
                 }
-                add_dynasty_perk = fp2_coterie_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_coterie_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp2_coterie_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp2_coterie_legacy_5
                 }
-                add_dynasty_perk = fp2_coterie_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp2_coterie_legacy_5
+                }
             }
         }
     }
@@ -5813,40 +6493,60 @@ DI_track_add_all_fp3_khvarenah_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp3_khvarenah_legacy_1
                 }
-                add_dynasty_perk = fp3_khvarenah_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp3_khvarenah_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp3_khvarenah_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp3_khvarenah_legacy_2
                 }
-                add_dynasty_perk = fp3_khvarenah_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp3_khvarenah_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp3_khvarenah_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp3_khvarenah_legacy_3
                 }
-                add_dynasty_perk = fp3_khvarenah_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp3_khvarenah_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp3_khvarenah_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp3_khvarenah_legacy_4
                 }
-                add_dynasty_perk = fp3_khvarenah_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp3_khvarenah_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = fp3_khvarenah_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = fp3_khvarenah_legacy_5
                 }
-                add_dynasty_perk = fp3_khvarenah_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = fp3_khvarenah_legacy_5
+                }
             }
         }
     }
@@ -5903,40 +6603,60 @@ DI_track_add_all_ce1_heroic_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_heroic_legacy_1
                 }
-                add_dynasty_perk = ce1_heroic_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_heroic_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ce1_heroic_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_heroic_legacy_2
                 }
-                add_dynasty_perk = ce1_heroic_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_heroic_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ce1_heroic_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_heroic_legacy_3
                 }
-                add_dynasty_perk = ce1_heroic_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_heroic_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ce1_heroic_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_heroic_legacy_4
                 }
-                add_dynasty_perk = ce1_heroic_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_heroic_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ce1_heroic_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_heroic_legacy_5
                 }
-                add_dynasty_perk = ce1_heroic_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_heroic_legacy_5
+                }
             }
         }
     }
@@ -5993,40 +6713,60 @@ DI_track_add_all_ce1_legitimacy_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_legitimacy_legacy_1
                 }
-                add_dynasty_perk = ce1_legitimacy_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_legitimacy_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ce1_legitimacy_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_legitimacy_legacy_2
                 }
-                add_dynasty_perk = ce1_legitimacy_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_legitimacy_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ce1_legitimacy_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_legitimacy_legacy_3
                 }
-                add_dynasty_perk = ce1_legitimacy_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_legitimacy_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ce1_legitimacy_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_legitimacy_legacy_4
                 }
-                add_dynasty_perk = ce1_legitimacy_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_legitimacy_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ce1_legitimacy_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ce1_legitimacy_legacy_5
                 }
-                add_dynasty_perk = ce1_legitimacy_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ce1_legitimacy_legacy_5
+                }
             }
         }
     }
@@ -6083,40 +6823,60 @@ DI_track_add_all_ep3_administrative_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep3_administrative_legacy_1
                 }
-                add_dynasty_perk = ep3_administrative_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep3_administrative_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ep3_administrative_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep3_administrative_legacy_2
                 }
-                add_dynasty_perk = ep3_administrative_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep3_administrative_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ep3_administrative_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep3_administrative_legacy_3
                 }
-                add_dynasty_perk = ep3_administrative_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep3_administrative_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ep3_administrative_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep3_administrative_legacy_4
                 }
-                add_dynasty_perk = ep3_administrative_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep3_administrative_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = ep3_administrative_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = ep3_administrative_legacy_5
                 }
-                add_dynasty_perk = ep3_administrative_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = ep3_administrative_legacy_5
+                }
             }
         }
     }
@@ -6173,40 +6933,60 @@ DI_track_add_all_mpo_nomad_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = mpo_nomad_legacy_1
                 }
-                add_dynasty_perk = mpo_nomad_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = mpo_nomad_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = mpo_nomad_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = mpo_nomad_legacy_2
                 }
-                add_dynasty_perk = mpo_nomad_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = mpo_nomad_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = mpo_nomad_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = mpo_nomad_legacy_3
                 }
-                add_dynasty_perk = mpo_nomad_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = mpo_nomad_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = mpo_nomad_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = mpo_nomad_legacy_4
                 }
-                add_dynasty_perk = mpo_nomad_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = mpo_nomad_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = mpo_nomad_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = mpo_nomad_legacy_5
                 }
-                add_dynasty_perk = mpo_nomad_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = mpo_nomad_legacy_5
+                }
             }
         }
     }
@@ -6263,40 +7043,60 @@ DI_track_add_all_tgp_china_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_chinese_legacy_1
                 }
-                add_dynasty_perk = tgp_chinese_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_chinese_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = tgp_chinese_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_chinese_legacy_2
                 }
-                add_dynasty_perk = tgp_chinese_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_chinese_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = tgp_chinese_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_chinese_legacy_3
                 }
-                add_dynasty_perk = tgp_chinese_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_chinese_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = tgp_chinese_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_chinese_legacy_4
                 }
-                add_dynasty_perk = tgp_chinese_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_chinese_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = tgp_chinese_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_chinese_legacy_5
                 }
-                add_dynasty_perk = tgp_chinese_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_chinese_legacy_5
+                }
             }
         }
     }
@@ -6353,40 +7153,60 @@ DI_track_add_all_tgp_japan_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_japan_legacy_1
                 }
-                add_dynasty_perk = tgp_japan_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_japan_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = tgp_japan_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_japan_legacy_2
                 }
-                add_dynasty_perk = tgp_japan_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_japan_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = tgp_japan_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_japan_legacy_3
                 }
-                add_dynasty_perk = tgp_japan_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_japan_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = tgp_japan_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_japan_legacy_4
                 }
-                add_dynasty_perk = tgp_japan_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_japan_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = tgp_japan_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_japan_legacy_5
                 }
-                add_dynasty_perk = tgp_japan_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_japan_legacy_5
+                }
             }
         }
     }
@@ -6443,40 +7263,60 @@ DI_track_add_all_tgp_southeast_asia_legacy_track = {
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_sea_legacy_1
                 }
-                add_dynasty_perk = tgp_sea_legacy_1
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_sea_legacy_1
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = tgp_sea_legacy_2 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_sea_legacy_2
                 }
-                add_dynasty_perk = tgp_sea_legacy_2
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_sea_legacy_2
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = tgp_sea_legacy_3 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_sea_legacy_3
                 }
-                add_dynasty_perk = tgp_sea_legacy_3
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_sea_legacy_3
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = tgp_sea_legacy_4 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_sea_legacy_4
                 }
-                add_dynasty_perk = tgp_sea_legacy_4
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_sea_legacy_4
+                }
             }
             if = {
                 limit = { NOT = { has_dynasty_perk = tgp_sea_legacy_5 } }
                 if = {
                     limit = { root = { has_variable = DI_legacy_editor_free_mode } }
                     add_dynasty_prestige = DI_dynasty_perk_cost_next
+                    add_dynasty_perk = tgp_sea_legacy_5
                 }
-                add_dynasty_perk = tgp_sea_legacy_5
+                else_if = {
+                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }
+                    add_dynasty_perk = tgp_sea_legacy_5
+                }
             }
         }
     }

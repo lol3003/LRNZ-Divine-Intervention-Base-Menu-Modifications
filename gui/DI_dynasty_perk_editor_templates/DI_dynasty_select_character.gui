@@ -11,7 +11,7 @@ template DI_Dynasty_Select_Character {
 			text_label_center = {
 				parentanchor = hcenter|top
 				position = { 0 -20 }
-				raw_text = DI_dynasty_to_edit
+				text = DI_dynasty_to_edit
 				default_format = "#high;bold"
 				max_width = 500
 			}
@@ -57,7 +57,7 @@ template DI_Dynasty_Select_Copy_Character {
 			text_label_center = {
 				parentanchor = hcenter|top
 				position = { 0 -20 }
-				raw_text = DI_dynasty_to_copy
+				text = DI_dynasty_to_copy
 				default_format = "#high;bold"
 				max_width = 500
 			}

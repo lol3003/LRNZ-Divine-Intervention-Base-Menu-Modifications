@@ -129,6 +129,76 @@ function Group-PerksByTrack {
     return $tracks
 }
 
+# Parse common/dynasty_perks/*.txt: perk key -> list of effect-text loc keys.
+# Effect text keys are `text = <key>` values found inside the perk's first-level
+# `effect = { ... }` block (vanilla emits them via custom_description_no_bullet).
+# Keys ending in _ai_effect / _req_effect are excluded: they are AI-behaviour /
+# requirement text (Hiraeth-style mods), not player-facing effect descriptions.
+# Returns a hashtable perk key -> List[string] (empty list when the perk has no
+# effect text). Perk keys absent from the result have no effect block at all.
+function Get-PerkEffectTextKeys {
+    param([string[]]$Directories)
+    $result = @{}
+    foreach ($dir in $Directories) {
+        if (-not (Test-Path $dir)) { continue }
+        foreach ($file in Get-ChildItem $dir -Filter '*.txt' | Sort-Object Name) {
+            $lines = Get-Content $file.FullName
+            $currentKey = $null
+            $depth = 0
+            $inEffect = $false
+            foreach ($line in $lines) {
+                $trimmed = ($line -replace '#.*$', '').Trim()
+                # --- single-line perk block: effects are out of scope there, but
+                # --- still scan for text keys when an inline effect block exists.
+                if ($null -eq $currentKey -and $trimmed -match '^(\w+)\s*=\s*\{\s*(.*)\}\s*$') {
+                    $singleKey = $Matches[1]
+                    $inner = $Matches[2]
+                    if ($inner -match 'legacy\s*=\s*\w+' -and $inner -match 'effect\s*=\s*\{') {
+                        $keys = [System.Collections.Generic.List[string]]::new()
+                        foreach ($m in [regex]::Matches($inner, 'text\s*=\s*(\w+)')) {
+                            $k = $m.Groups[1].Value
+                            if ($k -notmatch '_(ai|req)_effect$' -and -not $keys.Contains($k)) { $keys.Add($k) }
+                        }
+                        if ($keys.Count -gt 0) { $result[$singleKey] = $keys }
+                    }
+                    continue
+                }
+                # --- top-level perk opener ---
+                if ($null -eq $currentKey -and $depth -eq 0 -and $trimmed -match '^(\w+)\s*=\s*\{\s*$') {
+                    $currentKey = $Matches[1]
+                    $depth = 1
+                    $inEffect = $false
+                    continue
+                }
+                if ($null -ne $currentKey) {
+                    # effect block opens at the perk's first nesting level
+                    if (-not $inEffect -and $depth -eq 1 -and $trimmed -match '^effect\s*=\s*\{') {
+                        $inEffect = $true
+                    }
+                    if ($inEffect -and $trimmed -match '^\s*text\s*=\s*(\w+)') {
+                        $k = $Matches[1]
+                        if ($k -notmatch '_(ai|req)_effect$') {
+                            if (-not $result.ContainsKey($currentKey)) {
+                                $result[$currentKey] = [System.Collections.Generic.List[string]]::new()
+                            }
+                            if (-not $result[$currentKey].Contains($k)) { $result[$currentKey].Add($k) }
+                        }
+                    }
+                    $chars = $trimmed.ToCharArray() | Where-Object { $_ -eq '{' -or $_ -eq '}' }
+                    foreach ($c in $chars) { if ($c -eq '{') { $depth++ } else { $depth-- } }
+                    if ($inEffect -and $depth -le 1) { $inEffect = $false }
+                    if ($depth -le 0) {
+                        $currentKey = $null
+                        $depth = 0
+                        $inEffect = $false
+                    }
+                }
+            }
+        }
+    }
+    return $result
+}
+
 # Sanity-check the parsed model: every perk maps to a non-empty track and no track
 # ends up empty. Returns $true if OK; writes warnings naming the offender otherwise.
 # Called by generate_perk_editor.ps1 before it writes any generated file.
