@@ -9,8 +9,9 @@
 #   3. common/script_values/DI_generated_perk_values.txt
 #      - exact renown cost of the next perk (free-mode top-up)
 #   4. localization/english/DI_generated_perk_tooltips_l_english.yml
-#      - one DI_perk_tt_<perk> loc entry per perk: name + effect description,
-#        used as the grid button tooltip (game-like, mirrors vanilla highlight)
+#      - one DI_perk_tt_<perk> loc entry per perk: name + effect description +
+#        character_modifier lines, used as the grid button tooltip (game-like,
+#        mirrors vanilla highlight)
 #
 # Usage:
 #   pwsh -File tools/generate_perk_editor.ps1
@@ -87,6 +88,18 @@ $locMap = Get-LocValues -Directories $LocDirs
 # back to the raw dynamic key.
 $effLocDirs = $perkDirs | ForEach-Object { $_ -replace 'dynasty_perks$', 'effect_localization' }
 $effectLocMap = Get-EffectLocalization -Directories $effLocDirs
+
+# modifier definitions (value-formatting metadata) + per-perk character_modifier
+# blocks, for the static modifier lines appended to each perk tooltip. Vanilla
+# definitions first; extra perk dirs' sibling modifier_definition_formats override
+# afterwards (mods may add their own definitions).
+$modDefDirs = @("$GameDir\common\modifier_definition_formats")
+foreach ($d in $ExtraPerkDirs) {
+    $md = $d -replace 'dynasty_perks$', 'modifier_definition_formats'
+    if (Test-Path $md) { $modDefDirs += $md }
+}
+$modifierDefs = Get-ModifierDefinitions -Directories $modDefDirs
+$perkModifiers = Get-PerkModifierBlocks -Directories $perkDirs
 
 # parse DLC gates from the same dirs' sibling dynasty_legacies folders
 $legacyDirs = $perkDirs | ForEach-Object { $_ -replace 'dynasty_perks$', 'dynasty_legacies' }
@@ -330,8 +343,9 @@ if (-not $WhatIf) {
 $gui = [System.Text.StringBuilder]::new()
 [void]$gui.AppendLine("### GENERATED FILE - do not hand-edit. Regenerate with: tools/generate_perk_editor.ps1")
 [void]$gui.AppendLine("### Per-perk toggle grid for the DI dynasty perk editor.")
-[void]$gui.AppendLine("### Owned state IS rendered via the remove SGUI's IsShown binding (gold layer +")
-[void]$gui.AppendLine("### checkmark). Buttons stay enabled for left-add / right-remove.")
+[void]$gui.AppendLine("### Owned state IS rendered via the remove SGUI's IsShown binding (gold border +")
+[void]$gui.AppendLine("### checkmark; fully-owned tracks tint gold). Buttons stay enabled for left-add /")
+[void]$gui.AppendLine("### right-remove.")
 [void]$gui.AppendLine("### left click = add (no-op if already owned via the add SGUI's is_shown guard),")
 [void]$gui.AppendLine("### right click = remove (no-op if not owned). Out-of-order add/remove is intended.")
 [void]$gui.AppendLine("")
@@ -367,7 +381,9 @@ if (-not $WhatIf) {
 # --- Generate tooltip loc ---------------------------------------------------------
 # One loc entry per perk, referenced by the grid button tooltip. Text is resolved
 # STATICALLY at generation time from the loc files (vanilla first, then -LocDirs
-# so mod loc wins):  DI_perk_tt_<perk>:0 "#bold <name>#!\n<effect1>\n<effect2>"
+# so mod loc wins):  DI_perk_tt_<perk>:0 "#bold <name>#!\n<effect1>\n<effect2>" +
+# character_modifier lines (bold block name + per-modifier #P/#N value lines,
+# formatted via ConvertTo-PerkModifierTooltipLines in _perk_parser.ps1).
 # Effect keys come from the perk's effect = { ... } block (_ai_effect/_req_effect
 # excluded by the parser). Perks without effect text get name-only tooltips;
 # unresolvable keys fall back to the raw key string. No [Localize(...)] wrappers:
@@ -390,6 +406,11 @@ foreach ($k in $perks.Keys) {
             $eff = $locMap[$locKey]
             if ([string]::IsNullOrEmpty($eff)) { $eff = $e }
             $parts += "\n$eff"
+        }
+    }
+    if ($perkModifiers.ContainsKey($k)) {
+        foreach ($mline in (ConvertTo-PerkModifierTooltipLines -ModifierBlocks $perkModifiers[$k] -ModifierDefs $modifierDefs -LocMap $locMap -PerkKey $k -PerkNameText $name)) {
+            $parts += "\n$mline"
         }
     }
     $escaped = $parts -replace '"', '\"'

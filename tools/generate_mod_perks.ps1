@@ -321,6 +321,7 @@ function New-DiSubMod {
     try {
         $perks = Get-Perks -Directories $parseDirs
         $effectTexts = Get-PerkEffectTextKeys -Directories $parseDirs
+        $perkModifiers = Get-PerkModifierBlocks -Directories $parseDirs
     } finally { Remove-Item -LiteralPath $tmpVanillaPerks -Recurse -Force -ErrorAction SilentlyContinue }
     if ($perks.Count -eq 0) { Write-Warning "No perks parsed from $perkDir or $vanillaPerkDir"; return }
     if (-not (Test-PerksModel $perks)) { throw "Parsed perk model is inconsistent - aborting before writing" }
@@ -359,16 +360,33 @@ function New-DiSubMod {
         $missing = $false
         foreach ($k in $perks.Keys) { if (-not $vanilla.Contains($k) -and [string]::IsNullOrEmpty($locMap["$($k)_name"])) { $missing = $true; break } }
         if (-not $missing) { continue }
-        $root = Join-Path $d "localization"
-        if (Test-Path $root) {
+        # $d is a perk dir (<modroot>\common\dynasty_perks); the mod's localization
+        # tree hangs off the mod root (Hiraeth: localization\ directly, AGOT:
+        # localization\english\agot\). Try the derived root, then $d itself in case
+        # a caller passed a mod root directly.
+        foreach ($cand in @((Split-Path (Split-Path $d -Parent) -Parent), $d)) {
+            $root = Join-Path $cand "localization"
+            if (-not (Test-Path $root)) { continue }
             foreach ($y in (Get-ChildItem $root -Filter '*.yml' -Recurse)) {
                 if ($y.FullName -notmatch $langPattern) { $extraLocDirs += $y.DirectoryName }
             }
+            break
         }
     }
     if ($extraLocDirs.Count -gt 0) {
         $locMap = Get-LocValues -Directories ($LocDirs + ($extraLocDirs | Sort-Object -Unique))
     }
+
+    # -- modifier definitions (value-formatting metadata); vanilla first, then any
+    # perk mod's own modifier_definition_formats (mod definitions win) --
+    $modDefDirs = @((Join-Path $GameDir "common\modifier_definition_formats"))
+    foreach ($d in $allPerkDirs) {
+        foreach ($cand in @((Split-Path (Split-Path $d -Parent) -Parent), $d)) {
+            $md = Join-Path $cand "common\modifier_definition_formats"
+            if (Test-Path $md) { $modDefDirs += $md; break }
+        }
+    }
+    $modifierDefs = Get-ModifierDefinitions -Directories $modDefDirs
 
     # -- scripted guis --
     $sgui = [System.Text.StringBuilder]::new()
@@ -386,9 +404,9 @@ function New-DiSubMod {
     [void]$gui.AppendLine("### GENERATED FILE - do not hand-edit. generate_mod_perks.ps1 -SubMod")
     [void]$gui.AppendLine("### Same-path full-file override of the base mod's gui/DI_generated_perk_grid.gui.")
     [void]$gui.AppendLine("### This compatch must be loaded AFTER the base mod in the playset.")
-    [void]$gui.AppendLine("### NOTE: has_dynasty_perk is a script trigger, not a GUI datafunction, so owned")
-    [void]$gui.AppendLine("### state cannot be rendered in the UI. Buttons are always enabled; the add/remove")
-    [void]$gui.AppendLine("### SGUI is_shown guards make wrong-direction clicks no-ops.")
+    [void]$gui.AppendLine("### Owned state IS rendered via the remove SGUI's IsShown binding (gold border +")
+    [void]$gui.AppendLine("### checkmark; fully-owned tracks tint gold). Buttons stay enabled for left-add /")
+    [void]$gui.AppendLine("### right-remove; the SGUI is_shown guards make wrong-direction clicks no-ops.")
     [void]$gui.AppendLine("")
     [void]$gui.AppendLine("types DI_DynastyGeneratedPerks {")
     [void]$gui.AppendLine("    type di_generated_perk_grid = vbox {")
@@ -429,6 +447,11 @@ function New-DiSubMod {
                 $eff = $locMap[$locKey]
                 if ([string]::IsNullOrEmpty($eff)) { $eff = $e }
                 $parts += "\n$eff"
+            }
+        }
+        if ($perkModifiers.ContainsKey($k)) {
+            foreach ($mline in (ConvertTo-PerkModifierTooltipLines -ModifierBlocks $perkModifiers[$k] -ModifierDefs $modifierDefs -LocMap $locMap -PerkKey $k -PerkNameText $name)) {
+                $parts += "\n$mline"
             }
         }
         $escaped = $parts -replace '"', '\"'

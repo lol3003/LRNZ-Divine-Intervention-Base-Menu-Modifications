@@ -289,3 +289,171 @@ function Get-EffectLocalization {
     }
     return $map
 }
+
+# Parse common/modifier_definition_formats/00_*.txt: modifier key -> formatting
+# metadata (Prefix loc key, Decimals, Percent, AlreadyPercent, Hidden). Later
+# directories win (pass vanilla first, then mod dirs), so mods can override
+# vanilla definitions. Unknown properties inside an entry are ignored.
+function Get-ModifierDefinitions {
+    param([string[]]$Directories)
+    $defs = @{}
+    foreach ($dir in $Directories) {
+        if (-not (Test-Path $dir)) { continue }
+        foreach ($file in Get-ChildItem $dir -Filter '00_*.txt' | Sort-Object Name) {
+            $currentKey = $null
+            $entry = $null
+            foreach ($line in Get-Content $file.FullName) {
+                $trimmed = ($line -replace '#.*$', '').Trim()
+                if ($null -eq $currentKey -and $trimmed -match '^(\w+)\s*=\s*\{\s*$') {
+                    $currentKey = $Matches[1]
+                    $entry = @{ Prefix = $null; Decimals = $null; Percent = $false; AlreadyPercent = $false; Hidden = $false }
+                    continue
+                }
+                if ($null -ne $currentKey) {
+                    if ($trimmed -match '^\}$') {
+                        $defs[$currentKey] = $entry
+                        $currentKey = $null
+                        $entry = $null
+                        continue
+                    }
+                    if ($trimmed -match '^prefix\s*=\s*(\w+)') { $entry.Prefix = $Matches[1] }
+                    elseif ($trimmed -match '^decimals\s*=\s*(-?\d+)') { $entry.Decimals = [int]$Matches[1] }
+                    elseif ($trimmed -match '^percent\s*=\s*(\w+)') { $entry.Percent = ($Matches[1] -eq 'yes') }
+                    elseif ($trimmed -match '^already_percent\s*=\s*(\w+)') { $entry.AlreadyPercent = ($Matches[1] -eq 'yes') }
+                    elseif ($trimmed -match '^hidden\s*=\s*(\w+)') { $entry.Hidden = ($Matches[1] -eq 'yes') }
+                }
+            }
+        }
+    }
+    return $defs
+}
+
+# Parse common/dynasty_perks/*.txt: perk key -> ordered list of character_modifier
+# blocks. Each block is a pscustomobject { Name; Modifiers } where Name is the
+# optional `name = <loc key>` (bold heading in the tooltip) and Modifiers is an
+# ordered key -> raw value map in file order. `name =` is never treated as a
+# modifier key; non key/value lines inside the block are ignored. Other
+# *_modifier containers are reported via Write-Warning (parsed, not fatal).
+# First-seen-wins per perk key across directories, matching Get-Perks.
+function Get-PerkModifierBlocks {
+    param([string[]]$Directories)
+    $result = @{}
+    $claimed = @{}
+    foreach ($dir in $Directories) {
+        if (-not (Test-Path $dir)) { continue }
+        foreach ($file in Get-ChildItem $dir -Filter '*.txt' | Sort-Object Name) {
+            $fileKeys = @{}
+            $currentKey = $null
+            $depth = 0
+            $inMod = $false
+            $modName = $null
+            $modBlock = $null
+            foreach ($line in Get-Content $file.FullName) {
+                $trimmed = ($line -replace '#.*$', '').Trim()
+                if ($null -eq $currentKey -and $depth -eq 0 -and $trimmed -match '^(\w+)\s*=\s*\{\s*$') {
+                    $currentKey = $Matches[1]
+                    $depth = 1
+                    $inMod = $false
+                    $modName = $null
+                    $modBlock = $null
+                    continue
+                }
+                if ($null -eq $currentKey) { continue }
+                if (-not $inMod -and $depth -eq 1 -and $trimmed -match '^(\w*modifier)\s*=\s*\{\s*$') {
+                    if ($Matches[1] -eq 'character_modifier') {
+                        $inMod = $true
+                        $modName = $null
+                        $modBlock = [ordered]@{}
+                    } else {
+                        Write-Warning "Perk '$currentKey': container '$($Matches[1])' is not parsed (only character_modifier is supported)"
+                    }
+                }
+                elseif ($inMod -and $null -eq $modName -and $trimmed -match '^name\s*=\s*(\w+)') {
+                    $modName = $Matches[1]
+                }
+                elseif ($inMod -and $trimmed -match '^(\w+)\s*=\s*(-?[\d.]+)\s*$' -and $Matches[1] -ne 'name') {
+                    $modBlock[$Matches[1]] = $Matches[2]
+                }
+                $chars = $trimmed.ToCharArray() | Where-Object { $_ -eq '{' -or $_ -eq '}' }
+                foreach ($c in $chars) { if ($c -eq '{') { $depth++ } else { $depth-- } }
+                if ($inMod -and $depth -le 1) {
+                    if ($modBlock.Count -gt 0 -or -not [string]::IsNullOrEmpty($modName)) {
+                        if (-not $claimed.ContainsKey($currentKey) -or $fileKeys.ContainsKey($currentKey)) {
+                            if (-not $result.ContainsKey($currentKey)) {
+                                $result[$currentKey] = [System.Collections.Generic.List[object]]::new()
+                            }
+                            $result[$currentKey].Add([pscustomobject]@{ Name = $modName; Modifiers = $modBlock })
+                            $fileKeys[$currentKey] = $true
+                            $claimed[$currentKey] = $true
+                        }
+                    }
+                    $inMod = $false
+                    $modName = $null
+                    $modBlock = $null
+                }
+                if ($depth -le 0) {
+                    $currentKey = $null
+                    $depth = 0
+                }
+            }
+        }
+    }
+    return $result
+}
+
+# Format one perk's character_modifier blocks as static tooltip lines (shared by
+# both generators so base and sub-mod tooltips stay in sync). Emits, per block,
+# an optional "#bold <resolved block name>#!" heading followed by one line per
+# modifier: "<loc>" + colon unless the loc is a lone icon embed, then
+# "#P +<value>%#!" / "#N <value>%#!". Loc resolution order (vanilla-verified):
+# definition prefix key -> MOD_<KEY_UPPER> -> the raw modifier key (e.g.
+# monthly_martial_lifestyle_xp_gain_mult is loc'd under its own name);
+# unresolvable keys skip the line with a warning - the perk keeps its other
+# tooltip lines instead of hard-failing name-only. percent = yes multiplies by
+# 100 unless already_percent = yes; decimals defaults to 2 per the engine's
+# _definitions.info ("Defaults to 2").
+function ConvertTo-PerkModifierTooltipLines {
+    param($ModifierBlocks, $ModifierDefs, $LocMap, [string]$PerkKey = "", [string]$PerkNameText = "")
+    $lines = [System.Collections.Generic.List[string]]::new()
+    if ($null -eq $ModifierBlocks) { return $lines }
+    foreach ($block in $ModifierBlocks) {
+        if (-not [string]::IsNullOrEmpty($block.Name)) {
+            $n = $LocMap[$block.Name]
+            if ([string]::IsNullOrEmpty($n)) { $n = $block.Name }
+            # vanilla reuses <perk>_name as the modifier name (directly or as a
+            # "$<perk>_name$" loc variable) - skip the heading when it would
+            # duplicate the perk's own bold name line
+            $dup = (-not [string]::IsNullOrEmpty($PerkNameText) -and $n -eq $PerkNameText) -or
+                   ($n -match '^\$(\w+)\$$' -and -not [string]::IsNullOrEmpty($PerkKey) -and $Matches[1] -eq "${PerkKey}_name")
+            if (-not $dup) { $lines.Add("#bold $n#!") }
+        }
+        foreach ($mk in $block.Modifiers.Keys) {
+            $def = $null
+            if ($null -ne $ModifierDefs -and $ModifierDefs.ContainsKey($mk)) { $def = $ModifierDefs[$mk] }
+            if ($null -ne $def -and $def.Hidden) { continue }
+            $locKey = "MOD_$($mk.ToUpperInvariant())"
+            if ($null -ne $def -and -not [string]::IsNullOrEmpty($def.Prefix)) { $locKey = $def.Prefix }
+            $locText = $LocMap[$locKey]
+            if ([string]::IsNullOrEmpty($locText) -and $LocMap.ContainsKey($mk)) { $locText = $LocMap[$mk] }
+            if ([string]::IsNullOrEmpty($locText)) {
+                Write-Warning "Modifier '$mk': loc key '$locKey' not resolvable - tooltip line skipped"
+                continue
+            }
+            $raw = 0.0
+            if (-not [double]::TryParse([string]$block.Modifiers[$mk], [System.Globalization.NumberStyles]::Float, [System.Globalization.CultureInfo]::InvariantCulture, [ref]$raw)) { continue }
+            $isPercent = $false
+            $decimals = 2
+            if ($null -ne $def) {
+                $isPercent = $def.Percent -and -not $def.AlreadyPercent
+                if ($null -ne $def.Decimals) { $decimals = [int]$def.Decimals }
+            }
+            $v = [math]::Round($(if ($isPercent) { $raw * 100 } else { $raw }), $decimals)
+            $formatted = $v.ToString("F$decimals", [System.Globalization.CultureInfo]::InvariantCulture)
+            $sep = if ($locText -match '^\[.*_i\]$') { ' ' } else { ': ' }
+            $pct = if ($null -ne $def -and $def.Percent) { '%' } else { '' }
+            if ($v -ge 0) { $lines.Add("$locText$sep#P +$formatted$pct#!") }
+            else { $lines.Add("$locText$sep#N $formatted$pct#!") }
+        }
+    }
+    return $lines
+}
