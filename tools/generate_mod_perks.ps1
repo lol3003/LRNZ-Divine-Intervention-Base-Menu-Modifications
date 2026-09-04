@@ -34,7 +34,8 @@
 
 param(
     [switch]$Scan,                      # F1: list installed perk mods (read-only)
-    [string]$SubMod,                    # F3: standalone compatch for one perk mod
+    [string]$SubMod = "",               # F3: standalone compatch for one perk mod
+    [string[]]$SubModExtraDirs = @(),   # F3: extra ordered perk-mod dirs to merge (engine load order; later wins)
     [string]$Playset,                   # F4: combined compatch from a playset's enabled mods
     [string]$PlaysetMods = "",      # F4: comma/semicolon-separated perk mod names to combine
     [string]$SubMods = "",          # F4: alias for $PlaysetMods (explicit list to combine)
@@ -45,6 +46,7 @@ param(
     [string]$UserFolder   = "$env:USERPROFILE\OneDrive\Dokumente\Paradox Interactive\Crusader Kings III",
     [string[]]$ExtraScanDirs = @(),     # extra dirs to scan for common/dynasty_perks
     [string]$GameDir = "H:\SteamLibrary\steamapps\common\Crusader Kings III\game",
+    [string[]]$LocDirs = @("H:\SteamLibrary\steamapps\common\Crusader Kings III\game\localization\english"),
     [string]$Python = "python",
     [switch]$WhatIf,
     [switch]$Verbose
@@ -213,6 +215,73 @@ function Get-VanillaSurvivorSnapshot {
 # gui/DI_generated_perk_grid.gui, computed from mod files + vanilla game files
 # (mod same-name files replace vanilla files; new hth_*-style keys are added).
 # Non-free mode requires dynasty_prestige >= <cost value> before granting.
+function Write-SubModSguiBlocks {
+    param($Sb, $PerkMap, $Tracks, [string]$CostRef)
+    foreach ($k in $PerkMap.Keys) {
+        [void]$Sb.AppendLine("DI_perk_add_$k = {")
+        [void]$Sb.AppendLine("    scope = character")
+        [void]$Sb.AppendLine("    is_shown = { var:DI_dynasty_selected_dynasty = { NOT = { has_dynasty_perk = $k } } }")
+        [void]$Sb.AppendLine("    effect = { var:DI_dynasty_selected_dynasty = {")
+        [void]$Sb.AppendLine("        if = {")
+        [void]$Sb.AppendLine("            limit = { NOT = { has_dynasty_perk = $k } }")
+        [void]$Sb.AppendLine("            if = {")
+        [void]$Sb.AppendLine("                limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
+        [void]$Sb.AppendLine("                add_dynasty_prestige = $CostRef")
+        [void]$Sb.AppendLine("                add_dynasty_perk = $k")
+        [void]$Sb.AppendLine("            }")
+        [void]$Sb.AppendLine("            else_if = {")
+        [void]$Sb.AppendLine("                limit = { dynasty_prestige >= $CostRef }")
+        [void]$Sb.AppendLine("                add_dynasty_perk = $k")
+        [void]$Sb.AppendLine("            }")
+        [void]$Sb.AppendLine("        }")
+        [void]$Sb.AppendLine("    } }")
+        [void]$Sb.AppendLine("}")
+        [void]$Sb.AppendLine("")
+        [void]$Sb.AppendLine("DI_perk_remove_$k = {")
+        [void]$Sb.AppendLine("    scope = character")
+        [void]$Sb.AppendLine("    is_shown = { var:DI_dynasty_selected_dynasty = { has_dynasty_perk = $k } }")
+        [void]$Sb.AppendLine("    effect = { var:DI_dynasty_selected_dynasty = {")
+        [void]$Sb.AppendLine("        if = { limit = { has_dynasty_perk = $k } remove_dynasty_perk = $k }")
+        [void]$Sb.AppendLine("    } }")
+        [void]$Sb.AppendLine("}")
+        [void]$Sb.AppendLine("")
+    }
+    foreach ($t in $Tracks.Keys) {
+        $trk = $Tracks[$t]
+        [void]$Sb.AppendLine("DI_track_add_all_$t = {")
+        [void]$Sb.AppendLine("    scope = character")
+        [void]$Sb.AppendLine("    is_shown = { var:DI_dynasty_selected_dynasty = { NOT = { $($t)_perks >= $($trk.Count) } } }")
+        [void]$Sb.AppendLine("    effect = { var:DI_dynasty_selected_dynasty = {")
+        foreach ($k in $trk) {
+            [void]$Sb.AppendLine("        if = {")
+            [void]$Sb.AppendLine("            limit = { NOT = { has_dynasty_perk = $k } }")
+            [void]$Sb.AppendLine("            if = {")
+            [void]$Sb.AppendLine("                limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
+            [void]$Sb.AppendLine("                add_dynasty_prestige = $CostRef")
+            [void]$Sb.AppendLine("                add_dynasty_perk = $k")
+            [void]$Sb.AppendLine("            }")
+            [void]$Sb.AppendLine("            else_if = {")
+            [void]$Sb.AppendLine("                limit = { dynasty_prestige >= $CostRef }")
+            [void]$Sb.AppendLine("                add_dynasty_perk = $k")
+            [void]$Sb.AppendLine("            }")
+            [void]$Sb.AppendLine("        }")
+        }
+        [void]$Sb.AppendLine("    } }")
+        [void]$Sb.AppendLine("}")
+        [void]$Sb.AppendLine("")
+        [void]$Sb.AppendLine("DI_track_remove_all_$t = {")
+        [void]$Sb.AppendLine("    scope = character")
+        [void]$Sb.AppendLine("    is_shown = { var:DI_dynasty_selected_dynasty = { $($t)_perks > 0 } }")
+        [void]$Sb.AppendLine("    effect = { var:DI_dynasty_selected_dynasty = {")
+        foreach ($k in $trk) {
+            [void]$Sb.AppendLine("        if = { limit = { has_dynasty_perk = $k } remove_dynasty_perk = $k }")
+        }
+        [void]$Sb.AppendLine("    } }")
+        [void]$Sb.AppendLine("}")
+        [void]$Sb.AppendLine("")
+    }
+}
+
 function New-DiSubMod {
     param(
         [string]$PerkModPath,
@@ -221,6 +290,8 @@ function New-DiSubMod {
         [string]$GameDir,
         [string]$TargetFolder,
         [string]$UserFolder,
+        [string[]]$LocDirs,
+        [string[]]$ExtraPerkModDirs = @(),   # ordered submod paths; engine order, later wins
         [switch]$WhatIf
     )
     $perkDir = Join-Path $PerkModPath "common\dynasty_perks"
@@ -231,12 +302,25 @@ function New-DiSubMod {
     $prefix  = ($dirName -replace '[^A-Za-z0-9_]', '_').ToLowerInvariant()
     if ($prefix -match '^[0-9]') { $prefix = "_$prefix" }
 
-    # --- merged perk model: mod files first (overrides), then surviving vanilla ---
+    # --- merged perk model: mods in reverse engine order (first-seen parse wins,
+    # so later-loaded mods win key collisions), then surviving vanilla files ---
     $vanillaPerkDir = Join-Path $GameDir "common\dynasty_perks"
-    $tmpVanillaPerks = Get-VanillaSurvivorSnapshot -ModDir $perkDir -VanillaDir $vanillaPerkDir -Tag "perks_$prefix"
+    $allPerkDirs = @($perkDir) + $ExtraPerkModDirs
+    $shadowNames = @{}
+    foreach ($d in $allPerkDirs) { Get-ChildItem $d -Filter '*.txt' -ErrorAction SilentlyContinue | ForEach-Object { $shadowNames[$_.Name] = $true } }
+    $tmpVanillaPerks = Get-VanillaSurvivorSnapshot -ModDir $allPerkDirs[0] -VanillaDir $vanillaPerkDir -Tag "perks_$prefix"
+    # The survivor snapshot above only knows the first mod dir's shadows; remove
+    # vanilla files shadowed by ANY mod dir so same-name replacements win.
+    Get-ChildItem $tmpVanillaPerks -Filter '*.txt' | ForEach-Object {
+        if ($shadowNames.ContainsKey($_.Name)) { Remove-Item -LiteralPath $_.FullName -Force }
+    }
+    $parseDirs = @()
+    for ($i = $ExtraPerkModDirs.Count - 1; $i -ge 0; $i--) { $parseDirs += $ExtraPerkModDirs[$i] }
+    $parseDirs += $perkDir
+    $parseDirs += $tmpVanillaPerks
     try {
-        $perks = Get-Perks -Directories @($perkDir, $tmpVanillaPerks)
-        $effectTexts = Get-PerkEffectTextKeys -Directories @($perkDir, $tmpVanillaPerks)
+        $perks = Get-Perks -Directories $parseDirs
+        $effectTexts = Get-PerkEffectTextKeys -Directories $parseDirs
     } finally { Remove-Item -LiteralPath $tmpVanillaPerks -Recurse -Force -ErrorAction SilentlyContinue }
     if ($perks.Count -eq 0) { Write-Warning "No perks parsed from $perkDir or $vanillaPerkDir"; return }
     if (-not (Test-PerksModel $perks)) { throw "Parsed perk model is inconsistent - aborting before writing" }
@@ -244,9 +328,11 @@ function New-DiSubMod {
 
     # --- DLC gates from the same merged sources' dynasty_legacies folders ---------
     $vanillaLegacyDir = Join-Path $GameDir "common\dynasty_legacies"
-    $modLegacyDir = Join-Path $PerkModPath "common\dynasty_legacies"
     $legacyDirs = @()
-    if (Test-Path $modLegacyDir) { $legacyDirs += $modLegacyDir }
+    foreach ($d in $allPerkDirs) {
+        $ld = Join-Path $d "common\dynasty_legacies"
+        if (Test-Path $ld) { $legacyDirs += $ld }
+    }
     if (Test-Path $vanillaLegacyDir) { $legacyDirs += $vanillaLegacyDir }
     $trackGates = if ($legacyDirs.Count -gt 0) { Get-TrackDlcGates -Directories $legacyDirs } else { @{} }
 
@@ -257,74 +343,39 @@ function New-DiSubMod {
 
     $costRef = "DI_dynasty_perk_cost_next_$prefix"
 
+    # -- effect_localization + loc values for static tooltip text --
+    $effLocDirs = @((Join-Path $GameDir "common\effect_localization"))
+    if (Test-Path (Join-Path $PerkModPath "common\effect_localization")) { $effLocDirs += (Join-Path $PerkModPath "common\effect_localization") }
+    $effectLocMap = Get-EffectLocalization -Directories $effLocDirs
+    $locMap = Get-LocValues -Directories $LocDirs
+    # Fallback: some mods ship loc outside localization\english (e.g. AGOT nests it
+    # in english\agot\, Hiraeth in localization\ directly). If a mod-added perk's
+    # name key is unresolvable, append that mod's localization tree - all extra
+    # dirs collected first, then ONE rebuild over vanilla + extras so "later wins"
+    # applies and the vanilla map is never discarded.
+    $langPattern = '(simp_chinese|french|german|spanish|russian|polish|braz_por|japanese|korean|chinese|turkish)'
+    $extraLocDirs = @()
+    foreach ($d in $allPerkDirs) {
+        $missing = $false
+        foreach ($k in $perks.Keys) { if (-not $vanilla.Contains($k) -and [string]::IsNullOrEmpty($locMap["$($k)_name"])) { $missing = $true; break } }
+        if (-not $missing) { continue }
+        $root = Join-Path $d "localization"
+        if (Test-Path $root) {
+            foreach ($y in (Get-ChildItem $root -Filter '*.yml' -Recurse)) {
+                if ($y.FullName -notmatch $langPattern) { $extraLocDirs += $y.DirectoryName }
+            }
+        }
+    }
+    if ($extraLocDirs.Count -gt 0) {
+        $locMap = Get-LocValues -Directories ($LocDirs + ($extraLocDirs | Sort-Object -Unique))
+    }
+
     # -- scripted guis --
     $sgui = [System.Text.StringBuilder]::new()
     [void]$sgui.AppendLine("# GENERATED FILE - do not hand-edit. generate_mod_perks.ps1 -SubMod")
     [void]$sgui.AppendLine("# Cost refunds use $costRef (vanilla + this sub-mod's tracks).")
     [void]$sgui.AppendLine("")
-    foreach ($k in $perks.Keys) {
-        [void]$sgui.AppendLine("DI_perk_add_$k = {")
-        [void]$sgui.AppendLine("    scope = character")
-        [void]$sgui.AppendLine("    is_shown = { var:DI_dynasty_selected_dynasty = { NOT = { has_dynasty_perk = $k } } }")
-        [void]$sgui.AppendLine("    effect = { var:DI_dynasty_selected_dynasty = {")
-        [void]$sgui.AppendLine("        if = {")
-        [void]$sgui.AppendLine("            limit = { NOT = { has_dynasty_perk = $k } }")
-        [void]$sgui.AppendLine("            if = {")
-        [void]$sgui.AppendLine("                limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
-        [void]$sgui.AppendLine("                add_dynasty_prestige = $costRef")
-        [void]$sgui.AppendLine("                add_dynasty_perk = $k")
-        [void]$sgui.AppendLine("            }")
-        [void]$sgui.AppendLine("            else_if = {")
-        [void]$sgui.AppendLine("                limit = { dynasty_prestige >= $costRef }")
-        [void]$sgui.AppendLine("                add_dynasty_perk = $k")
-        [void]$sgui.AppendLine("            }")
-        [void]$sgui.AppendLine("        }")
-        [void]$sgui.AppendLine("    } }")
-        [void]$sgui.AppendLine("}")
-        [void]$sgui.AppendLine("")
-        [void]$sgui.AppendLine("DI_perk_remove_$k = {")
-        [void]$sgui.AppendLine("    scope = character")
-        [void]$sgui.AppendLine("    is_shown = { var:DI_dynasty_selected_dynasty = { has_dynasty_perk = $k } }")
-        [void]$sgui.AppendLine("    effect = { var:DI_dynasty_selected_dynasty = {")
-        [void]$sgui.AppendLine("        if = { limit = { has_dynasty_perk = $k } remove_dynasty_perk = $k }")
-        [void]$sgui.AppendLine("    } }")
-        [void]$sgui.AppendLine("}")
-        [void]$sgui.AppendLine("")
-    }
-    foreach ($t in $tracks.Keys) {
-        $trk = $tracks[$t]
-        [void]$sgui.AppendLine("DI_track_add_all_$t = {")
-        [void]$sgui.AppendLine("    scope = character")
-        [void]$sgui.AppendLine("    is_shown = { var:DI_dynasty_selected_dynasty = { NOT = { $($t)_perks >= $($trk.Count) } } }")
-        [void]$sgui.AppendLine("    effect = { var:DI_dynasty_selected_dynasty = {")
-        foreach ($k in $trk) {
-            [void]$sgui.AppendLine("        if = {")
-            [void]$sgui.AppendLine("            limit = { NOT = { has_dynasty_perk = $k } }")
-            [void]$sgui.AppendLine("            if = {")
-            [void]$sgui.AppendLine("                limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
-            [void]$sgui.AppendLine("                add_dynasty_prestige = $costRef")
-            [void]$sgui.AppendLine("                add_dynasty_perk = $k")
-            [void]$sgui.AppendLine("            }")
-            [void]$sgui.AppendLine("            else_if = {")
-            [void]$sgui.AppendLine("                limit = { dynasty_prestige >= $costRef }")
-            [void]$sgui.AppendLine("                add_dynasty_perk = $k")
-            [void]$sgui.AppendLine("            }")
-            [void]$sgui.AppendLine("        }")
-        }
-        [void]$sgui.AppendLine("    } }")
-        [void]$sgui.AppendLine("}")
-        [void]$sgui.AppendLine("")
-        [void]$sgui.AppendLine("DI_track_remove_all_$t = {")
-        [void]$sgui.AppendLine("    scope = character")
-        [void]$sgui.AppendLine("    is_shown = { var:DI_dynasty_selected_dynasty = { $($t)_perks > 0 } }")
-        [void]$sgui.AppendLine("    effect = { var:DI_dynasty_selected_dynasty = {")
-        foreach ($k in $trk) {
-            [void]$sgui.AppendLine("        if = { limit = { has_dynasty_perk = $k } remove_dynasty_perk = $k }")
-        }
-        [void]$sgui.AppendLine("    } }")
-        [void]$sgui.AppendLine("}")
-        [void]$sgui.AppendLine("")
-    }
+    Write-SubModSguiBlocks -Sb $sgui -PerkMap $perks -Tracks $tracks -CostRef $costRef
 
     # -- grid: COMPLETE same-path override of the base mod's generated grid --
     # CK3 GUI type registration is first-loaded-wins; a second di_perk_grid_extension
@@ -355,7 +406,10 @@ function New-DiSubMod {
     [void]$gui.AppendLine("    }")
     [void]$gui.AppendLine("}")
 
-    # -- tooltip loc: game-like name + effect description per perk --
+    # -- tooltip loc: STATIC resolved text (same format as the base generator).
+    # CRITICAL: emit ONLY mod-added perk keys - vanilla keys are already covered by
+    # the base mod's DI_generated_perk_tooltips_l_english.yml, and duplicate
+    # definitions break loc resolution engine-side (pdx_localize errors).
     $ttLoc = [System.Text.StringBuilder]::new()
     [void]$ttLoc.AppendLine("# =============================================================================")
     [void]$ttLoc.AppendLine("# GENERATED FILE - do not hand-edit. generate_mod_perks.ps1 -SubMod")
@@ -363,15 +417,25 @@ function New-DiSubMod {
     [void]$ttLoc.AppendLine("# =============================================================================")
     [void]$ttLoc.AppendLine("")
     [void]$ttLoc.AppendLine("l_english:")
+    $modCount = 0
     foreach ($k in $perks.Keys) {
-        $parts = "#bold [Localize('${k}_name')]#!"
+        if ($vanilla.Contains($k)) { continue }
+        $name = $locMap["$($k)_name"]
+        if ([string]::IsNullOrEmpty($name)) { $name = "$($k)_name" }
+        $parts = "#bold $name#!"
         if ($effectTexts.ContainsKey($k)) {
             foreach ($e in $effectTexts[$k]) {
-                $parts += "\n[Localize('${e}')]"
+                $locKey = if ($effectLocMap.ContainsKey($e)) { $effectLocMap[$e] } else { $e }
+                $eff = $locMap[$locKey]
+                if ([string]::IsNullOrEmpty($eff)) { $eff = $e }
+                $parts += "\n$eff"
             }
         }
-        [void]$ttLoc.AppendLine(" DI_perk_tt_${k}:0 `"$parts`"")
+        $escaped = $parts -replace '"', '\"'
+        [void]$ttLoc.AppendLine(" DI_perk_tt_${k}:0 `"$escaped`"")
+        $modCount++
     }
+    Write-Host "Tooltip loc: $modCount mod-added entries (vanilla keys resolve from the base mod's loc file)."
 
     # -- script value: per-prefix cost over ALL merged tracks --
     $values = [System.Text.StringBuilder]::new()
@@ -395,7 +459,16 @@ function New-DiSubMod {
     # remove the pre-v15 extension-slot grid if a previous run created it
     $staleGrid = Join-Path $outDir "gui\DI_generated_submod_${prefix}_grid.gui"
     if (Test-Path $staleGrid) { Remove-Item -LiteralPath $staleGrid -Force; Write-Host "Removed stale extension-slot grid: $staleGrid" }
-    Write-Descriptor -OutDir $outDir -ModName "DI Perks - $dirName" -Depends @($dirName, $BaseDIName) -UserFolder $UserFolder -WriteLauncher $true
+    $deps = @($dirName)
+    foreach ($d in $ExtraPerkModDirs) {
+        $desc = Join-Path $d "descriptor.mod"
+        $nm = $null
+        if (Test-Path $desc) { $m = Select-String -Path $desc -Pattern 'name="([^"]+)"' | Select-Object -First 1; if ($m) { $nm = $m.Matches[0].Groups[1].Value } }
+        if (-not $nm) { $nm = Split-Path $d -Leaf }
+        $deps += $nm
+    }
+    $deps += $BaseDIName
+    Write-Descriptor -OutDir $outDir -ModName "DI Perks - $dirName" -Depends $deps -UserFolder $UserFolder -WriteLauncher $true
     Write-Host "Wrote sub-mod to $outDir"
 }
 
@@ -408,6 +481,7 @@ function New-DiCombinedMod {
         [string]$GameDir,
         [string]$TargetFolder,
         [string]$UserFolder,
+        [string[]]$LocDirs,
         [switch]$WhatIf
     )
     if (-not $PerkMods -or $PerkMods.Count -eq 0) { throw "No perk mods supplied to combined generation." }
@@ -619,7 +693,7 @@ function Invoke-DiMenu {
             $mods = $results | ForEach { [pscustomobject]@{ Path = $_.Path; Name = $_.Name } }
             $name = Read-Host "Combined mod name [DI Perks - Combined]: "
             if (-not $name) { $name = "DI Perks - Combined" }
-            New-DiCombinedMod -PerkMods $mods -CombinedName $name -BaseDIName $baseName -GameDir $GameDir -UserFolder $UserFolder -WhatIf:$WhatIf
+            New-DiCombinedMod -PerkMods $mods -CombinedName $name -BaseDIName $baseName -GameDir $GameDir -UserFolder $UserFolder -LocDirs $LocDirs -WhatIf:$WhatIf
         }
         "2" {
             Write-Host "Numbered list (or -SubMod <name> at the CLI works too):"
@@ -628,7 +702,7 @@ function Invoke-DiMenu {
             $idx = [int]$sel - 1
             if ($idx -ge 0 -and $idx -lt $results.Count) {
                 $s = $results[$idx]
-                New-DiSubMod -PerkModPath $s.Path -PerkModName $s.Name -BaseDIName $baseName -GameDir $GameDir -UserFolder $UserFolder -WhatIf:$WhatIf
+                New-DiSubMod -PerkModPath $s.Path -PerkModName $s.Name -BaseDIName $baseName -GameDir $GameDir -UserFolder $UserFolder -LocDirs $LocDirs -WhatIf:$WhatIf
             } else { Write-Host "Bad choice." }
         }
         "3" {
@@ -637,7 +711,7 @@ function Invoke-DiMenu {
             $mods = Get-PlaysetMods -UserFolder $UserFolder -PlaysetName $name
             $pl = @($mods | ForEach { if ($_.Path -and (Test-Path (Join-Path $_.Path "common\dynasty_perks"))) { [pscustomobject]@{ Path = $_.Path; Name = $_.Name } } })
             if ($pl.Count -eq 0) { Write-Host "No perk mods in that playset."; return }
-            New-DiCombinedMod -PerkMods $pl -CombinedName "DI Perks - $name" -BaseDIName $baseName -GameDir $GameDir -UserFolder $UserFolder -WhatIf:$WhatIf
+            New-DiCombinedMod -PerkMods $pl -CombinedName "DI Perks - $name" -BaseDIName $baseName -GameDir $GameDir -UserFolder $UserFolder -LocDirs $LocDirs -WhatIf:$WhatIf
         }
         default { Write-Host "Bye." }
     }
@@ -680,7 +754,7 @@ if ($Playset) {
     $pm = Get-PlaysetMods -UserFolder $UserFolder -PlaysetName $Playset
     $select = @($pm | ForEach { if ($_.Path -and (Test-Path (Join-Path $_.Path "common\dynasty_perks"))) { [pscustomobject]@{ Path=$_.Path; Name=$_.Name } } })
     $cn = $CombinedName;     if (-not $cn) { $cn = "DI Perks - $Playset" }
-    New-DiCombinedMod -PerkMods $select -CombinedName $cn -BaseDIName $baseDIName -GameDir $GameDir -TargetFolder $TargetFolder -UserFolder $UserFolder -WhatIf:$WhatIf
+    New-DiCombinedMod -PerkMods $select -CombinedName $cn -BaseDIName $baseDIName -GameDir $GameDir -TargetFolder $TargetFolder -UserFolder $UserFolder -LocDirs $LocDirs -WhatIf:$WhatIf
 }
 elseif ($PlaysetMods -or $SubMods) {
     # Explicit list of perk mod names to combine, comma/semicolon separated.
@@ -695,7 +769,7 @@ elseif ($PlaysetMods -or $SubMods) {
     }
     if ($select.Count -eq 0) { Write-Warning "No mods matched -PlaysetMods."; exit 1 }
     Write-Host "Selected: $($select.Count) mod(s)."
-    New-DiCombinedMod -PerkMods $select -CombinedName $CombinedName -BaseDIName $baseDIName -GameDir $GameDir -TargetFolder $TargetFolder -UserFolder $UserFolder -WhatIf:$WhatIf
+    New-DiCombinedMod -PerkMods $select -CombinedName $CombinedName -BaseDIName $baseDIName -GameDir $GameDir -TargetFolder $TargetFolder -UserFolder $UserFolder -LocDirs $LocDirs -WhatIf:$WhatIf
 }
 elseif ($SubMod) {
     $cands = Get-ModCandidates
@@ -704,7 +778,7 @@ elseif ($SubMod) {
     if ($match.Count -gt 1) { Write-Warning "'$SubMod' matched multiple; using first." }
     $sel = $match[0]
     Write-Host "Generating sub-mod for: $($sel.Name)"
-    New-DiSubMod -PerkModPath $sel.Path -PerkModName $sel.Name -BaseDIName $baseDIName -GameDir $GameDir -TargetFolder $TargetFolder -UserFolder $UserFolder -WhatIf:$WhatIf
+    New-DiSubMod -PerkModPath $sel.Path -PerkModName $sel.Name -BaseDIName $baseDIName -GameDir $GameDir -TargetFolder $TargetFolder -UserFolder $UserFolder -LocDirs $LocDirs -ExtraPerkModDirs $SubModExtraDirs -WhatIf:$WhatIf
 }
 else {
     Invoke-DiMenu

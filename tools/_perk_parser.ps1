@@ -225,3 +225,67 @@ function Test-PerksModel {
     }
     return $ok
 }
+
+# Load localization values from one or more loc directories into a flat
+# key -> value hashtable. Parses YAML-ish lines matching
+#   <key>:<version> "<value>"
+# across all *.yml files (recursive) in each directory, in the order given.
+# Later directories/files override earlier ones, so mod loc passed AFTER vanilla
+# wins. Values are kept raw, including #bold markers and any datafunctions they
+# contain - CK3 resolves those at display time.
+function Get-LocValues {
+    param([string[]]$Directories)
+    $locMap = @{}
+    foreach ($dir in $Directories) {
+        if (-not (Test-Path $dir)) { Write-Warning "loc dir not found: $dir"; continue }
+        foreach ($file in Get-ChildItem $dir -Filter '*.yml' -Recurse | Sort-Object FullName) {
+            foreach ($line in Get-Content $file.FullName) {
+                # vanilla loc uses <key>:<version> "value"; several mods omit the
+                # version (AGOT). \d*\s* covers both "key:0" and "key: ".
+                if ($line -match '^\s*(\S+):\d*\s*"([^"]*)"') {
+                    $locMap[$Matches[1]] = $Matches[2]
+                }
+            }
+        }
+    }
+    return $locMap
+}
+
+# Parse common/effect_localization/*.txt: effect-loc key -> its `global = <LOC_KEY>`
+# mapping. These are dynamically-evaluated effect descriptions (e.g.
+# warfare_legacy_5_effect -> HOUSE_GUARD_DESCRIPTION) whose actual text lives in a
+# normal loc key. Returns a hashtable effectLocKey -> plain loc key (first `global`
+# entry wins; that is the key the GUI displays by default).
+function Get-EffectLocalization {
+    param([string[]]$Directories)
+    $map = @{}
+    foreach ($dir in $Directories) {
+        if (-not (Test-Path $dir)) { continue }
+        foreach ($file in Get-ChildItem $dir -Filter '*.txt' | Sort-Object Name) {
+            $lines = Get-Content $file.FullName
+            $currentKey = $null
+            $depth = 0
+            foreach ($line in $lines) {
+                $trimmed = ($line -replace '#.*$', '').Trim()
+                if ($null -eq $currentKey -and $depth -eq 0 -and $trimmed -match '^(\w+)\s*=\s*\{\s*$') {
+                    $currentKey = $Matches[1]
+                    $depth = 1
+                    continue
+                }
+                if ($null -ne $currentKey) {
+                    $chars = $trimmed.ToCharArray() | Where-Object { $_ -eq '{' -or $_ -eq '}' }
+                    foreach ($c in $chars) { if ($c -eq '{') { $depth++ } else { $depth-- } }
+                    if ($depth -le 0) {
+                        $currentKey = $null
+                        $depth = 0
+                        continue
+                    }
+                    if ($depth -eq 1 -and $trimmed -match '^\s*global\s*=\s*(\w+)') {
+                        if (-not $map.ContainsKey($currentKey)) { $map[$currentKey] = $Matches[1] }
+                    }
+                }
+            }
+        }
+    }
+    return $map
+}

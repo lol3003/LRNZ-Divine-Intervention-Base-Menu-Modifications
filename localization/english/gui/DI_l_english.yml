@@ -760,6 +760,10 @@
  DI_DYNASTY_EDITOR_PLUS_ONE:0 "+1"
  DI_DYNASTY_EDITOR_RESET_SPLENDOR:0 "Reset to 0"
  DI_DYNASTY_EDITOR_SPLENDOR_RESET_TT:0 "Set the selected dynasty's Level of Splendor back to the lowest level."
+ DI_DYNASTY_EDITOR_UNLOCK_ALL:0 "Unlock All"
+ DI_DYNASTY_EDITOR_UNLOCK_ALL_TT:0 "Grant every perk of every track to the selected dynasty. Free Mode refunds renown; otherwise it is charged."
+ DI_DYNASTY_EDITOR_LOCK_ALL:0 "Lock All"
+ DI_DYNASTY_EDITOR_LOCK_ALL_TT:0 "Remove every perk from the selected dynasty."
  DI_tm_building_walls_00:0 "Walls"
  DI_tm_building_walls_01_tribal:0 "Tribal Walls"
  ### INTERACTIONS ###

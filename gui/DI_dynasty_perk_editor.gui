@@ -102,6 +102,20 @@ window = {
 				onclick = "[GetScriptedGui('DI_dynasty_splendor_reset').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
 				tooltip = "DI_DYNASTY_EDITOR_SPLENDOR_RESET_TT"
 			}
+
+			button_standard = {
+				size = { 120 26 }
+				text = "DI_DYNASTY_EDITOR_UNLOCK_ALL"
+				onclick = "[GetScriptedGui('DI_perk_unlock_all').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+				tooltip = "DI_DYNASTY_EDITOR_UNLOCK_ALL_TT"
+			}
+
+			button_standard = {
+				size = { 120 26 }
+				text = "DI_DYNASTY_EDITOR_LOCK_ALL"
+				onclick = "[GetScriptedGui('DI_perk_lock_all').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+				tooltip = "DI_DYNASTY_EDITOR_LOCK_ALL_TT"
+			}
 		}
 
 		header_standard = {  # Dynasty perk editor window header

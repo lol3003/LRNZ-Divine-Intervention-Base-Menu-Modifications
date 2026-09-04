@@ -119,6 +119,11 @@ the base mod's empty slot definition always won. The `-SubMod` compatch therefor
 - A tooltip loc file (`localization/english/DI_generated_perk_tt_l_english.yml`) gives every
   button a game-like tooltip: bold perk name + effect description lines extracted from the
   perk's `effect = { ... }` block (`*_ai_effect` / `*_req_effect` excluded).
+  The compatch tooltip file contains **only mod-added perk keys**; vanilla perks keep
+  using the base mod's `DI_generated_perk_tooltips_l_english.yml`. Duplicate definitions
+  break loc resolution engine-side, so the generator skips any key the base mod already
+  ships. `DI_perk_unlock_all` / `DI_perk_lock_all` are **base-mod-only** scripted guis
+  and are never emitted in compatches.
 - The old extension-slot grid (`gui/DI_generated_submod_<name>_grid.gui`) is obsolete; the
   generator deletes it from the compatch folder on regeneration.
 

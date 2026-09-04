@@ -24,6 +24,7 @@ param(
     [string]$GameDir = "H:\SteamLibrary\steamapps\common\Crusader Kings III\game",
     [string]$ModDir  = "$PSScriptRoot\..",
     [string[]]$ExtraPerkDirs = @(),   # e.g. AGOT mod's common/dynasty_perks
+    [string[]]$LocDirs = @("H:\SteamLibrary\steamapps\common\Crusader Kings III\game\localization\english"),
     [switch]$WhatIf,
     [switch]$Check   # dry-run summary only (no writes); used by validate_perk_editor.ps1
 )
@@ -73,6 +74,19 @@ if (-not (Test-PerksModel $perks)) { throw "Parsed perk model is inconsistent - 
 # effect-text loc keys per perk (for the generated tooltip loc file). Missing key
 # = perk has no effect = { ... } text; the tooltip falls back to name-only.
 $effectTexts = Get-PerkEffectTextKeys -Directories $perkDirs
+
+# loc values (key -> resolved text) for static tooltip emission. Vanilla first,
+# then any extra loc dirs (mod loc wins). Resolved at generation time so the
+# emitted loc file contains only static text - [Localize('key')] wrappers broke
+# in-game because no vanilla tooltip loc uses that quoted form.
+$locMap = Get-LocValues -Directories $LocDirs
+
+# effect_localization chain: some perk effect texts (e.g. warfare_legacy_5_effect)
+# are dynamic - the real text lives in a plain loc key via common/effect_localization.
+# Load that mapping so tooltip resolution can follow the chain instead of falling
+# back to the raw dynamic key.
+$effLocDirs = $perkDirs | ForEach-Object { $_ -replace 'dynasty_perks$', 'effect_localization' }
+$effectLocMap = Get-EffectLocalization -Directories $effLocDirs
 
 # parse DLC gates from the same dirs' sibling dynasty_legacies folders
 $legacyDirs = $perkDirs | ForEach-Object { $_ -replace 'dynasty_perks$', 'dynasty_legacies' }
@@ -217,7 +231,7 @@ $sgui = [System.Text.StringBuilder]::new()
 [void]$sgui.AppendLine("# GENERATED FILE - do not hand-edit.")
 [void]$sgui.AppendLine("# Regenerate with: tools/generate_perk_editor.ps1")
 [void]$sgui.AppendLine("# Per dynasty perk: add/remove effects (left click adds, right click removes),")
-[void]$sgui.AppendLine("# plus per-track add-all/remove-all effects.")
+[void]$sgui.AppendLine("# plus per-track add-all/remove-all and bulk unlock-all/lock-all effects.")
 [void]$sgui.AppendLine("# Operates on the dynasty selected in the DI perk editor")
 [void]$sgui.AppendLine("# (player variable DI_dynasty_selected_dynasty).")
 [void]$sgui.AppendLine("# =============================================================================")
@@ -232,6 +246,46 @@ foreach ($t in $tracks.Keys) {
     Write-TrackAddAllBlock $sgui $t $tracks[$t]
     Write-TrackRemoveAllBlock $sgui $t $tracks[$t]
 }
+
+# --- Bulk unlock/lock-all -------------------------------------------------------
+# Apply the exact per-perk add/remove body to every perk in first-seen order, so
+# free-mode vs. renown-cost logic is identical to the single-perk toggles. Buttons
+# live in the hand-written editor window's control bar.
+function Write-BulkAllBlock {
+    param($Sb, [string]$Name, $PerkMap, [string]$Direction)
+    [void]$Sb.AppendLine("$Name = {")
+    [void]$Sb.AppendLine("    scope = character")
+    [void]$Sb.AppendLine("")
+    [void]$Sb.AppendLine("    effect = {")
+    [void]$Sb.AppendLine("        var:DI_dynasty_selected_dynasty = {")
+    foreach ($k in $PerkMap.Keys) {
+        if ($Direction -eq 'add') {
+            [void]$Sb.AppendLine("            if = {")
+            [void]$Sb.AppendLine("                limit = { NOT = { has_dynasty_perk = $k } }")
+            [void]$Sb.AppendLine("                if = {")
+            [void]$Sb.AppendLine("                    limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
+            [void]$Sb.AppendLine("                    add_dynasty_prestige = DI_dynasty_perk_cost_next")
+            [void]$Sb.AppendLine("                    add_dynasty_perk = $k")
+            [void]$Sb.AppendLine("                }")
+            [void]$Sb.AppendLine("                else_if = {")
+            [void]$Sb.AppendLine("                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }")
+            [void]$Sb.AppendLine("                    add_dynasty_perk = $k")
+            [void]$Sb.AppendLine("                }")
+            [void]$Sb.AppendLine("            }")
+        } else {
+            [void]$Sb.AppendLine("            if = {")
+            [void]$Sb.AppendLine("                limit = { has_dynasty_perk = $k }")
+            [void]$Sb.AppendLine("                remove_dynasty_perk = $k")
+            [void]$Sb.AppendLine("            }")
+        }
+    }
+    [void]$Sb.AppendLine("        }")
+    [void]$Sb.AppendLine("    }")
+    [void]$Sb.AppendLine("}")
+    [void]$Sb.AppendLine("")
+}
+Write-BulkAllBlock $sgui "DI_perk_unlock_all" $perks 'add'
+Write-BulkAllBlock $sgui "DI_perk_lock_all" $perks 'remove'
 if (-not $WhatIf) {
     New-Item -ItemType Directory -Force -Path (Split-Path $outSgui) | Out-Null
     [System.IO.File]::WriteAllText($outSgui, $sgui.ToString(), $utf8Bom)
@@ -276,11 +330,10 @@ if (-not $WhatIf) {
 $gui = [System.Text.StringBuilder]::new()
 [void]$gui.AppendLine("### GENERATED FILE - do not hand-edit. Regenerate with: tools/generate_perk_editor.ps1")
 [void]$gui.AppendLine("### Per-perk toggle grid for the DI dynasty perk editor.")
-[void]$gui.AppendLine("### NOTE: has_dynasty_perk is a script trigger, not a GUI datafunction, so owned")
-[void]$gui.AppendLine("### state cannot be rendered in the UI. Buttons are therefore always enabled:")
+[void]$gui.AppendLine("### Owned state IS rendered via the remove SGUI's IsShown binding (gold layer +")
+[void]$gui.AppendLine("### checkmark). Buttons stay enabled for left-add / right-remove.")
 [void]$gui.AppendLine("### left click = add (no-op if already owned via the add SGUI's is_shown guard),")
 [void]$gui.AppendLine("### right click = remove (no-op if not owned). Out-of-order add/remove is intended.")
-[void]$gui.AppendLine("### Owned state is intentionally not rendered: has_dynasty_perk is a script trigger, not a GUI datafunction (see docs/DYNASTY_PERK_EDITOR_PLAN.md v14).")
 [void]$gui.AppendLine("")
 [void]$gui.AppendLine("types DI_DynastyGeneratedPerks {")
 [void]$gui.AppendLine("    type di_generated_perk_grid = vbox {")
@@ -312,12 +365,13 @@ if (-not $WhatIf) {
 }
 
 # --- Generate tooltip loc ---------------------------------------------------------
-# One loc entry per perk, referenced by the grid button tooltip:
-#   DI_perk_tt_<perk>:0 "#bold [Localize('<perk>_name')]#!\n[Localize('<effect_key>')]..."
+# One loc entry per perk, referenced by the grid button tooltip. Text is resolved
+# STATICALLY at generation time from the loc files (vanilla first, then -LocDirs
+# so mod loc wins):  DI_perk_tt_<perk>:0 "#bold <name>#!\n<effect1>\n<effect2>"
 # Effect keys come from the perk's effect = { ... } block (_ai_effect/_req_effect
-# excluded by the parser). Perks without effect text get name-only tooltips.
-# [Localize(...)] datafunctions inside loc values are vanilla-verified
-# (game/localization/english/ledger/ledger_filtersorts_l_english.yml).
+# excluded by the parser). Perks without effect text get name-only tooltips;
+# unresolvable keys fall back to the raw key string. No [Localize(...)] wrappers:
+# the quoted form has no vanilla tooltip precedent and silently rendered empty.
 $ttLoc = [System.Text.StringBuilder]::new()
 [void]$ttLoc.AppendLine("# =============================================================================")
 [void]$ttLoc.AppendLine("# GENERATED FILE - do not hand-edit.")
@@ -327,13 +381,19 @@ $ttLoc = [System.Text.StringBuilder]::new()
 [void]$ttLoc.AppendLine("")
 [void]$ttLoc.AppendLine("l_english:")
 foreach ($k in $perks.Keys) {
-    $parts = "#bold [Localize('${k}_name')]#!"
+    $name = $locMap["${k}_name"]
+    if ([string]::IsNullOrEmpty($name)) { $name = "${k}_name" }
+    $parts = "#bold $name#!"
     if ($effectTexts.ContainsKey($k)) {
         foreach ($e in $effectTexts[$k]) {
-            $parts += "\n[Localize('${e}')]"
+            $locKey = if ($effectLocMap.ContainsKey($e)) { $effectLocMap[$e] } else { $e }
+            $eff = $locMap[$locKey]
+            if ([string]::IsNullOrEmpty($eff)) { $eff = $e }
+            $parts += "\n$eff"
         }
     }
-    [void]$ttLoc.AppendLine(" DI_perk_tt_${k}:0 `"$parts`"")
+    $escaped = $parts -replace '"', '\"'
+    [void]$ttLoc.AppendLine(" DI_perk_tt_${k}:0 `"$escaped`"")
 }
 if (-not $WhatIf) {
     New-Item -ItemType Directory -Force -Path (Split-Path $outTtLoc) | Out-Null
