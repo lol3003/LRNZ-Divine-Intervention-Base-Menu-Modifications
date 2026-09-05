@@ -381,29 +381,41 @@ if (-not $WhatIf) {
 # --- Generate tooltip loc ---------------------------------------------------------
 # One loc entry per perk, referenced by the grid button tooltip. Text is resolved
 # STATICALLY at generation time from the loc files (vanilla first, then -LocDirs
-# so mod loc wins):  DI_perk_tt_<perk>:0 "#bold <name>#!\n<effect1>\n<effect2>" +
+# so mod loc wins):  DI_perk_tt_<perk>:0 "#bold $<perk>_name$#!\n<effect1>..." +
 # character_modifier lines (bold block name + per-modifier #P/#N value lines,
-# formatted via ConvertTo-PerkModifierTooltipLines in _perk_parser.ps1).
-# Effect keys come from the perk's effect = { ... } block (_ai_effect/_req_effect
-# excluded by the parser). Perks without effect text get name-only tooltips;
-# unresolvable keys fall back to the raw key string. No [Localize(...)] wrappers:
+# formatted via ConvertTo-PerkModifierTooltipLines in _perk_parser.ps1). The bold
+# heading is a loc VARIABLE ref (not baked text) so it follows load-order loc at
+# runtime - renaming mods keep tooltip heading and button label in sync. Effect
+# keys come from the perk's effect = { ... } block (_ai_effect/_req_effect
+# excluded by the parser), resolved as <key>, then vanilla's <key>_global
+# (custom_description convention), then the raw key. Perks without effect text
+# get name-only tooltips. No [Localize(...)] wrappers in the TOOLTIP ATTRIBUTE:
 # the quoted form has no vanilla tooltip precedent and silently rendered empty.
 $ttLoc = [System.Text.StringBuilder]::new()
 [void]$ttLoc.AppendLine("# =============================================================================")
 [void]$ttLoc.AppendLine("# GENERATED FILE - do not hand-edit.")
 [void]$ttLoc.AppendLine("# Regenerate with: tools/generate_perk_editor.ps1")
-[void]$ttLoc.AppendLine("# Grid button tooltips: perk name (bold) + effect description lines.")
+[void]$ttLoc.AppendLine("# Grid button tooltips: perk name (bold, $<key>_name$ loc var) + effect/modifier lines.")
 [void]$ttLoc.AppendLine("# =============================================================================")
 [void]$ttLoc.AppendLine("")
 [void]$ttLoc.AppendLine("l_english:")
 foreach ($k in $perks.Keys) {
     $name = $locMap["${k}_name"]
     if ([string]::IsNullOrEmpty($name)) { $name = "${k}_name" }
-    $parts = "#bold $name#!"
+    # heading as a loc variable ref (not baked text): follows load-order loc at
+    # runtime so renaming mods keep tooltip heading and button label in sync;
+    # raw key fallback when the name loc is missing entirely
+    if ($name -ne "${k}_name") {
+        $parts = '#bold $' + $k + '_name$#!'
+    } else {
+        $parts = "#bold $($k)_name#!"
+    }
     if ($effectTexts.ContainsKey($k)) {
         foreach ($e in $effectTexts[$k]) {
             $locKey = if ($effectLocMap.ContainsKey($e)) { $effectLocMap[$e] } else { $e }
             $eff = $locMap[$locKey]
+            # custom_description_no_bullet keys resolve under vanilla's _global suffix
+            if ([string]::IsNullOrEmpty($eff)) { $eff = $locMap["${e}_global"] }
             if ([string]::IsNullOrEmpty($eff)) { $eff = $e }
             $parts += "\n$eff"
         }

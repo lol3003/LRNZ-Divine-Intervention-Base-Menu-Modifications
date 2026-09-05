@@ -280,6 +280,49 @@ function Write-SubModSguiBlocks {
         [void]$Sb.AppendLine("}")
         [void]$Sb.AppendLine("")
     }
+    # Bulk unlock-all / lock-all over the FULL merged perk set. These NAME-OVERRIDE
+    # the base mod's 105-key versions (same-name scripted guis: later mod wins) so
+    # the window's Unlock All / Lock All buttons cover mod-added tracks/keys too and
+    # use THIS sub-mod's cost value - the base cost value is blind to modded tracks,
+    # which silently drained renown dry (free-mode top-up under-counted per add).
+    [void]$Sb.AppendLine("DI_perk_unlock_all = {")
+    [void]$Sb.AppendLine("    scope = character")
+    [void]$Sb.AppendLine("")
+    [void]$Sb.AppendLine("    effect = {")
+    [void]$Sb.AppendLine("        var:DI_dynasty_selected_dynasty = {")
+    foreach ($k in $PerkMap.Keys) {
+        [void]$Sb.AppendLine("            if = {")
+        [void]$Sb.AppendLine("                limit = { NOT = { has_dynasty_perk = $k } }")
+        [void]$Sb.AppendLine("                if = {")
+        [void]$Sb.AppendLine("                    limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
+        [void]$Sb.AppendLine("                    add_dynasty_prestige = $CostRef")
+        [void]$Sb.AppendLine("                    add_dynasty_perk = $k")
+        [void]$Sb.AppendLine("                }")
+        [void]$Sb.AppendLine("                else_if = {")
+        [void]$Sb.AppendLine("                    limit = { dynasty_prestige >= $CostRef }")
+        [void]$Sb.AppendLine("                    add_dynasty_perk = $k")
+        [void]$Sb.AppendLine("                }")
+        [void]$Sb.AppendLine("            }")
+    }
+    [void]$Sb.AppendLine("        }")
+    [void]$Sb.AppendLine("    }")
+    [void]$Sb.AppendLine("}")
+    [void]$Sb.AppendLine("")
+    [void]$Sb.AppendLine("DI_perk_lock_all = {")
+    [void]$Sb.AppendLine("    scope = character")
+    [void]$Sb.AppendLine("")
+    [void]$Sb.AppendLine("    effect = {")
+    [void]$Sb.AppendLine("        var:DI_dynasty_selected_dynasty = {")
+    foreach ($k in $PerkMap.Keys) {
+        [void]$Sb.AppendLine("            if = {")
+        [void]$Sb.AppendLine("                limit = { has_dynasty_perk = $k }")
+        [void]$Sb.AppendLine("                remove_dynasty_perk = $k")
+        [void]$Sb.AppendLine("            }")
+    }
+    [void]$Sb.AppendLine("        }")
+    [void]$Sb.AppendLine("    }")
+    [void]$Sb.AppendLine("}")
+    [void]$Sb.AppendLine("")
 }
 
 function New-DiSubMod {
@@ -392,6 +435,8 @@ function New-DiSubMod {
     $sgui = [System.Text.StringBuilder]::new()
     [void]$sgui.AppendLine("# GENERATED FILE - do not hand-edit. generate_mod_perks.ps1 -SubMod")
     [void]$sgui.AppendLine("# Cost refunds use $costRef (vanilla + this sub-mod's tracks).")
+    [void]$sgui.AppendLine("# Bulk unlock-all/lock-all NAME-OVERRIDE the base mod's versions (later mod wins)")
+    [void]$sgui.AppendLine("# so the window buttons cover the full merged perk set.")
     [void]$sgui.AppendLine("")
     Write-SubModSguiBlocks -Sb $sgui -PerkMap $perks -Tracks $tracks -CostRef $costRef
 
@@ -431,7 +476,7 @@ function New-DiSubMod {
     $ttLoc = [System.Text.StringBuilder]::new()
     [void]$ttLoc.AppendLine("# =============================================================================")
     [void]$ttLoc.AppendLine("# GENERATED FILE - do not hand-edit. generate_mod_perks.ps1 -SubMod")
-    [void]$ttLoc.AppendLine("# Grid button tooltips: perk name (bold) + effect description lines.")
+    [void]$ttLoc.AppendLine("# Grid button tooltips: perk name (bold, $<key>_name$ loc var) + effect/modifier lines.")
     [void]$ttLoc.AppendLine("# =============================================================================")
     [void]$ttLoc.AppendLine("")
     [void]$ttLoc.AppendLine("l_english:")
@@ -440,11 +485,20 @@ function New-DiSubMod {
         if ($vanilla.Contains($k)) { continue }
         $name = $locMap["$($k)_name"]
         if ([string]::IsNullOrEmpty($name)) { $name = "$($k)_name" }
-        $parts = "#bold $name#!"
+        # heading as a loc variable ref (not baked text): follows load-order loc at
+        # runtime so renaming mods keep tooltip heading and button label in sync;
+        # raw key fallback when the name loc is missing entirely
+        if ($name -ne "$($k)_name") {
+            $parts = '#bold $' + $k + '_name$#!'
+        } else {
+            $parts = "#bold $($k)_name#!"
+        }
         if ($effectTexts.ContainsKey($k)) {
             foreach ($e in $effectTexts[$k]) {
                 $locKey = if ($effectLocMap.ContainsKey($e)) { $effectLocMap[$e] } else { $e }
                 $eff = $locMap[$locKey]
+                # custom_description_no_bullet keys resolve under vanilla's _global suffix
+                if ([string]::IsNullOrEmpty($eff)) { $eff = $locMap["${e}_global"] }
                 if ([string]::IsNullOrEmpty($eff)) { $eff = $e }
                 $parts += "\n$eff"
             }

@@ -131,9 +131,11 @@ function Group-PerksByTrack {
 
 # Parse common/dynasty_perks/*.txt: perk key -> list of effect-text loc keys.
 # Effect text keys are `text = <key>` values found inside the perk's first-level
-# `effect = { ... }` block (vanilla emits them via custom_description_no_bullet).
-# Keys ending in _ai_effect / _req_effect are excluded: they are AI-behaviour /
-# requirement text (Hiraeth-style mods), not player-facing effect descriptions.
+# `effect = { ... }` block (vanilla emits them via custom_description_no_bullet,
+# either on its own line or inline: `custom_description_no_bullet = { text = X }`
+# - the key is matched anywhere in the line). Keys ending in _ai_effect /
+# _req_effect are excluded: they are AI-behaviour / requirement text
+# (Hiraeth-style mods), not player-facing effect descriptions.
 # Returns a hashtable perk key -> List[string] (empty list when the perk has no
 # effect text). Perk keys absent from the result have no effect block at all.
 function Get-PerkEffectTextKeys {
@@ -175,7 +177,7 @@ function Get-PerkEffectTextKeys {
                     if (-not $inEffect -and $depth -eq 1 -and $trimmed -match '^effect\s*=\s*\{') {
                         $inEffect = $true
                     }
-                    if ($inEffect -and $trimmed -match '^\s*text\s*=\s*(\w+)') {
+                    if ($inEffect -and $trimmed -match '\btext\s*=\s*(\w+)') {
                         $k = $Matches[1]
                         if ($k -notmatch '_(ai|req)_effect$') {
                             if (-not $result.ContainsKey($currentKey)) {
