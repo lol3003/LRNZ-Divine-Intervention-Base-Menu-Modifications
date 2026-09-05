@@ -122,8 +122,10 @@ the base mod's empty slot definition always won. The `-SubMod` compatch therefor
   The compatch tooltip file contains **only mod-added perk keys**; vanilla perks keep
   using the base mod's `DI_generated_perk_tooltips_l_english.yml`. Duplicate definitions
   break loc resolution engine-side, so the generator skips any key the base mod already
-  ships. `DI_perk_unlock_all` / `DI_perk_lock_all` are **base-mod-only** scripted guis
-  and are never emitted in compatches.
+  ships. `DI_perk_unlock_all` / `DI_perk_lock_all` are emitted as scripted-gui
+  **name-overrides** covering the compatch's full merged perk set and using the
+  compatch's own cost value (later-loaded mod wins), so the window's Unlock All /
+  Lock All buttons stay correct in modded playsets.
 - The old extension-slot grid (`gui/DI_generated_submod_<name>_grid.gui`) is obsolete; the
   generator deletes it from the compatch folder on regeneration.
 

@@ -347,8 +347,26 @@ function New-DiSubMod {
 
     # --- merged perk model: mods in reverse engine order (first-seen parse wins,
     # so later-loaded mods win key collisions), then surviving vanilla files ---
+    # Extras may be passed as mod ROOTS (needed for descriptor deps + dynasty_legacies
+    # gates + modifier defs + loc discovery) or as flat perk dirs (documented form).
+    # Normalize to perk dirs for parsing while keeping a parallel mod-roots list -
+    # without this, root-form extras contribute ZERO perk files and multi-mod
+    # compatches silently miss their perk data.
     $vanillaPerkDir = Join-Path $GameDir "common\dynasty_perks"
-    $allPerkDirs = @($perkDir) + $ExtraPerkModDirs
+    $modRoots = @($PerkModPath)
+    $extraPerkDirs = @()
+    foreach ($e in $ExtraPerkModDirs) {
+        $pd = Join-Path $e "common\dynasty_perks"
+        if (Test-Path $pd) {
+            $extraPerkDirs += $pd
+            $modRoots += $e
+        } else {
+            $extraPerkDirs += $e
+            $derived = Split-Path (Split-Path $e -Parent) -Parent
+            if ($derived -and (Test-Path (Join-Path $derived "descriptor.mod"))) { $modRoots += $derived } else { $modRoots += $e }
+        }
+    }
+    $allPerkDirs = @($perkDir) + $extraPerkDirs
     $shadowNames = @{}
     foreach ($d in $allPerkDirs) { Get-ChildItem $d -Filter '*.txt' -ErrorAction SilentlyContinue | ForEach-Object { $shadowNames[$_.Name] = $true } }
     $tmpVanillaPerks = Get-VanillaSurvivorSnapshot -ModDir $allPerkDirs[0] -VanillaDir $vanillaPerkDir -Tag "perks_$prefix"
@@ -358,7 +376,7 @@ function New-DiSubMod {
         if ($shadowNames.ContainsKey($_.Name)) { Remove-Item -LiteralPath $_.FullName -Force }
     }
     $parseDirs = @()
-    for ($i = $ExtraPerkModDirs.Count - 1; $i -ge 0; $i--) { $parseDirs += $ExtraPerkModDirs[$i] }
+    for ($i = $extraPerkDirs.Count - 1; $i -ge 0; $i--) { $parseDirs += $extraPerkDirs[$i] }
     $parseDirs += $perkDir
     $parseDirs += $tmpVanillaPerks
     try {
@@ -371,10 +389,15 @@ function New-DiSubMod {
     $tracks = Group-PerksByTrack $perks
 
     # --- DLC gates from the same merged sources' dynasty_legacies folders ---------
+    # Mod ROOTS in REVERSE engine order + vanilla last: Get-TrackDlcGates is
+    # first-seen-wins (_perk_parser.ps1), so this ordering makes later-loaded mods
+    # win, matching the perk parseDirs convention. The perk-dir form used before
+    # never resolved <perkdir>\common\dynasty_legacies, silently dropping the
+    # primary mod's own gates.
     $vanillaLegacyDir = Join-Path $GameDir "common\dynasty_legacies"
     $legacyDirs = @()
-    foreach ($d in $allPerkDirs) {
-        $ld = Join-Path $d "common\dynasty_legacies"
+    for ($i = $modRoots.Count - 1; $i -ge 0; $i--) {
+        $ld = Join-Path $modRoots[$i] "common\dynasty_legacies"
         if (Test-Path $ld) { $legacyDirs += $ld }
     }
     if (Test-Path $vanillaLegacyDir) { $legacyDirs += $vanillaLegacyDir }
@@ -389,7 +412,10 @@ function New-DiSubMod {
 
     # -- effect_localization + loc values for static tooltip text --
     $effLocDirs = @((Join-Path $GameDir "common\effect_localization"))
-    if (Test-Path (Join-Path $PerkModPath "common\effect_localization")) { $effLocDirs += (Join-Path $PerkModPath "common\effect_localization") }
+    foreach ($r in $modRoots) {
+        $el = Join-Path $r "common\effect_localization"
+        if (Test-Path $el) { $effLocDirs += $el }
+    }
     $effectLocMap = Get-EffectLocalization -Directories $effLocDirs
     $locMap = Get-LocValues -Directories $LocDirs
     # Fallback: some mods ship loc outside localization\english (e.g. AGOT nests it
@@ -399,21 +425,17 @@ function New-DiSubMod {
     # applies and the vanilla map is never discarded.
     $langPattern = '(simp_chinese|french|german|spanish|russian|polish|braz_por|japanese|korean|chinese|turkish)'
     $extraLocDirs = @()
-    foreach ($d in $allPerkDirs) {
+    foreach ($r in $modRoots) {
         $missing = $false
         foreach ($k in $perks.Keys) { if (-not $vanilla.Contains($k) -and [string]::IsNullOrEmpty($locMap["$($k)_name"])) { $missing = $true; break } }
         if (-not $missing) { continue }
-        # $d is a perk dir (<modroot>\common\dynasty_perks); the mod's localization
-        # tree hangs off the mod root (Hiraeth: localization\ directly, AGOT:
-        # localization\english\agot\). Try the derived root, then $d itself in case
-        # a caller passed a mod root directly.
-        foreach ($cand in @((Split-Path (Split-Path $d -Parent) -Parent), $d)) {
-            $root = Join-Path $cand "localization"
-            if (-not (Test-Path $root)) { continue }
+        # $r is a mod root; the mod's localization tree hangs off it (Hiraeth:
+        # localization\ directly, AGOT: localization\english\agot\).
+        $root = Join-Path $r "localization"
+        if (Test-Path $root) {
             foreach ($y in (Get-ChildItem $root -Filter '*.yml' -Recurse)) {
                 if ($y.FullName -notmatch $langPattern) { $extraLocDirs += $y.DirectoryName }
             }
-            break
         }
     }
     if ($extraLocDirs.Count -gt 0) {
@@ -423,11 +445,9 @@ function New-DiSubMod {
     # -- modifier definitions (value-formatting metadata); vanilla first, then any
     # perk mod's own modifier_definition_formats (mod definitions win) --
     $modDefDirs = @((Join-Path $GameDir "common\modifier_definition_formats"))
-    foreach ($d in $allPerkDirs) {
-        foreach ($cand in @((Split-Path (Split-Path $d -Parent) -Parent), $d)) {
-            $md = Join-Path $cand "common\modifier_definition_formats"
-            if (Test-Path $md) { $modDefDirs += $md; break }
-        }
+    foreach ($r in $modRoots) {
+        $md = Join-Path $r "common\modifier_definition_formats"
+        if (Test-Path $md) { $modDefDirs += $md }
     }
     $modifierDefs = Get-ModifierDefinitions -Directories $modDefDirs
 
@@ -537,7 +557,9 @@ function New-DiSubMod {
     $staleGrid = Join-Path $outDir "gui\DI_generated_submod_${prefix}_grid.gui"
     if (Test-Path $staleGrid) { Remove-Item -LiteralPath $staleGrid -Force; Write-Host "Removed stale extension-slot grid: $staleGrid" }
     $deps = @($dirName)
-    foreach ($d in $ExtraPerkModDirs) {
+    # $modRoots[0] is the primary mod (already covered by $dirName); the rest are
+    # the extras - now correct for BOTH root-form and perk-dir-form extras.
+    foreach ($d in ($modRoots | Select-Object -Skip 1)) {
         $desc = Join-Path $d "descriptor.mod"
         $nm = $null
         if (Test-Path $desc) { $m = Select-String -Path $desc -Pattern 'name="([^"]+)"' | Select-Object -First 1; if ($m) { $nm = $m.Matches[0].Groups[1].Value } }
@@ -824,6 +846,10 @@ for r in cur.fetchall():
 
 # --- Main ------------------------------------------------------------------------
 $baseDIName = Get-BaseDiName
+# -File invocations cannot pass PS arrays: accept a single comma/semicolon-joined
+# string for -SubModExtraDirs (mirrors -PlaysetMods) and split it here. Paths with
+# commas are not supported.
+$SubModExtraDirs = @($SubModExtraDirs | ForEach-Object { $_ -split '[;,]+' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
 if ($Scan) {
     Show-ScanTable (Invoke-DiScan | Sort-Object PerkCount -Descending)
 }
