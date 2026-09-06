@@ -51,18 +51,37 @@ try {
         if (-not (Test-Path $committed)) { Write-Host "[FAIL] missing shipped file: $($f.Rel)"; $fail = $true; continue }
         if (-not (Test-Path $generated)) { Write-Host "[FAIL] generator did not produce $($f.Rel) - generator is broken, not drifting"; $fail = $true; continue }
 
-        $a = Get-Content $committed
-        $b = Get-Content $generated
-        $diff = Compare-Object $a $b
-        if ($diff) {
-            Write-Host "[FAIL] drift in $($f.Label) ($($f.Rel)) - $($diff.Count) line differences"
-            $diff | Select-Object -First 8 | ForEach-Object {
-                $side = if ($_.SideIndicator -eq '<=') { 'removed' } else { 'added' }
-                Write-Host "    $side : $($_.InputObject)"
-            }
+        # F6: byte-level comparison - Compare-Object on line arrays accepted
+        # reordered executable statements and discarded encoding. We compare
+        # ORDERED normalized content (CRLF/LF-insensitive) plus explicit BOM and
+        # line-ending-style checks.
+        $bytesA = [System.IO.File]::ReadAllBytes($committed)
+        $bytesB = [System.IO.File]::ReadAllBytes($generated)
+        $bomA = ($bytesA.Length -ge 3 -and $bytesA[0] -eq 0xEF -and $bytesA[1] -eq 0xBB -and $bytesA[2] -eq 0xBF)
+        $bomB = ($bytesB.Length -ge 3 -and $bytesB[0] -eq 0xEF -and $bytesB[1] -eq 0xBB -and $bytesB[2] -eq 0xBF)
+        $rawA = [System.Text.Encoding]::UTF8.GetString($bytesA)
+        $rawB = [System.Text.Encoding]::UTF8.GetString($bytesB)
+        $normA = ($rawA -replace "`r`n", "`n").TrimStart([char]0xFEFF)
+        $normB = ($rawB -replace "`r`n", "`n").TrimStart([char]0xFEFF)
+        if ($normA -cne $normB) {
+            # ordered mismatch - locate the first differing line for the report
+            $la = $normA -split "`n"
+            $lb = $normB -split "`n"
+            $idx = 0
+            while ($idx -lt $la.Count -and $idx -lt $lb.Count -and $la[$idx] -ceq $lb[$idx]) { $idx++ }
+            Write-Host "[FAIL] drift in $($f.Label) ($($f.Rel)) - first difference at line $($idx + 1)"
+            Write-Host "    shipped  : $($la[$idx])"
+            Write-Host "    generated: $($lb[$idx])"
+            $fail = $true
+        } elseif ($bomA -ne $bomB) {
+            Write-Host "[FAIL] $($f.Label) BOM mismatch (shipped=$(if ($bomA) { 'UTF-8 BOM' } else { 'no BOM' }), generated=$(if ($bomB) { 'UTF-8 BOM' } else { 'no BOM' }))"
+            $fail = $true
+        } elseif ((($rawA -match "`r`n") -gt 0) -ne (($rawB -match "`r`n") -gt 0)) {
+            Write-Host "[FAIL] $($f.Label) line-ending style mismatch (shipped=$(if ($rawA -match "`r`n") { 'CRLF' } else { 'LF' }), generated=$(if ($rawB -match "`r`n") { 'CRLF' } else { 'LF' }))"
             $fail = $true
         } else {
-            Write-Host "[ OK ] $($f.Label) matches generator ($($a.Count) lines)"
+            $lineCount = ($normA -split "`n").Count
+            Write-Host "[ OK ] $($f.Label) matches generator byte-for-byte ($lineCount lines, BOM consistent)"
         }
     }
 

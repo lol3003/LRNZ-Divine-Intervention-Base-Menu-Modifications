@@ -244,7 +244,10 @@ function Get-LocValues {
             foreach ($line in Get-Content $file.FullName) {
                 # vanilla loc uses <key>:<version> "value"; several mods omit the
                 # version (AGOT). \d*\s* covers both "key:0" and "key: ".
-                if ($line -match '^\s*(\S+):\d*\s*"([^"]*)"') {
+                # F8: the value capture honors backslash-escaped characters, so
+                # embedded \" quotes no longer truncate the entry; the captured
+                # value keeps the source's escape sequences verbatim.
+                if ($line -match '^\s*(\S+):\d*\s*"((?:[^"\\]|\\.)*)"') {
                     $locMap[$Matches[1]] = $Matches[2]
                 }
             }
@@ -308,7 +311,7 @@ function Get-ModifierDefinitions {
                 $trimmed = ($line -replace '#.*$', '').Trim()
                 if ($null -eq $currentKey -and $trimmed -match '^(\w+)\s*=\s*\{\s*$') {
                     $currentKey = $Matches[1]
-                    $entry = @{ Prefix = $null; Decimals = $null; Percent = $false; AlreadyPercent = $false; Hidden = $false }
+                    $entry = @{ Prefix = $null; Decimals = $null; Percent = $false; AlreadyPercent = $false; Hidden = $false; Color = $null }
                     continue
                 }
                 if ($null -ne $currentKey) {
@@ -323,6 +326,7 @@ function Get-ModifierDefinitions {
                     elseif ($trimmed -match '^percent\s*=\s*(\w+)') { $entry.Percent = ($Matches[1] -eq 'yes') }
                     elseif ($trimmed -match '^already_percent\s*=\s*(\w+)') { $entry.AlreadyPercent = ($Matches[1] -eq 'yes') }
                     elseif ($trimmed -match '^hidden\s*=\s*(\w+)') { $entry.Hidden = ($Matches[1] -eq 'yes') }
+                    elseif ($trimmed -match '^color\s*=\s*(\w+)') { $entry.Color = $Matches[1] }
                 }
             }
         }
@@ -453,8 +457,16 @@ function ConvertTo-PerkModifierTooltipLines {
             $formatted = $v.ToString("F$decimals", [System.Globalization.CultureInfo]::InvariantCulture)
             $sep = if ($locText -match '^\[.*_i\]$') { ' ' } else { ': ' }
             $pct = if ($null -ne $def -and $def.Percent) { '%' } else { '' }
-            if ($v -ge 0) { $lines.Add("$locText$sep#P +$formatted$pct#!") }
-            else { $lines.Add("$locText$sep#N $formatted$pct#!") }
+            # F9: the definition's color semantics override the numeric sign.
+            # color = bad (vanilla negative_random_genetic_chance) means a NEGATIVE
+            # value is a beneficial reduction -> #P; an increase -> #N. All other
+            # cases keep the sign-based #P/#N convention. The sign prefix is
+            # sign-aware in BOTH branches: reductions render "#P -30%#!" (never
+            # "#P +-30%#!") and #N of a positive value renders "#N +25%#!".
+            $sign = if ($formatted.StartsWith('-')) { '' } else { '+' }
+            $beneficial = if ($null -ne $def -and $def.Color -eq 'bad') { $v -lt 0 } else { $v -ge 0 }
+            if ($beneficial) { $lines.Add("$locText$sep#P $sign$formatted$pct#!") }
+            else { $lines.Add("$locText$sep#N $sign$formatted$pct#!") }
         }
     }
     return $lines

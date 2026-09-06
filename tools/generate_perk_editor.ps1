@@ -86,7 +86,10 @@ $locMap = Get-LocValues -Directories $LocDirs
 # are dynamic - the real text lives in a plain loc key via common/effect_localization.
 # Load that mapping so tooltip resolution can follow the chain instead of falling
 # back to the raw dynamic key.
-$effLocDirs = $perkDirs | ForEach-Object { $_ -replace 'dynasty_perks$', 'effect_localization' }
+# F4: Get-EffectLocalization is first-seen-wins, so extra (mod) dirs must come
+# BEFORE vanilla or vanilla mappings would shadow mod mappings for shared keys.
+$effLocDirs = @($perkDirs | Select-Object -Skip 1 | ForEach-Object { $_ -replace 'dynasty_perks$', 'effect_localization' })
+$effLocDirs += @("$GameDir\common\effect_localization")
 $effectLocMap = Get-EffectLocalization -Directories $effLocDirs
 
 # modifier definitions (value-formatting metadata) + per-perk character_modifier
@@ -425,7 +428,9 @@ foreach ($k in $perks.Keys) {
             $parts += "\n$mline"
         }
     }
-    $escaped = $parts -replace '"', '\"'
+    # F8: escape only UNescaped quotes - captured loc values keep their source
+    # escape sequences (\", \\) verbatim, so a blanket replace would double them.
+    $escaped = $parts -replace '(?<!\\)"', '\"'
     [void]$ttLoc.AppendLine(" DI_perk_tt_${k}:0 `"$escaped`"")
 }
 if (-not $WhatIf) {

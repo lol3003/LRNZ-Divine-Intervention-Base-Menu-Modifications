@@ -100,6 +100,20 @@ pwsh -File tools/generate_mod_perks.ps1 -SubMod "Hiraeth"
 
 Generates a compatch for just that one mod: `mod/DI Perks - Hiraeth - Dynasty Legacies Overhaul`.
 
+**Additional `-SubMod` flags:**
+
+- `-SubModName "DI Traits - ..."` — override the compatch display name (default
+  `DI Perks - <mod name>`). The output folder and the registered launcher `.mod`
+  follow this name, which avoids launcher-name collisions when you maintain
+  several playsets. The internal SGUI/values filenames stay stable (derived from
+  the mod folder), so renaming does not orphan old generated files.
+- `-Open` — opens the output folder in Explorer after generation.
+- `-WhatIf` — dry run: prints the perk/track counts, the target folder, the
+  descriptor name and the full dependency list without writing anything.
+
+`-Scan` lists every installed perk mod with its perk/track counts, source and the
+full resolved perk-dir path, then exits.
+
 **How it works (v15):** CK3 registers GUI types **first-loaded-wins**. The old "extension
 slot" approach (a second `di_perk_grid_extension` type) was silently rejected by the engine —
 the base mod's empty slot definition always won. The `-SubMod` compatch therefore now ships a

@@ -35,8 +35,11 @@
 param(
     [switch]$Scan,                      # F1: list installed perk mods (read-only)
     [string]$SubMod = "",               # F3: standalone compatch for one perk mod
+    [string]$SubModName = "",           # override the compatch display name (default "DI Perks - <mod name>")
     [string[]]$SubModExtraDirs = @(),   # F3: extra ordered perk-mod dirs to merge (engine load order; later wins)
+    [switch]$Open,                      # open the output folder in Explorer after generation
     [string]$Playset,                   # F4: combined compatch from a playset's enabled mods
+    [string]$PlaysetJson = "",          # F3b: launcher playset EXPORT json -> merged compatch via the -SubMod route
     [string]$PlaysetMods = "",      # F4: comma/semicolon-separated perk mod names to combine
     [string]$SubMods = "",          # F4: alias for $PlaysetMods (explicit list to combine)
     [string]$CombinedName = "",         # F4: name for the combined compatch (auto if empty)
@@ -114,7 +117,6 @@ function Invoke-DiScan {
     foreach ($c in $cands) {
         $perkDir = Join-Path $c.Path "common\dynasty_perks"
         if (-not (Test-Path $perkDir)) { continue }
-        if ($Verbose) { Write-Host "Scanning $($c.Name) ..." }
         $perks = Get-Perks -Directories $perkDir
         $trackMap = Group-PerksByTrack $perks
         $legacyDir = Join-Path $c.Path "common\dynasty_legacies"
@@ -132,12 +134,10 @@ function Show-ScanTable {
     param($Results)
     if (-not $Results -or $Results.Count -eq 0) { Write-Host "No perk mods found."; return }
     Write-Host ""
-    Write-Host ("{0,-5} {1,-6} {2,-46} {3}" -f "Perks", "Tracks", "Mod", "Path")
-    Write-Host ("{0,-5} {1,-6} {2,-46} {3}" -f "-----", "------", "----", "----")
     foreach ($r in $Results) {
-        $full  = $r.Path + "\common\dynasty_perks"
-        $short = if ($full.Length -gt 55) { "..." + $full.Substring($full.Length - 55) } else { $full }
-        Write-Host ("{0,-5} {1,-6} {2,-46} {3}" -f $r.PerkCount, $r.TrackCount, $r.Name, $short)
+        Write-Host ("{0,-5} {1,-6} {2}" -f "[$($r.PerkCount) perks]", "$($r.TrackCount) tracks", $r.Name)
+        Write-Host ("      source: {0}" -f $r.Source)
+        Write-Host ("      perk dir: {0}\common\dynasty_perks" -f $r.Path)
     }
     Write-Host ""
     Write-Host "$($Results.Count) perk mod(s) found."
@@ -178,8 +178,25 @@ $depsBlock
 }
 path="$($OutDir -replace '[\\/]','/')"
 "@
-    if (-not (Test-Path (Join-Path $OutDir "descriptor.mod"))) {
-        [System.IO.File]::WriteAllText((Join-Path $OutDir "descriptor.mod"), $desc, $utf8Bom)
+    $internalPath = Join-Path $OutDir "descriptor.mod"
+    if (-not (Test-Path $internalPath)) {
+        [System.IO.File]::WriteAllText($internalPath, $desc, $utf8Bom)
+    } else {
+        # F7: regeneration must refresh generator-owned fields (name, version,
+        # supported_version, path, dependencies) in the EXISTING internal
+        # descriptor too - previously a changed dependency set left it stale while
+        # only the launcher .mod was rewritten. User-owned lines (tags,
+        # remote_file_id, ...) are preserved.
+        $t = [System.IO.File]::ReadAllText($internalPath)
+        $t = [regex]::Replace($t, '(?m)^version\s*=\s*"[^"]*"', 'version="0.1.0"')
+        $t = [regex]::Replace($t, '(?m)^name\s*=\s*"[^"]*"', "name=`"$ModName`"")
+        $t = [regex]::Replace($t, '(?m)^supported_version\s*=\s*"[^"]*"', 'supported_version="1.19.*"')
+        $t = [regex]::Replace($t, '(?m)^path\s*=\s*"[^"]*"', "path=`"$($OutDir -replace '[\\/]','/')`"")
+        $t = [regex]::Replace($t, '(?s)dependencies\s*=\s*\{.*?\r?\n\}', "dependencies = {`n$depsBlock`n}")
+        $missing = @($Depends | Where-Object { $t -notmatch [regex]::Escape("`"$_`"") })
+        if ($missing.Count -gt 0) { Write-Warning "Internal descriptor is missing dependency entries after update: $($missing -join ', ')" }
+        [System.IO.File]::WriteAllText($internalPath, $t, $utf8Bom)
+        Write-Host "Updated internal descriptor fields: $internalPath"
     }
     if ($WriteLauncher) {
         $launcherModDir = Join-Path $UserFolder "mod"
@@ -334,7 +351,9 @@ function New-DiSubMod {
         [string]$TargetFolder,
         [string]$UserFolder,
         [string[]]$LocDirs,
+        [string]$SubModName = "",           # override the compatch display name (default "DI Perks - <mod name>")
         [string[]]$ExtraPerkModDirs = @(),   # ordered submod paths; engine order, later wins
+        [switch]$Open,                       # open the output folder in Explorer after generation
         [switch]$WhatIf
     )
     $perkDir = Join-Path $PerkModPath "common\dynasty_perks"
@@ -411,11 +430,14 @@ function New-DiSubMod {
     $costRef = "DI_dynasty_perk_cost_next_$prefix"
 
     # -- effect_localization + loc values for static tooltip text --
-    $effLocDirs = @((Join-Path $GameDir "common\effect_localization"))
+    # F4: Get-EffectLocalization is first-seen-wins - mod dirs BEFORE vanilla so
+    # mod mappings win for shared keys.
+    $effLocDirs = @()
     foreach ($r in $modRoots) {
         $el = Join-Path $r "common\effect_localization"
         if (Test-Path $el) { $effLocDirs += $el }
     }
+    $effLocDirs += (Join-Path $GameDir "common\effect_localization")
     $effectLocMap = Get-EffectLocalization -Directories $effLocDirs
     $locMap = Get-LocValues -Directories $LocDirs
     # Fallback: some mods ship loc outside localization\english (e.g. AGOT nests it
@@ -439,7 +461,12 @@ function New-DiSubMod {
         }
     }
     if ($extraLocDirs.Count -gt 0) {
-        $locMap = Get-LocValues -Directories ($LocDirs + ($extraLocDirs | Sort-Object -Unique))
+        # F4: Select-Object -Unique preserves collection order (mod load order) -
+        # the previous alphabetical Sort-Object discarded intended precedence.
+        # @($LocDirs) forces array concat: with a scalar $LocDirs the + would
+        # string-join vanilla + extras into ONE nonexistent path (empty locMap ->
+        # raw-key tooltips everywhere - the 2026-09-05 regression).
+        $locMap = Get-LocValues -Directories (@($LocDirs) + @($extraLocDirs | Select-Object -Unique))
     }
 
     # -- modifier definitions (value-formatting metadata); vanilla first, then any
@@ -528,7 +555,9 @@ function New-DiSubMod {
                 $parts += "\n$mline"
             }
         }
-        $escaped = $parts -replace '"', '\"'
+        # F8: escape only UNescaped quotes - captured loc values keep their source
+        # escape sequences (\", \\) verbatim, so a blanket replace would double them.
+        $escaped = $parts -replace '(?<!\\)"', '\"'
         [void]$ttLoc.AppendLine(" DI_perk_tt_${k}:0 `"$escaped`"")
         $modCount++
     }
@@ -543,19 +572,9 @@ function New-DiSubMod {
 
     # -- output --
     $outDir = $TargetFolder
-    if (-not $outDir) { $outDir = Join-Path $UserFolder "mod\DI Perks - $dirName" }
-    if ($WhatIf) { Write-Host "[WhatIf] Would generate sub-mod override grid (prefix=$prefix, $($perks.Count) perks / $($tracks.Count) tracks) -> $outDir"; return }
-    New-Item -ItemType Directory -Force -Path (Join-Path $outDir "common\scripted_guis") | Out-Null
-    New-Item -ItemType Directory -Force -Path (Join-Path $outDir "common\script_values") | Out-Null
-    New-Item -ItemType Directory -Force -Path (Join-Path $outDir "gui") | Out-Null
-    New-Item -ItemType Directory -Force -Path (Join-Path $outDir "localization\english") | Out-Null
-    [System.IO.File]::WriteAllText((Join-Path $outDir "common\scripted_guis\DI_generated_submod_${prefix}_toggles_sgui.txt"), $sgui.ToString(), $utf8Bom)
-    [System.IO.File]::WriteAllText((Join-Path $outDir "common\script_values\DI_generated_submod_${prefix}_values.txt"), $values.ToString(), $utf8Bom)
-    [System.IO.File]::WriteAllText((Join-Path $outDir "gui\DI_generated_perk_grid.gui"), $gui.ToString(), $utf8Bom)
-    [System.IO.File]::WriteAllText((Join-Path $outDir "localization\english\DI_generated_perk_tt_l_english.yml"), $ttLoc.ToString(), $utf8Bom)
-    # remove the pre-v15 extension-slot grid if a previous run created it
-    $staleGrid = Join-Path $outDir "gui\DI_generated_submod_${prefix}_grid.gui"
-    if (Test-Path $staleGrid) { Remove-Item -LiteralPath $staleGrid -Force; Write-Host "Removed stale extension-slot grid: $staleGrid" }
+    $modDisplayName = if ($SubModName) { $SubModName } else { "DI Perks - $dirName" }
+    if (-not $outDir) { $outDir = Join-Path $UserFolder "mod\$modDisplayName" }
+
     $deps = @($dirName)
     # $modRoots[0] is the primary mod (already covered by $dirName); the rest are
     # the extras - now correct for BOTH root-form and perk-dir-form extras.
@@ -567,8 +586,30 @@ function New-DiSubMod {
         $deps += $nm
     }
     $deps += $BaseDIName
-    Write-Descriptor -OutDir $outDir -ModName "DI Perks - $dirName" -Depends $deps -UserFolder $UserFolder -WriteLauncher $true
+
+    if ($WhatIf) {
+        Write-Host "[WhatIf] Would generate sub-mod (prefix=$prefix, $($perks.Count) perks / $($tracks.Count) tracks) -> $outDir"
+        Write-Host "[WhatIf] Descriptor name: $modDisplayName"
+        Write-Host "[WhatIf] Dependencies: $($deps -join ', ')"
+        return
+    }
+    New-Item -ItemType Directory -Force -Path (Join-Path $outDir "common\scripted_guis") | Out-Null
+    New-Item -ItemType Directory -Force -Path (Join-Path $outDir "common\script_values") | Out-Null
+    New-Item -ItemType Directory -Force -Path (Join-Path $outDir "gui") | Out-Null
+    New-Item -ItemType Directory -Force -Path (Join-Path $outDir "localization\english") | Out-Null
+    [System.IO.File]::WriteAllText((Join-Path $outDir "common\scripted_guis\DI_generated_submod_${prefix}_toggles_sgui.txt"), $sgui.ToString(), $utf8Bom)
+    [System.IO.File]::WriteAllText((Join-Path $outDir "common\script_values\DI_generated_submod_${prefix}_values.txt"), $values.ToString(), $utf8Bom)
+    [System.IO.File]::WriteAllText((Join-Path $outDir "gui\DI_generated_perk_grid.gui"), $gui.ToString(), $utf8Bom)
+    [System.IO.File]::WriteAllText((Join-Path $outDir "localization\english\DI_generated_perk_tt_l_english.yml"), $ttLoc.ToString(), $utf8Bom)
+    # remove the pre-v15 extension-slot grid if a previous run created it
+    $staleGrid = Join-Path $outDir "gui\DI_generated_submod_${prefix}_grid.gui"
+    if (Test-Path $staleGrid) { Remove-Item -LiteralPath $staleGrid -Force; Write-Host "Removed stale extension-slot grid: $staleGrid" }
+    # deps were computed before the WhatIf gate; only the write happens here.
+
+    Write-Descriptor -OutDir $outDir -ModName $modDisplayName -Depends $deps -UserFolder $UserFolder -WriteLauncher $true
     Write-Host "Wrote sub-mod to $outDir"
+    Write-Host "Launcher mod: $(Join-Path $UserFolder "mod\$modDisplayName.mod")"
+    if ($Open) { Start-Process explorer.exe $outDir }
 }
 
 # --- F4: combined compatch for a set of perk mods --------------------------------
@@ -851,7 +892,9 @@ $baseDIName = Get-BaseDiName
 # commas are not supported.
 $SubModExtraDirs = @($SubModExtraDirs | ForEach-Object { $_ -split '[;,]+' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
 if ($Scan) {
+    # scan-only execution must not fall through to the interactive menu (audit F10)
     Show-ScanTable (Invoke-DiScan | Sort-Object PerkCount -Descending)
+    return
 }
 if ($Playset) {
     $pm = Get-PlaysetMods -UserFolder $UserFolder -PlaysetName $Playset
@@ -874,14 +917,47 @@ elseif ($PlaysetMods -or $SubMods) {
     Write-Host "Selected: $($select.Count) mod(s)."
     New-DiCombinedMod -PerkMods $select -CombinedName $CombinedName -BaseDIName $baseDIName -GameDir $GameDir -TargetFolder $TargetFolder -UserFolder $UserFolder -LocDirs $LocDirs -WhatIf:$WhatIf
 }
+elseif ($PlaysetJson) {
+    # Playset EXPORT json: {"game":"ck3","mods":[{displayName,enabled,position,steamId}]}
+    # Routes through New-DiSubMod (current single-mod emitters: full same-path grid,
+    # bulk unlock/lock-all name-overrides, one merged cost value) - NOT the obsolete
+    # -Playset combined route (audit F1). Load order = JSON position.
+    if (-not (Test-Path $PlaysetJson)) { Write-Warning "Playset JSON not found: $PlaysetJson"; exit 1 }
+    $ps = Get-Content $PlaysetJson -Raw | ConvertFrom-Json
+    $steamRoot = $GameDir -replace '\\common\\[^\\]+\\game$', ''
+    $workshop = Join-Path $steamRoot "workshop\content\1158310"
+    $perkMods = @()
+    foreach ($m in ($ps.mods | Where-Object { $_.enabled } | Sort-Object position)) {
+        $dir = Join-Path $workshop $m.steamId
+        if (-not (Test-Path $dir)) {
+            $cand = @(Get-ModCandidates | Where-Object { $_.Name -eq $m.displayName })
+            if ($cand.Count -gt 0) { $dir = $cand[0].Path } else { Write-Warning "Playset mod '$($m.displayName)' (steamId $($m.steamId)) is not installed - skipped"; continue }
+        }
+        if (Test-Path (Join-Path $dir "common\dynasty_perks")) {
+            $perkMods += [pscustomobject]@{ Path = $dir; Name = $m.displayName }
+        }
+    }
+    if ($perkMods.Count -eq 0) { Write-Warning "No perk mods found in playset export."; exit 1 }
+    Write-Host "Playset: $($perkMods.Count) perk mod(s) in load order: $(($perkMods | ForEach-Object { $_.Name }) -join ' -> ')"
+    $primary = $perkMods[0]
+    $extras = @($perkMods | Select-Object -Skip 1 | ForEach-Object { $_.Path })
+    $cn = if ($SubModName) { $SubModName } else { "DI Perks - $([System.IO.Path]::GetFileNameWithoutExtension($PlaysetJson))" }
+    New-DiSubMod -PerkModPath $primary.Path -PerkModName $primary.Name -BaseDIName $baseDIName -GameDir $GameDir -TargetFolder $TargetFolder -UserFolder $UserFolder -LocDirs $LocDirs -SubModName $cn -ExtraPerkModDirs $extras -Open:$Open -WhatIf:$WhatIf
+}
 elseif ($SubMod) {
     $cands = Get-ModCandidates
-    $match = @($cands | Where { $_.Name -like "*$SubMod*" -or $_.Path -like "*$SubMod*" })
+    # exact display-name match first; fuzzy matching must only consider mods that
+    # actually HAVE a perk dir - renamed compatch copies (no common\dynasty_perks)
+    # would otherwise win the -like match and break generation.
+    $match = @($cands | Where { $_.Name -ieq $SubMod })
+    if ($match.Count -eq 0) {
+        $match = @($cands | Where { ($_.Name -like "*$SubMod*" -or $_.Path -like "*$SubMod*") -and (Test-Path (Join-Path $_.Path "common\dynasty_perks")) })
+    }
     if ($match.Count -eq 0) { Write-Warning "No perk mod matched '$SubMod'."; exit 1 }
     if ($match.Count -gt 1) { Write-Warning "'$SubMod' matched multiple; using first." }
     $sel = $match[0]
     Write-Host "Generating sub-mod for: $($sel.Name)"
-    New-DiSubMod -PerkModPath $sel.Path -PerkModName $sel.Name -BaseDIName $baseDIName -GameDir $GameDir -TargetFolder $TargetFolder -UserFolder $UserFolder -LocDirs $LocDirs -ExtraPerkModDirs $SubModExtraDirs -WhatIf:$WhatIf
+    New-DiSubMod -PerkModPath $sel.Path -PerkModName $sel.Name -BaseDIName $baseDIName -GameDir $GameDir -TargetFolder $TargetFolder -UserFolder $UserFolder -LocDirs $LocDirs -SubModName $SubModName -ExtraPerkModDirs $SubModExtraDirs -Open:$Open -WhatIf:$WhatIf
 }
 else {
     Invoke-DiMenu
