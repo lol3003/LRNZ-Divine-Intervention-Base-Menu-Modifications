@@ -6,9 +6,7 @@
 #      - one per-perk toggle scripted gui: add if missing, remove if owned
 #   2. gui/DI_generated_perk_grid.gui
 #      - a `di_generated_perk_grid` type (vbox: one row per track, N perk buttons)
-#   3. common/script_values/DI_generated_perk_values.txt
-#      - exact renown cost of the next perk (free-mode top-up)
-#   4. localization/english/DI_generated_perk_tooltips_l_english.yml
+#   3. localization/english/DI_generated_perk_tooltips_l_english.yml
 #      - one DI_perk_tt_<perk> loc entry per perk: name + effect description +
 #        character_modifier lines, used as the grid button tooltip (game-like,
 #        mirrors vanilla highlight)
@@ -36,18 +34,18 @@ $WhatIf = $WhatIf -or $Check
 $perkDirs   = @("$GameDir\common\dynasty_perks") + $ExtraPerkDirs
 $outSgui    = Join-Path $ModDir "common\scripted_guis\DI_generated_perk_toggles_sgui.txt"
 $outGui     = Join-Path $ModDir "gui\DI_generated_perk_grid.gui"
-$outValues  = Join-Path $ModDir "common\script_values\DI_generated_perk_values.txt"
 $outTtLoc   = Join-Path $ModDir "localization\english\DI_generated_perk_tooltips_l_english.yml"
 
 # --- Free-edit renown handling ------------------------------------------------
 # add_dynasty_perk DEDUCTS renown at the vanilla cost (user-confirmed in-game):
 #   cost = 250 (PERK_COST_BASE) + 500 (PERK_COST_MULTIPLIER) x total perks owned
-# Free mode tops up the dynasty with the EXACT cost right before the grant, so
-# the net renown change is zero. A flat top-up (previous design) left renown
-# inconsistent and inflated the splendor level; exact refunds avoid both (the
-# deduction brings current prestige - and thus splendor - back to baseline).
-# The exact cost is computed by a generated script value: DI_dynasty_perk_cost_next
-# (common/script_values/DI_generated_perk_values.txt).
+# Free mode grants FIRST and then refunds the EXACT engine charge, computed as
+# renown-before minus renown-after (save_scope_value_as + inline subtract value) -
+# the net renown change is zero regardless of which perks the dynasty already owns.
+# A flat top-up (first design) and the generated per-track cost-mirror script value
+# (previous design, DI_dynasty_perk_cost_next) were both removed: the mirror
+# duplicated engine state and under-counted whenever modded tracks lagged coverage.
+# The paid gate mirrors the defines formula directly via dynasty_num_unlocked_perks.
 
 # --- DLC gating ----------------------------------------------------------------
 # Tracks can be DLC-gated in vanilla via is_shown = { has_dlc_feature = X }.
@@ -143,15 +141,16 @@ function Write-PerPerkBlocks {
     [void]$Sb.AppendLine("        var:DI_dynasty_selected_dynasty = {")
     [void]$Sb.AppendLine("            if = {")
     [void]$Sb.AppendLine("                limit = { NOT = { has_dynasty_perk = $Key } }")
-    [void]$Sb.AppendLine("                # free-edit mode: top up the EXACT vanilla cost before the grant")
-    [void]$Sb.AppendLine("                # (inside dynasty scope; gate checks root = player character)")
+    [void]$Sb.AppendLine("                # free-edit mode: grant first, then refund the EXACT engine")
+    [void]$Sb.AppendLine("                # charge (inside dynasty scope; gate checks root = player character)")
     [void]$Sb.AppendLine("                if = {")
     [void]$Sb.AppendLine("                    limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
-    [void]$Sb.AppendLine("                    add_dynasty_prestige = DI_dynasty_perk_cost_next")
+    [void]$Sb.AppendLine("                    save_scope_value_as = { name = DI_renown_before value = dynasty_prestige }")
     [void]$Sb.AppendLine("                    add_dynasty_perk = $Key")
+    [void]$Sb.AppendLine("                    add_dynasty_prestige = { value = scope:DI_renown_before subtract = dynasty_prestige }")
     [void]$Sb.AppendLine("                }")
     [void]$Sb.AppendLine("                else_if = {")
-    [void]$Sb.AppendLine("                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }")
+    [void]$Sb.AppendLine("                    limit = { dynasty_prestige >= { value = 250 add = { value = dynasty_num_unlocked_perks multiply = 500 } } }")
     [void]$Sb.AppendLine("                    add_dynasty_perk = $Key")
     [void]$Sb.AppendLine("                }")
     [void]$Sb.AppendLine("            }")
@@ -198,11 +197,12 @@ function Write-TrackAddAllBlock {
         [void]$Sb.AppendLine("                limit = { NOT = { has_dynasty_perk = $k } }")
         [void]$Sb.AppendLine("                if = {")
         [void]$Sb.AppendLine("                    limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
-        [void]$Sb.AppendLine("                    add_dynasty_prestige = DI_dynasty_perk_cost_next")
+        [void]$Sb.AppendLine("                    save_scope_value_as = { name = DI_renown_before value = dynasty_prestige }")
         [void]$Sb.AppendLine("                    add_dynasty_perk = $k")
+        [void]$Sb.AppendLine("                    add_dynasty_prestige = { value = scope:DI_renown_before subtract = dynasty_prestige }")
         [void]$Sb.AppendLine("                }")
         [void]$Sb.AppendLine("                else_if = {")
-        [void]$Sb.AppendLine("                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }")
+        [void]$Sb.AppendLine("                    limit = { dynasty_prestige >= { value = 250 add = { value = dynasty_num_unlocked_perks multiply = 500 } } }")
         [void]$Sb.AppendLine("                    add_dynasty_perk = $k")
         [void]$Sb.AppendLine("                }")
         [void]$Sb.AppendLine("            }")
@@ -280,11 +280,12 @@ function Write-BulkAllBlock {
             [void]$Sb.AppendLine("                limit = { NOT = { has_dynasty_perk = $k } }")
             [void]$Sb.AppendLine("                if = {")
             [void]$Sb.AppendLine("                    limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
-            [void]$Sb.AppendLine("                    add_dynasty_prestige = DI_dynasty_perk_cost_next")
+            [void]$Sb.AppendLine("                    save_scope_value_as = { name = DI_renown_before value = dynasty_prestige }")
             [void]$Sb.AppendLine("                    add_dynasty_perk = $k")
+            [void]$Sb.AppendLine("                    add_dynasty_prestige = { value = scope:DI_renown_before subtract = dynasty_prestige }")
             [void]$Sb.AppendLine("                }")
             [void]$Sb.AppendLine("                else_if = {")
-            [void]$Sb.AppendLine("                    limit = { dynasty_prestige >= DI_dynasty_perk_cost_next }")
+            [void]$Sb.AppendLine("                    limit = { dynasty_prestige >= { value = 250 add = { value = dynasty_num_unlocked_perks multiply = 500 } } }")
             [void]$Sb.AppendLine("                    add_dynasty_perk = $k")
             [void]$Sb.AppendLine("                }")
             [void]$Sb.AppendLine("            }")
@@ -309,31 +310,12 @@ if (-not $WhatIf) {
 }
 
 # --- Generate script values ----------------------------------------------------
-# DI_dynasty_perk_cost_next = exact renown the next perk will cost:
-# 250 (PERK_COST_BASE) + 500 (PERK_COST_MULTIPLIER) per already-owned perk.
-# Total owned perks = sum over tracks of each track's count, measured with the
-# auto-generated <track>_legacy_track_perks comparison triggers (dynasty scope).
-$values = [System.Text.StringBuilder]::new()
-[void]$values.AppendLine("# =============================================================================")
-[void]$values.AppendLine("# GENERATED FILE - do not hand-edit.")
-[void]$values.AppendLine("# Regenerate with: tools/generate_perk_editor.ps1")
-[void]$values.AppendLine("# Exact renown cost of the next dynasty perk (vanilla formula), evaluated in")
-[void]$values.AppendLine("# dynasty scope. Used by the generated perk toggles' free-edit mode.")
-[void]$values.AppendLine("# =============================================================================")
-[void]$values.AppendLine("")
-[void]$values.AppendLine("DI_dynasty_perk_cost_next = {")
-[void]$values.AppendLine("    value = 250   # PERK_COST_BASE")
-foreach ($t in $tracks.Keys) {
-    for ($i = 1; $i -le $tracks[$t].Count; $i++) {
-        [void]$values.AppendLine("    if = { limit = { $($t)_perks >= $i } add = 500 }   # PERK_COST_MULTIPLIER")
-    }
-}
-[void]$values.AppendLine("}")
-if (-not $WhatIf) {
-    New-Item -ItemType Directory -Force -Path (Split-Path $outValues) | Out-Null
-    [System.IO.File]::WriteAllText($outValues, $values.ToString(), $utf8Bom)
-    Write-Host "Wrote $outValues"
-}
+# REMOVED (refund simplification): the per-track cost-mirror script value
+# (DI_dynasty_perk_cost_next = 250 + one if per perk) is no longer generated.
+# Free mode now grants first and refunds the EXACT engine charge via
+# save_scope_value_as + an inline subtract value; the paid gate uses the
+# documented dynasty_num_unlocked_perks trigger (mirrors 00_defines.txt:
+# COST = PERK_COST_BASE + unlocked * PERK_COST_MULTIPLIER) - no mirror file.
 
 # --- Generate GUI grid -----------------------------------------------------------
 # Vanilla-look grid: one section per track (80x80 track icon + localized <track>_name

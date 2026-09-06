@@ -179,7 +179,7 @@ $depsBlock
 path="$($OutDir -replace '[\\/]','/')"
 "@
     $internalPath = Join-Path $OutDir "descriptor.mod"
-    if (-not (Test-Path $internalPath)) {
+    if (-not (Test-Path -LiteralPath $internalPath)) {
         [System.IO.File]::WriteAllText($internalPath, $desc, $utf8Bom)
     } else {
         # F7: regeneration must refresh generator-owned fields (name, version,
@@ -231,9 +231,10 @@ function Get-VanillaSurvivorSnapshot {
 # v15: the grid is a COMPLETE same-path override of the base mod's
 # gui/DI_generated_perk_grid.gui, computed from mod files + vanilla game files
 # (mod same-name files replace vanilla files; new hth_*-style keys are added).
-# Non-free mode requires dynasty_prestige >= <cost value> before granting.
+# Non-free mode gates on the defines formula (250 + 500 x unlocked perks) via
+# dynasty_num_unlocked_perks; free mode grants first and refunds the exact charge.
 function Write-SubModSguiBlocks {
-    param($Sb, $PerkMap, $Tracks, [string]$CostRef)
+    param($Sb, $PerkMap, $Tracks)
     foreach ($k in $PerkMap.Keys) {
         [void]$Sb.AppendLine("DI_perk_add_$k = {")
         [void]$Sb.AppendLine("    scope = character")
@@ -243,11 +244,12 @@ function Write-SubModSguiBlocks {
         [void]$Sb.AppendLine("            limit = { NOT = { has_dynasty_perk = $k } }")
         [void]$Sb.AppendLine("            if = {")
         [void]$Sb.AppendLine("                limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
-        [void]$Sb.AppendLine("                add_dynasty_prestige = $CostRef")
+        [void]$Sb.AppendLine("                save_scope_value_as = { name = DI_renown_before value = dynasty_prestige }")
         [void]$Sb.AppendLine("                add_dynasty_perk = $k")
+        [void]$Sb.AppendLine("                add_dynasty_prestige = { value = scope:DI_renown_before subtract = dynasty_prestige }")
         [void]$Sb.AppendLine("            }")
         [void]$Sb.AppendLine("            else_if = {")
-        [void]$Sb.AppendLine("                limit = { dynasty_prestige >= $CostRef }")
+        [void]$Sb.AppendLine("                limit = { dynasty_prestige >= { value = 250 add = { value = dynasty_num_unlocked_perks multiply = 500 } } }")
         [void]$Sb.AppendLine("                add_dynasty_perk = $k")
         [void]$Sb.AppendLine("            }")
         [void]$Sb.AppendLine("        }")
@@ -274,11 +276,12 @@ function Write-SubModSguiBlocks {
             [void]$Sb.AppendLine("            limit = { NOT = { has_dynasty_perk = $k } }")
             [void]$Sb.AppendLine("            if = {")
             [void]$Sb.AppendLine("                limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
-            [void]$Sb.AppendLine("                add_dynasty_prestige = $CostRef")
+            [void]$Sb.AppendLine("                save_scope_value_as = { name = DI_renown_before value = dynasty_prestige }")
             [void]$Sb.AppendLine("                add_dynasty_perk = $k")
+            [void]$Sb.AppendLine("                add_dynasty_prestige = { value = scope:DI_renown_before subtract = dynasty_prestige }")
             [void]$Sb.AppendLine("            }")
             [void]$Sb.AppendLine("            else_if = {")
-            [void]$Sb.AppendLine("                limit = { dynasty_prestige >= $CostRef }")
+            [void]$Sb.AppendLine("                limit = { dynasty_prestige >= { value = 250 add = { value = dynasty_num_unlocked_perks multiply = 500 } } }")
             [void]$Sb.AppendLine("                add_dynasty_perk = $k")
             [void]$Sb.AppendLine("            }")
             [void]$Sb.AppendLine("        }")
@@ -298,10 +301,10 @@ function Write-SubModSguiBlocks {
         [void]$Sb.AppendLine("")
     }
     # Bulk unlock-all / lock-all over the FULL merged perk set. These NAME-OVERRIDE
-    # the base mod's 105-key versions (same-name scripted guis: later mod wins) so
-    # the window's Unlock All / Lock All buttons cover mod-added tracks/keys too and
-    # use THIS sub-mod's cost value - the base cost value is blind to modded tracks,
-    # which silently drained renown dry (free-mode top-up under-counted per add).
+    # the base mod's vanilla-key versions (same-name scripted guis: later mod wins)
+    # so the window's Unlock All / Lock All buttons cover mod-added tracks/keys too.
+    # Each unit captures renown BEFORE its own grant and refunds the exact engine
+    # charge afterwards - no per-track cost-mirror script value is needed.
     [void]$Sb.AppendLine("DI_perk_unlock_all = {")
     [void]$Sb.AppendLine("    scope = character")
     [void]$Sb.AppendLine("")
@@ -312,11 +315,12 @@ function Write-SubModSguiBlocks {
         [void]$Sb.AppendLine("                limit = { NOT = { has_dynasty_perk = $k } }")
         [void]$Sb.AppendLine("                if = {")
         [void]$Sb.AppendLine("                    limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
-        [void]$Sb.AppendLine("                    add_dynasty_prestige = $CostRef")
+        [void]$Sb.AppendLine("                    save_scope_value_as = { name = DI_renown_before value = dynasty_prestige }")
         [void]$Sb.AppendLine("                    add_dynasty_perk = $k")
+        [void]$Sb.AppendLine("                    add_dynasty_prestige = { value = scope:DI_renown_before subtract = dynasty_prestige }")
         [void]$Sb.AppendLine("                }")
         [void]$Sb.AppendLine("                else_if = {")
-        [void]$Sb.AppendLine("                    limit = { dynasty_prestige >= $CostRef }")
+        [void]$Sb.AppendLine("                    limit = { dynasty_prestige >= { value = 250 add = { value = dynasty_num_unlocked_perks multiply = 500 } } }")
         [void]$Sb.AppendLine("                    add_dynasty_perk = $k")
         [void]$Sb.AppendLine("                }")
         [void]$Sb.AppendLine("            }")
@@ -427,7 +431,8 @@ function New-DiSubMod {
     foreach ($k in $perks.Keys) { if (-not $vanilla.Contains($k)) { $newCount++ } }
     Write-Host "Merged grid: $($perks.Count) perks / $($tracks.Count) tracks (mod adds $newCount new keys; same-name mod files replace vanilla files)."
 
-    $costRef = "DI_dynasty_perk_cost_next_$prefix"
+    # (no $costRef: free mode refunds the exact engine charge per unit; the paid
+    # gate uses the dynasty_num_unlocked_perks trigger - no mirror script value)
 
     # -- effect_localization + loc values for static tooltip text --
     # F4: Get-EffectLocalization is first-seen-wins - mod dirs BEFORE vanilla so
@@ -481,11 +486,13 @@ function New-DiSubMod {
     # -- scripted guis --
     $sgui = [System.Text.StringBuilder]::new()
     [void]$sgui.AppendLine("# GENERATED FILE - do not hand-edit. generate_mod_perks.ps1 -SubMod")
-    [void]$sgui.AppendLine("# Cost refunds use $costRef (vanilla + this sub-mod's tracks).")
+    [void]$sgui.AppendLine("# Free mode: each unit grants first and refunds the EXACT engine charge")
+    [void]$sgui.AppendLine("# (renown-before minus renown-after). Paid mode gates on the defines")
+    [void]$sgui.AppendLine("# formula (250 + 500 x unlocked) via dynasty_num_unlocked_perks - no mirror.")
     [void]$sgui.AppendLine("# Bulk unlock-all/lock-all NAME-OVERRIDE the base mod's versions (later mod wins)")
     [void]$sgui.AppendLine("# so the window buttons cover the full merged perk set.")
     [void]$sgui.AppendLine("")
-    Write-SubModSguiBlocks -Sb $sgui -PerkMap $perks -Tracks $tracks -CostRef $costRef
+    Write-SubModSguiBlocks -Sb $sgui -PerkMap $perks -Tracks $tracks
 
     # -- grid: COMPLETE same-path override of the base mod's generated grid --
     # CK3 GUI type registration is first-loaded-wins; a second di_perk_grid_extension
@@ -563,12 +570,9 @@ function New-DiSubMod {
     }
     Write-Host "Tooltip loc: $modCount mod-added entries (vanilla keys resolve from the base mod's loc file)."
 
-    # -- script value: per-prefix cost over ALL merged tracks --
-    $values = [System.Text.StringBuilder]::new()
-    [void]$values.AppendLine("$costRef = {")
-    [void]$values.AppendLine("    value = 250   # PERK_COST_BASE")
-    foreach ($t in $tracks.Keys) { for ($i=1;$i -le $tracks[$t].Count;$i++){ [void]$values.AppendLine("    if = { limit = { $($t)_perks >= $i } add = 500 }") } }
-    [void]$values.AppendLine("}")
+    # -- script value emitter REMOVED (refund simplification): no per-track cost
+    # mirror is generated; free mode refunds the exact engine charge per unit and
+    # the paid gate uses dynasty_num_unlocked_perks (mirrors 00_defines.txt).
 
     # -- output --
     $outDir = $TargetFolder
@@ -594,16 +598,24 @@ function New-DiSubMod {
         return
     }
     New-Item -ItemType Directory -Force -Path (Join-Path $outDir "common\scripted_guis") | Out-Null
-    New-Item -ItemType Directory -Force -Path (Join-Path $outDir "common\script_values") | Out-Null
     New-Item -ItemType Directory -Force -Path (Join-Path $outDir "gui") | Out-Null
     New-Item -ItemType Directory -Force -Path (Join-Path $outDir "localization\english") | Out-Null
     [System.IO.File]::WriteAllText((Join-Path $outDir "common\scripted_guis\DI_generated_submod_${prefix}_toggles_sgui.txt"), $sgui.ToString(), $utf8Bom)
-    [System.IO.File]::WriteAllText((Join-Path $outDir "common\script_values\DI_generated_submod_${prefix}_values.txt"), $values.ToString(), $utf8Bom)
     [System.IO.File]::WriteAllText((Join-Path $outDir "gui\DI_generated_perk_grid.gui"), $gui.ToString(), $utf8Bom)
     [System.IO.File]::WriteAllText((Join-Path $outDir "localization\english\DI_generated_perk_tt_l_english.yml"), $ttLoc.ToString(), $utf8Bom)
     # remove the pre-v15 extension-slot grid if a previous run created it
+    # (LiteralPath: IFFTed folder names contain [] which -Path would glob)
     $staleGrid = Join-Path $outDir "gui\DI_generated_submod_${prefix}_grid.gui"
-    if (Test-Path $staleGrid) { Remove-Item -LiteralPath $staleGrid -Force; Write-Host "Removed stale extension-slot grid: $staleGrid" }
+    if (Test-Path -LiteralPath $staleGrid) { Remove-Item -LiteralPath $staleGrid -Force; Write-Host "Removed stale extension-slot grid: $staleGrid" }
+    # remove the pre-simplification cost-mirror values file (refund simplification:
+    # no script value is generated anymore - free mode refunds the exact engine charge)
+    $staleValues = Join-Path $outDir "common\script_values\DI_generated_submod_${prefix}_values.txt"
+    if (Test-Path -LiteralPath $staleValues) {
+        Remove-Item -LiteralPath $staleValues -Force
+        Write-Host "Removed stale cost-mirror values file: $staleValues"
+        $svDir = Split-Path $staleValues -Parent
+        if ((Get-ChildItem -LiteralPath $svDir -ErrorAction SilentlyContinue | Measure-Object).Count -eq 0) { Remove-Item -LiteralPath $svDir -Force }
+    }
     # deps were computed before the WhatIf gate; only the write happens here.
 
     Write-Descriptor -OutDir $outDir -ModName $modDisplayName -Depends $deps -UserFolder $UserFolder -WriteLauncher $true
@@ -655,13 +667,12 @@ function New-DiCombinedMod {
     if (-not $modName) { $modName = "DI Perks - Combined" }
     $prefix = ($modName -replace '[^A-Za-z0-9_]', '_').ToLowerInvariant()
     if ($prefix -match '^[0-9]') { $prefix = "_$prefix" }
-    $costRef = "DI_dynasty_perk_cost_next_$prefix"
     Write-Host "Combined: $($newPerks.Count) new perks / $($newTracks.Count) tracks from $($PerkMods.Count) mod(s)."
 
     # -- scripted guis --
     $sgui = [System.Text.StringBuilder]::new()
     [void]$sgui.AppendLine("# GENERATED FILE - do not hand-edit. generate_mod_perks.ps1 -Playset / combined")
-    [void]$sgui.AppendLine("# Cost refunds use $costRef (vanilla + all merged tracks).")
+    [void]$sgui.AppendLine("# Free mode: each unit grants first and refunds the EXACT engine charge.")
     [void]$sgui.AppendLine("")
     foreach ($k in $newPerks.Keys) {
         [void]$sgui.AppendLine("DI_perk_add_$k = {")
@@ -669,7 +680,10 @@ function New-DiCombinedMod {
         [void]$sgui.AppendLine("    is_shown = { var:DI_dynasty_selected_dynasty = { NOT = { has_dynasty_perk = $k } } }")
         [void]$sgui.AppendLine("    effect = { var:DI_dynasty_selected_dynasty = {")
         [void]$sgui.AppendLine("        if = { limit = { NOT = { has_dynasty_perk = $k } }")
-        [void]$sgui.AppendLine("                if = { limit = { root = { has_variable = DI_legacy_editor_free_mode } } add_dynasty_prestige = $costRef }")
+        [void]$sgui.AppendLine("                if = { limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
+        [void]$sgui.AppendLine("                    save_scope_value_as = { name = DI_renown_before value = dynasty_prestige }")
+        [void]$sgui.AppendLine("                    add_dynasty_perk = $k")
+        [void]$sgui.AppendLine("                    add_dynasty_prestige = { value = scope:DI_renown_before subtract = dynasty_prestige } }")
         [void]$sgui.AppendLine("                add_dynasty_perk = $k }")
         [void]$sgui.AppendLine("    } }")
         [void]$sgui.AppendLine("}")
@@ -691,7 +705,10 @@ function New-DiCombinedMod {
         [void]$sgui.AppendLine("    effect = { var:DI_dynasty_selected_dynasty = {")
         foreach ($k in $trk) {
             [void]$sgui.AppendLine("        if = { limit = { NOT = { has_dynasty_perk = $k } }")
-            [void]$sgui.AppendLine("                if = { limit = { root = { has_variable = DI_legacy_editor_free_mode } } add_dynasty_prestige = $costRef }")
+            [void]$sgui.AppendLine("                if = { limit = { root = { has_variable = DI_legacy_editor_free_mode } }")
+            [void]$sgui.AppendLine("                    save_scope_value_as = { name = DI_renown_before value = dynasty_prestige }")
+            [void]$sgui.AppendLine("                    add_dynasty_perk = $k")
+            [void]$sgui.AppendLine("                    add_dynasty_prestige = { value = scope:DI_renown_before subtract = dynasty_prestige } }")
             [void]$sgui.AppendLine("                add_dynasty_perk = $k }")
         }
         [void]$sgui.AppendLine("    } }")
@@ -777,14 +794,9 @@ function New-DiCombinedMod {
     [void]$gui.AppendLine("    }")
     [void]$gui.AppendLine("}")
 
-    # -- script value: combined cost (vanilla + all tracks) --
-    $values = [System.Text.StringBuilder]::new()
-    [void]$values.AppendLine("$costRef = {")
-    [void]$values.AppendLine("    value = 250   # PERK_COST_BASE")
-    $vanTracks = Group-PerksByTrack $vanilla
-    foreach ($t in $vanTracks.Keys) { for ($i=1;$i -le $vanTracks[$t].Count;$i++){ [void]$values.AppendLine("    if = { limit = { $($t)_perks >= $i } add = 500 }") } }
-    foreach ($t in $newTracks.Keys) { for ($i=1;$i -le $newTracks[$t].Count;$i++){ [void]$values.AppendLine("    if = { limit = { $($t)_perks >= $i } add = 500 }") } }
-    [void]$values.AppendLine("}")
+    # -- script value emitter REMOVED (refund simplification): no per-track cost
+    # mirror for the combined route either; free mode refunds the exact engine
+    # charge per unit, the paid gate uses dynasty_num_unlocked_perks.
 
     # -- manifest --
     $manifest = [System.Text.StringBuilder]::new()
@@ -799,10 +811,8 @@ function New-DiCombinedMod {
     if (-not $outDir) { $outDir = Join-Path $UserFolder "mod\$modName" }
     if ($WhatIf) { Write-Host "[WhatIf] Would generate combined (prefix=$prefix, $($newPerks.Count) perks / $($newTracks.Count) tracks) -> $outDir"; return }
     New-Item -ItemType Directory -Force -Path (Join-Path $outDir "common\scripted_guis") | Out-Null
-    New-Item -ItemType Directory -Force -Path (Join-Path $outDir "common\script_values") | Out-Null
     New-Item -ItemType Directory -Force -Path (Join-Path $outDir "gui") | Out-Null
     [System.IO.File]::WriteAllText((Join-Path $outDir "common\scripted_guis\DI_generated_combined_${prefix}_toggles_sgui.txt"), $sgui.ToString(), $utf8Bom)
-    [System.IO.File]::WriteAllText((Join-Path $outDir "common\script_values\DI_generated_combined_${prefix}_values.txt"), $values.ToString(), $utf8Bom)
     [System.IO.File]::WriteAllText((Join-Path $outDir "gui\DI_generated_combined_${prefix}_grid.gui"), $gui.ToString(), $utf8Bom)
     [System.IO.File]::WriteAllText((Join-Path $outDir "README_DI_perks.txt"), $manifest.ToString(), $utf8Bom)
     $deps = @()

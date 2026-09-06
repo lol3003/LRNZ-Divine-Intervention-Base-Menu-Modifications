@@ -28,7 +28,6 @@ $ErrorActionPreference = "Stop"
 $files = @(
     @{ Rel = "gui\DI_generated_perk_grid.gui";                        Label = "grid" },
     @{ Rel = "common\scripted_guis\DI_generated_perk_toggles_sgui.txt"; Label = "toggles" },
-    @{ Rel = "common\script_values\DI_generated_perk_values.txt";     Label = "values" },
     @{ Rel = "localization\english\DI_generated_perk_tooltips_l_english.yml"; Label = "tooltips-loc" }
 )
 

@@ -105,7 +105,7 @@ Generates a compatch for just that one mod: `mod/DI Perks - Hiraeth - Dynasty Le
 - `-SubModName "DI Traits - ..."` — override the compatch display name (default
   `DI Perks - <mod name>`). The output folder and the registered launcher `.mod`
   follow this name, which avoids launcher-name collisions when you maintain
-  several playsets. The internal SGUI/values filenames stay stable (derived from
+  several playsets. The internal SGUI filename stays stable (derived from
   the mod folder), so renaming does not orphan old generated files.
 - `-Open` — opens the output folder in Explorer after generation.
 - `-WhatIf` — dry run: prints the perk/track counts, the target folder, the
@@ -127,9 +127,10 @@ the base mod's empty slot definition always won. The `-SubMod` compatch therefor
   vanilla/DLC perks, merged by perk key (mod same-name files replace the corresponding vanilla
   file first, per CK3's file-override rule; new `hth_*`-style keys are appended). Mods that
   *reassign* vanilla perks to different tracks (Hiraeth does) are handled correctly.
-- The compatch's toggles SGUI and values files keep their submod-specific filenames and cover
-  exactly the merged perk set. Non-free mode now requires
-  `dynasty_prestige >= DI_dynasty_perk_cost_next_<submod>` before granting.
+- The compatch's toggles SGUI keeps its submod-specific filename and covers exactly
+  the merged perk set. Non-free mode gates on the vanilla cost formula directly
+  (`dynasty_prestige >= { value = 250 add = { value = dynasty_num_unlocked_perks multiply = 500 } }`)
+  before granting - no cost-mirror script value is generated.
 - A tooltip loc file (`localization/english/DI_generated_perk_tt_l_english.yml`) gives every
   button a game-like tooltip: bold perk name + effect description lines extracted from the
   perk's `effect = { ... }` block (`*_ai_effect` / `*_req_effect` excluded).
@@ -137,9 +138,10 @@ the base mod's empty slot definition always won. The `-SubMod` compatch therefor
   using the base mod's `DI_generated_perk_tooltips_l_english.yml`. Duplicate definitions
   break loc resolution engine-side, so the generator skips any key the base mod already
   ships. `DI_perk_unlock_all` / `DI_perk_lock_all` are emitted as scripted-gui
-  **name-overrides** covering the compatch's full merged perk set and using the
-  compatch's own cost value (later-loaded mod wins), so the window's Unlock All /
-  Lock All buttons stay correct in modded playsets.
+  **name-overrides** covering the compatch's full merged perk set (later-loaded mod
+  wins), so the window's Unlock All / Lock All buttons stay correct in modded playsets.
+  In free mode every unit grants first and then refunds the exact engine charge
+  (renown-before minus renown-after), so renown stays flat without any cost mirror.
 - The old extension-slot grid (`gui/DI_generated_submod_<name>_grid.gui`) is obsolete; the
   generator deletes it from the compatch folder on regeneration.
 
